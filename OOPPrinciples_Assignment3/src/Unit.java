@@ -17,7 +17,7 @@ public class Unit extends Tile{
         return super.toString();
     }
 
-    public void move(Direction d) {}
-
+    public void move(Direction d) {
+    }
     public void onGameTick() {}
 }
