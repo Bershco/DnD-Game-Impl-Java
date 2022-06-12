@@ -1,7 +1,7 @@
-public class Unit {
+public class Unit extends Tile{
     public String name;
     public int healthPool;
-    public int healthAmunt;
+    public int healthAmount;
     public int attackPoints;
     public int defensePoints;
 
