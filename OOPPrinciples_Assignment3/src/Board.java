@@ -21,7 +21,7 @@ public class Board {
     public ArrayList<Enemy> getEnemies(int range) {
         ArrayList<Enemy> closeEnemies = new ArrayList<>();
         allEnemies.forEach(enemy -> {
-            if(player.range(enemy) < 2)
+            if(player.range(enemy) < range)
                 closeEnemies.add(enemy);
         });
         return closeEnemies;
