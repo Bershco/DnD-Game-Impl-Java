@@ -20,4 +20,14 @@ public class Unit extends Tile{
     public void move(Direction d) {
     }
     public void onGameTick() {}
+
+    public void death() {}
+
+    public void dealDamage(Unit target) {
+        int attackRoll = (int)Math.round(Math.random()*(attackPoints+1));
+        int defenseRoll = (int)Math.round(Math.random()*(target.defensePoints+1));
+        int damage = attackRoll - defenseRoll;
+        if (damage > 0)
+            target.healthAmount -= damage;
+    }
 }

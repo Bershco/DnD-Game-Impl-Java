@@ -26,4 +26,7 @@ public class Board {
         });
         return closeEnemies;
     }
+    public void removeEnemy(Enemy e) {
+        allEnemies.remove(e);
+    }
 }
