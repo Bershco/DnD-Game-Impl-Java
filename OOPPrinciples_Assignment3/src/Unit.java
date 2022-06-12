@@ -1,4 +1,4 @@
-public class Unit {
+public class Unit extends Tile{
     public String name;
     public int healthPool;
     public int healthAmunt;
@@ -17,9 +17,7 @@ public class Unit {
         return super.toString();
     }
 
-    public void move() {
-    }
+    public void move(Direction d) {}
 
-    public void onGameTick() {
-    }
+    public void onGameTick() {}
 }
