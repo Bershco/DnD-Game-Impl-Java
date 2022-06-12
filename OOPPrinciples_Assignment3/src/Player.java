@@ -1,6 +1,6 @@
 public class Player extends Unit implements HeroicUnit{
-    public int experience;
-    public int playerLevel;
+    protected int experience;
+    protected int playerLevel;
 
     public Player() {
         tile = 61;
@@ -8,7 +8,7 @@ public class Player extends Unit implements HeroicUnit{
         playerLevel = 1;
     }
 
-    public void onLevelUp() {
+    protected void onLevelUp() {
         experience -= playerLevel * 50;
         playerLevel++;
         healthPool += playerLevel * 4;
