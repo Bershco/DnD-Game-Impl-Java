@@ -1,9 +1,10 @@
 public class Player extends Unit implements HeroicUnit{
     protected int experience;
     protected int playerLevel;
+    protected Board b = Board.getInstance();
 
     public Player() {
-        tile = 61;
+        tile = '@';
         experience = 0;
         playerLevel = 1;
     }
@@ -28,6 +29,25 @@ public class Player extends Unit implements HeroicUnit{
     @Override
     public void castAbility() {
 
+    }
+
+    @Override
+    public void dealDamage(Unit target) {
+        super.dealDamage(target);
+        if (target.healthAmount <= 0) {
+            experience += ((Enemy) target).experienceValue;
+            Position newPos = target.pos; //TODO: Make sure it updates the currentPosition properly in board
+            ((Enemy)target).death();
+            Tile middleman = b.currentPosition[newPos.x][newPos.y];
+            b.currentPosition[newPos.x][newPos.y] = this;
+            b.currentPosition[pos.x][pos.y] = middleman;
+            pos = newPos;
+        }
+    }
+
+    @Override
+    public void death() {
+        //b.gameOver(); //TODO: Implement gameOver() method in Board
     }
 
     protected boolean enoughResources() {
