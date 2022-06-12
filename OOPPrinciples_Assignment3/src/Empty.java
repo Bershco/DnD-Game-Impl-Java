@@ -1,5 +1,5 @@
 public class Empty extends Tile {
     public Empty() {
-        Tile = '.';
+        tile = '.';
     }
 }
