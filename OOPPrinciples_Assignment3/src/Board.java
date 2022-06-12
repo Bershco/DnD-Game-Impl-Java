@@ -3,7 +3,7 @@ import java.util.List;
 
 public class Board {
     private static Board instance;
-    private char[][] currentPosition;
+    public Tile[][] currentPosition;
     private ArrayList<Enemy> allEnemies;
     private ArrayList<Wall> allWalls;
     private Player player;
