@@ -35,9 +35,8 @@ public class Player extends Unit implements HeroicUnit{
     public void dealDamage(Unit target) {
         super.dealDamage(target);
         if (target.healthAmount <= 0) {
-            experience += ((Enemy) target).experienceValue;
+            target.death();
             Position newPos = target.pos; //TODO: Make sure it updates the currentPosition properly in board
-            ((Enemy)target).death();
             Tile middleman = b.currentPosition[newPos.x][newPos.y];
             b.currentPosition[newPos.x][newPos.y] = this;
             b.currentPosition[pos.x][pos.y] = middleman;
@@ -47,7 +46,11 @@ public class Player extends Unit implements HeroicUnit{
 
     @Override
     public void death() {
-        //b.gameOver(); //TODO: Implement gameOver() method in Board
+        b.gameOver();
+    }
+
+    public void addExp(int exp) {
+        experience += exp;
     }
 
     protected boolean enoughResources() {

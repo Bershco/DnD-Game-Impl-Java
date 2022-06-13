@@ -2,19 +2,13 @@ public class Enemy extends Unit{
     public int experienceValue;
 
     Board b = Board.getInstance();
-    @Override
-    public void dealDamage(Unit target) {
-        super.dealDamage(target);
-        if (target.healthAmount <= 0) {
-            target.death();
-        }
-    }
 
     public void death() {
         b.currentPosition[pos.x][pos.y] = new Empty();
+        b.player.addExp(experienceValue);
         b.removeEnemy(this);
     }
-    
+
     @Override
     public void move(Direction d) {
         Board b = Board.getInstance();
@@ -27,7 +21,9 @@ public class Enemy extends Unit{
                         b.currentPosition[pos.x][pos.y] = middleman;
                         pos.y++;
                     }
-                    //case '@' -> return; //TODO: Implement attacking sequence
+                    case '@' -> {
+                        dealDamage(b.player);
+                    }
                     default -> randomizeMove();
                 }
             }
@@ -39,7 +35,9 @@ public class Enemy extends Unit{
                         b.currentPosition[pos.x][pos.y] = middleman;
                         pos.y--;
                     }
-                    //case '@' -> return; //TODO: Implement attacking sequence
+                    case '@' -> {
+                        dealDamage(b.player);
+                    }
                     default -> randomizeMove();
                 }
             }
@@ -51,7 +49,9 @@ public class Enemy extends Unit{
                         b.currentPosition[pos.x][pos.y] = middleman;
                         pos.x++;
                     }
-                    //case '@' -> return; //TODO: Implement attacking sequence
+                    case '@' -> {
+                        dealDamage(b.player);
+                    }
                     default -> randomizeMove();
                 }
             }
@@ -63,12 +63,15 @@ public class Enemy extends Unit{
                         b.currentPosition[pos.x][pos.y] = middleman;
                         pos.x--;
                     }
-                    //case '@' -> return; //TODO: Implement attacking sequence
+                    case '@' -> {
+                        dealDamage(b.player);
+                    }
                     default -> randomizeMove();
                 }
             }
         }
     }
+  
     public void randomizeMove() {
         int direction = Math.round((float)Math.random()*5) + 1;
         switch (direction) {

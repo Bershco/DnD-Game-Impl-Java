@@ -6,7 +6,7 @@ public class Board {
     public Tile[][] currentPosition;
     private ArrayList<Enemy> allEnemies;
     private ArrayList<Wall> allWalls;
-    private Player player;
+    public Player player;
 
     private Board(){
 
@@ -28,5 +28,10 @@ public class Board {
     }
     public void removeEnemy(Enemy e) {
         allEnemies.remove(e);
+    }
+
+    public void gameOver() {
+        player.tile = 'X';
+        //TODO (UI): print board and display game over message
     }
 }
