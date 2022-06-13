@@ -71,6 +71,7 @@ public class Enemy extends Unit{
             }
         }
     }
+  
     public void randomizeMove() {
         int direction = Math.round((float)Math.random()*5) + 1;
         switch (direction) {
