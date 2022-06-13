@@ -1,4 +1,9 @@
-public class Trap extends Enemy{
+package BusinessLayer;
+
+import BusinessLayer.Board;
+import BusinessLayer.Enemy;
+
+public class Trap extends Enemy {
     public int visibilityTime;
     public int invisibilityTime;
     public int ticksCount = 0;

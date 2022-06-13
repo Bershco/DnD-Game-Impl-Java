@@ -1,4 +1,8 @@
-public class Boss extends Monster implements HeroicUnit{
+package BusinessLayer;
+
+import BusinessLayer.Board;
+
+public class Boss extends Monster implements HeroicUnit {
     public int abilityFrequency;
     public int combatTicks;
 

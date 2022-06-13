@@ -1,3 +1,5 @@
+package BusinessLayer;
+
 public class Tile {
     public char tile;
     public Position pos;

@@ -1,4 +1,10 @@
-public class Monster extends Enemy{
+package BusinessLayer;
+
+import BusinessLayer.Board;
+import BusinessLayer.Direction;
+import BusinessLayer.Enemy;
+
+public class Monster extends Enemy {
     public int visionRange;
     protected void moveProperly() {
         int dx = pos.x - Board.getInstance().player.pos.x;

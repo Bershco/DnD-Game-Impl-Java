@@ -1,4 +1,6 @@
-public class Unit extends Tile{
+package BusinessLayer;
+
+public class Unit extends Tile {
     public String name;
     public int healthPool;
     public int healthAmount;

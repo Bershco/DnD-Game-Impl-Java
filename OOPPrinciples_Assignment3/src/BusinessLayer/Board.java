@@ -1,5 +1,6 @@
+package BusinessLayer;
+
 import java.util.ArrayList;
-import java.util.List;
 
 public class Board {
     private static Board instance;

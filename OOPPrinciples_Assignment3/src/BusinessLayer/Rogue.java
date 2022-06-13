@@ -1,3 +1,9 @@
+package BusinessLayer;
+
+import BusinessLayer.Board;
+import BusinessLayer.Enemy;
+import BusinessLayer.Player;
+
 import java.util.ArrayList;
 
 public class Rogue extends Player {

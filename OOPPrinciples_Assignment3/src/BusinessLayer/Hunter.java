@@ -1,3 +1,8 @@
+package BusinessLayer;
+
+import BusinessLayer.Board;
+import BusinessLayer.Enemy;
+
 import java.util.ArrayList;
 
 public class Hunter extends Player {

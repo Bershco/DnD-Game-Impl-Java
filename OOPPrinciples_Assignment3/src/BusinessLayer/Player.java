@@ -1,4 +1,9 @@
-public class Player extends Unit implements HeroicUnit{
+package BusinessLayer;
+
+import BusinessLayer.Board;
+import BusinessLayer.HeroicUnit;
+
+public class Player extends Unit implements HeroicUnit {
     protected int experience;
     protected int playerLevel;
     protected Board b = Board.getInstance();

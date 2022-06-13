@@ -1,4 +1,10 @@
-public class Enemy extends Unit{
+package BusinessLayer;
+
+import BusinessLayer.Board;
+import BusinessLayer.Direction;
+import BusinessLayer.Empty;
+
+public class Enemy extends Unit {
     public int experienceValue;
 
     Board b = Board.getInstance();
