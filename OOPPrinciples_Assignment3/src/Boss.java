@@ -15,7 +15,11 @@ public class Boss extends Monster implements HeroicUnit{
     }
     @Override
     public void castAbility() {
-        //TODO implement castAbility()
+        if (attackPoints > Board.getInstance().player.defensePoints) {
+            Board.getInstance().player.healthAmount -= attackPoints;
+            if (Board.getInstance().player.healthAmount <= 0)
+                Board.getInstance().player.death();
+        }
     }
     @Override
     public void onGameTick() {
