@@ -1,0 +1,37 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class Board {
+    private static Board instance;
+    public Tile[][] currentPosition;
+    private ArrayList<Enemy> allEnemies;
+    private ArrayList<Wall> allWalls;
+    public Player player;
+
+    private Board(){
+
+    }
+
+    public static Board getInstance() {
+        if(instance == null)
+            instance = new Board();
+        return instance;
+    }
+
+    public ArrayList<Enemy> getEnemies(int range) {
+        ArrayList<Enemy> closeEnemies = new ArrayList<>();
+        allEnemies.forEach(enemy -> {
+            if(player.range(enemy) < range)
+                closeEnemies.add(enemy);
+        });
+        return closeEnemies;
+    }
+    public void removeEnemy(Enemy e) {
+        allEnemies.remove(e);
+    }
+
+    public void gameOver() {
+        player.tile = 'X';
+        //TODO (UI): print board and display game over message
+    }
+}

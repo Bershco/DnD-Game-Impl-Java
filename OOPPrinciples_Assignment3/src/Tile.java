@@ -6,6 +6,6 @@ public class Tile {
     }
 
     public String toString() {
-        return ""+tile;
+        return "" + tile;
     }
 }
