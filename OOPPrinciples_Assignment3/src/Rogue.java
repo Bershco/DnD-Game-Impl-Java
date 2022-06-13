@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Rogue extends Player {
     private int cost;
     private int currentEnergy;
@@ -31,8 +33,20 @@ public class Rogue extends Player {
     public void castAbility() {
         if (enoughResources()) {
             currentEnergy -= cost;
-            //TODO: damage all enemies within range < 2 (they will try to defend)
+            ArrayList<Enemy> enemies = Board.getInstance().getEnemies(2);
+            enemies.forEach(enemy -> {
+                if(attackPoints > enemy.defensePoints)
+                    enemy.healthAmount -= attackPoints;
+            });
         }
         //TODO: provide error message
+    }
+
+    @Override
+    public String description() {
+        return super.description() +
+            "Current Energy: " + currentEnergy + " out of 100\n" +
+            "Ability Cost: " + cost + "\n" +
+            "Ability Range: 2\n";
     }
 }

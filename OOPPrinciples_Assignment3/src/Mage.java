@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Random;
+
 public class Mage extends  Player{
     private int manaPool;
     private int currentMana;
@@ -41,12 +44,28 @@ public class Mage extends  Player{
         if(enoughResources()) {
             currentMana -= manaCost;
             int hits = 0;
-            while (hits < hitCount ) { //TODO: add living enemy exists within range clause
-                //TODO: damage an enemy within the ability range (it will try to defend itself)
+            ArrayList<Enemy> enemies = Board.getInstance().getEnemies(abilityRange);
+            while (hits < hitCount && enemies.size() > 0) {
+                Random rnd = new Random();
+                int index = rnd.nextInt(enemies.size());
+                Enemy enemy = enemies.get(index);
+                if(attackPoints > enemy.defensePoints)
+                    enemy.healthAmount -= spellPower;
                 hits++;
             }
         }
 
         //TODO: provide error message
+    }
+
+    @Override
+    public String description() {
+        return super.description() +
+            "Class: Mage\n" +
+            "Mana: " + currentMana + " out of " + manaPool + "\n" +
+            "Spell Cost: " + manaCost + "\n" +
+            "Spell Power: " + spellPower + "\n" +
+            "Ability Range: " + abilityRange + "\n" +
+            "Hit Count: " + hitCount + "\n";
     }
 }

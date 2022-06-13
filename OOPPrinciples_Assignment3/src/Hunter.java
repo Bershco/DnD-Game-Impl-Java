@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Hunter extends Player {
     private int range;
     private int arrowCount;
@@ -39,8 +41,24 @@ public class Hunter extends Player {
     public void castAbility() {
         if(enoughResources()) {
             arrowCount--;
-            //TODO: deal damage to the closest enemy within range
+            ArrayList<Enemy> enemies = Board.getInstance().getEnemies(range);
+            Enemy closestEnemy = enemies.get(0);
+            for (Enemy enemy : enemies) {
+                if(this.range(enemy) > this.range(closestEnemy))
+                    closestEnemy = enemy;
+            }
+
+            if(attackPoints > closestEnemy.defensePoints)
+                closestEnemy.healthAmount -= attackPoints;
         }
         //TODO: provide error message
+    }
+
+    @Override
+    public String description() {
+        return super.description() +
+            "Attack Range: " + range + "\n" +
+            "Remaining Arrows: " + arrowCount + "\n" +
+            "Countdown Until Arrow: " + (10 - tickCount) + "\n";
     }
 }

@@ -1,5 +1,4 @@
 public class Boss extends Monster implements HeroicUnit{
-    public int visionRange;
     public int abilityFrequency;
     public int combatTicks;
 
@@ -20,10 +19,17 @@ public class Boss extends Monster implements HeroicUnit{
     }
     @Override
     public void onGameTick() {
-        if (range(player) < visionRange)
+        if (range(Board.getInstance().player) < visionRange)
             moveProperly();
-        else
+        else {
             combatTicks = 0;
             moveRandomly();
+        }
+    }
+
+    @Override
+    public String description() {
+        return super.description() +
+            "Cooldown: " + (abilityFrequency - combatTicks) + " out of " + abilityFrequency + "\n";
     }
 }

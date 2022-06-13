@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Random;
+
 public class Warrior extends Player {
     private int abilityCooldown;
     private int remainingCooldown;
@@ -34,8 +37,20 @@ public class Warrior extends Player {
         if (enoughResources()) {
             remainingCooldown = abilityCooldown;
             healthAmount = Math.min(healthPool, healthAmount + defensePoints * 10);
+            ArrayList<Enemy> closeEnemies = Board.getInstance().getEnemies(3);
+            Random rnd = new Random();
+            int index = rnd.nextInt(closeEnemies.size());
+            Enemy enemy = closeEnemies.get(index);
+            enemy.healthAmount -= healthPool * 10;
             return;
         }
 
+    }
+
+    @Override
+    public String description() {
+        return super.description() +
+            "Ability Range: 3\n" +
+            "Cooldown: " + remainingCooldown + " out of " + abilityCooldown + "\n";
     }
 }
