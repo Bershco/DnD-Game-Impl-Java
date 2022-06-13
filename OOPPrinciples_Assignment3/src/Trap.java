@@ -4,8 +4,6 @@ public class Trap extends Enemy{
     public int ticksCount = 0;
     public boolean visible = true;
 
-    private void invert() { visible = !visible;}
-
     public Trap(int vis, int invis) {
         visibilityTime = vis;
         invisibilityTime = invis;
@@ -15,9 +13,13 @@ public class Trap extends Enemy{
     }
     @Override
     public void onGameTick() {
-        if (ticksCount == visibilityTime) invert();
-        if (ticksCount == visibilityTime + invisibilityTime) ticksCount = 0;
+        visible = ticksCount < visibilityTime;
+        if (ticksCount == (visibilityTime + invisibilityTime))
+            ticksCount = 0;
         else ticksCount++;
-        //if (range(player) < 2) attackPlayer();
+
+        if (range(Board.getInstance().player) < 2) {
+            dealDamage(Board.getInstance().player);
+        }
     }
 }
