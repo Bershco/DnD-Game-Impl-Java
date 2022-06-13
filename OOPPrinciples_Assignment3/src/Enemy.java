@@ -5,7 +5,10 @@ public class Enemy extends Unit{
 
     public void death() {
         b.currentPosition[pos.x][pos.y] = new Empty();
+        b.player.addExp(experienceValue);
         b.removeEnemy(this);
+    }
+
     @Override
     public void move(Direction d) {
         Board b = Board.getInstance();
