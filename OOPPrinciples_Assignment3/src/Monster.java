@@ -33,4 +33,10 @@ public class Monster extends Enemy{
         else
             moveRandomly();
     }
+
+    @Override
+    public String description() {
+        return super.description() +
+            "Vision Range: " + visionRange + "\n";
+    }
 }

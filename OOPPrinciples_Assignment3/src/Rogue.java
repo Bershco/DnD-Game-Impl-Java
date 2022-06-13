@@ -41,4 +41,12 @@ public class Rogue extends Player {
         }
         //TODO: provide error message
     }
+
+    @Override
+    public String description() {
+        return super.description() +
+            "Current Energy: " + currentEnergy + " out of 100\n" +
+            "Ability Cost: " + cost + "\n" +
+            "Ability Range: 2\n";
+    }
 }

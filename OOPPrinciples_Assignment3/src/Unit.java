@@ -5,12 +5,15 @@ public class Unit extends Tile{
     public int attackPoints;
     public int defensePoints;
 
-    public String getname() {
+    public String getName() {
         return name;
     }
 
     public String description() {
-        throw new UnsupportedOperationException("No implementation yet");
+        return "" + name + ":\n" +
+                "Health: " + healthAmount + " out of " + healthPool + "\n" +
+                "Attack: " + attackPoints + "\n" +
+                "Defense: " + defensePoints + "\n";
     }
 
     public String toString() {
