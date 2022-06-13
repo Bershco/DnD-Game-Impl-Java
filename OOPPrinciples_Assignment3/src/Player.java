@@ -56,4 +56,11 @@ public class Player extends Unit implements HeroicUnit{
     protected boolean enoughResources() {
         return true;
     }
+
+    @Override
+    public String description() {
+        return super.description() +
+            "Experience: " + experience + "\n" +
+            "Level: " + playerLevel + "\n";
+    }
 }

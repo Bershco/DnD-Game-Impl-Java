@@ -53,4 +53,12 @@ public class Hunter extends Player {
         }
         //TODO: provide error message
     }
+
+    @Override
+    public String description() {
+        return super.description() +
+            "Attack Range: " + range + "\n" +
+            "Remaining Arrows: " + arrowCount + "\n" +
+            "Countdown Until Arrow: " + (10 - tickCount) + "\n";
+    }
 }

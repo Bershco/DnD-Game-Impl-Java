@@ -57,4 +57,15 @@ public class Mage extends  Player{
 
         //TODO: provide error message
     }
+
+    @Override
+    public String description() {
+        return super.description() +
+            "Class: Mage\n" +
+            "Mana: " + currentMana + " out of " + manaPool + "\n" +
+            "Spell Cost: " + manaCost + "\n" +
+            "Spell Power: " + spellPower + "\n" +
+            "Ability Range: " + abilityRange + "\n" +
+            "Hit Count: " + hitCount + "\n";
+    }
 }

@@ -83,4 +83,10 @@ public class Enemy extends Unit{
         }
 
     }
+
+    @Override
+    public String description() {
+        return super.description() +
+            "Experience Value: " + experienceValue + "\n";
+    }
 }

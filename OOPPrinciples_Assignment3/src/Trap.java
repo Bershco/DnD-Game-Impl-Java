@@ -22,4 +22,18 @@ public class Trap extends Enemy{
             dealDamage(Board.getInstance().player);
         }
     }
+
+    @Override
+    public String description() {
+        String output = super.description() +
+            "Visible: " + visible + "\n" +
+            "Visibility Time: " + visibilityTime + "\n" +
+            "Invisibility Time: " + invisibilityTime + "\n";
+        if (visible)
+            output += "Time Until Invisibility: " + (visibilityTime - ticksCount) + "\n";
+        else
+            output += "Time Until Visibility: " + (visibilityTime + invisibilityTime - ticksCount) + "\n";
+
+        return output;
+    }
 }
