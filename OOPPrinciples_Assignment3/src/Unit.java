@@ -29,5 +29,7 @@ public class Unit extends Tile{
         int damage = attackRoll - defenseRoll;
         if (damage > 0)
             target.healthAmount -= damage;
+        if (target.healthAmount <= 0)
+            target.death();
     }
 }
