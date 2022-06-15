@@ -11,6 +11,9 @@ public class Hunter extends Player {
         tickCount = 0;
     }
 
+    /**
+     * This method describes the process of a level up
+     */
     @Override
     public void onLevelUp() {
         super.onLevelUp();
@@ -20,6 +23,18 @@ public class Hunter extends Player {
         defensePoints += playerLevel;
     }
 
+    /**
+     * This method dictates if the hunter has enough resources to use his ability
+     * @return true if he has enough, false otherwise
+     */
+    @Override
+    protected boolean enoughResources() {
+        return super.enoughResources();
+    }
+
+    /**
+     * This method describes the action and background activity of the hunter regarding their turn
+     */
     @Override
     public void onGameTick() {
         super.onGameTick();
@@ -32,11 +47,9 @@ public class Hunter extends Player {
             tickCount++;
     }
 
-    @Override
-    protected boolean enoughResources() {
-        return super.enoughResources();
-    }
-
+    /**
+     * This method describes the ability a hunter can cast
+     */
     @Override
     public void castAbility() {
         if(enoughResources()) {
