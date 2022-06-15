@@ -12,7 +12,7 @@ public class Unit extends Tile{
     /**
      * This method returns full information of the current unit.
      * Mainly used to print the information of each unit during combat / on player's turn
-     * @return
+     * @return description of the unit
      */
     public String description() {
         return "" + name + ":\n" +

@@ -66,6 +66,10 @@ public class Board {
             e.onGameTick();
         }
     }
+
+    /**
+     * This method describes the turn of events when you lose the game
+     */
     public void gameOverLose() {
         Tile grave = new Grave(player.pos);
         currentPosition[grave.pos.x][grave.pos.y] = grave;

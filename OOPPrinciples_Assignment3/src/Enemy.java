@@ -51,9 +51,7 @@ public class Enemy extends Unit{
                         b.currentPosition[pos.x][pos.y] = middleman;
                         pos.y++;
                     }
-                    case '@' -> {
-                        dealDamage(b.player);
-                    }
+                    case '@' -> dealDamage(b.player);
                     default -> randomizeMove();
                 }
             }
@@ -65,9 +63,7 @@ public class Enemy extends Unit{
                         b.currentPosition[pos.x][pos.y] = middleman;
                         pos.y--;
                     }
-                    case '@' -> {
-                        dealDamage(b.player);
-                    }
+                    case '@' -> dealDamage(b.player);
                     default -> randomizeMove();
                 }
             }
@@ -79,9 +75,7 @@ public class Enemy extends Unit{
                         b.currentPosition[pos.x][pos.y] = middleman;
                         pos.x++;
                     }
-                    case '@' -> {
-                        dealDamage(b.player);
-                    }
+                    case '@' -> dealDamage(b.player);
                     default -> randomizeMove();
                 }
             }
@@ -93,9 +87,7 @@ public class Enemy extends Unit{
                         b.currentPosition[pos.x][pos.y] = middleman;
                         pos.x--;
                     }
-                    case '@' -> {
-                        dealDamage(b.player);
-                    }
+                    case '@' -> dealDamage(b.player);
                     default -> randomizeMove();
                 }
             }
