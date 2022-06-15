@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Warrior extends Player {
-    private int abilityCooldown;
+    private final int abilityCooldown;
     private int remainingCooldown;
 
     public Warrior(int cooldown){
@@ -10,6 +10,9 @@ public class Warrior extends Player {
         remainingCooldown = 0;
     }
 
+    /**
+     * This method describes the process of a level up
+     */
     @Override
     public void onLevelUp() {
         super.onLevelUp();
@@ -19,6 +22,9 @@ public class Warrior extends Player {
         defensePoints += playerLevel;
     }
 
+    /**
+     * This method describes the action and background activity of the warrior regarding their turn
+     */
     @Override
     public void onGameTick() {
         super.onGameTick();
@@ -26,11 +32,18 @@ public class Warrior extends Player {
         remainingCooldown = Math.max(0, remainingCooldown - 1);
     }
 
+    /**
+     * This method dictates if the warrior has enough resources to use his ability
+     * @return true if he has enough, false otherwise
+     */
     @Override
     protected boolean enoughResources() {
         return remainingCooldown == 0;
     }
 
+    /**
+     * This method describes the ability a warrior can cast
+     */
     @Override
     public void castAbility() {
         //TODO: provide error message
@@ -42,7 +55,6 @@ public class Warrior extends Player {
             int index = rnd.nextInt(closeEnemies.size());
             Enemy enemy = closeEnemies.get(index);
             enemy.healthAmount -= healthPool * 10;
-            return;
         }
 
     }

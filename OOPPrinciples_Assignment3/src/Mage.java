@@ -18,6 +18,9 @@ public class Mage extends  Player{
         this.abilityRange = abilityRange;
     }
 
+    /**
+     * This method describes the process of a level up
+     */
     @Override
     public void onLevelUp() {
         super.onLevelUp();
@@ -27,6 +30,9 @@ public class Mage extends  Player{
         spellPower += playerLevel * 10;
     }
 
+    /**
+     * This method describes the action and background activity of the mage regarding their turn
+     */
     @Override
     public void onGameTick() {
         super.onGameTick();
@@ -34,11 +40,18 @@ public class Mage extends  Player{
         currentMana = Math.min(manaPool, currentMana + playerLevel);
     }
 
+    /**
+     * This method dictates if the mage has enough resources to use his ability
+     * @return true if he has enough, false otherwise
+     */
     @Override
     protected boolean enoughResources() {
         return currentMana >= manaCost;
     }
 
+    /**
+     * This method describes the ability a hunter can cast
+     */
     @Override
     public void castAbility() {
         if(enoughResources()) {
