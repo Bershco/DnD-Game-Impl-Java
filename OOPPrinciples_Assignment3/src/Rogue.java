@@ -9,6 +9,9 @@ public class Rogue extends Player {
         currentEnergy = 100;
     }
 
+    /**
+     * This method describes the process of a level up
+     */
     @Override
     public void onLevelUp() {
         super.onLevelUp();
@@ -17,6 +20,9 @@ public class Rogue extends Player {
         attackPoints += playerLevel * 3;
     }
 
+    /**
+     * This method describes the action and background activity of the rogue regarding their turn
+     */
     @Override
     public void onGameTick() {
         super.onGameTick();
@@ -24,11 +30,18 @@ public class Rogue extends Player {
         currentEnergy = Math.min(100, currentEnergy + 10);
     }
 
+    /**
+     * This method dictates if the rogue has enough resources to use his ability
+     * @return true if he has enough, false otherwise
+     */
     @Override
     protected boolean enoughResources() {
         return currentEnergy >= cost;
     }
 
+    /**
+     * This method describes the ability a rogue can cast
+     */
     @Override
     public void castAbility() {
         if (enoughResources()) {
