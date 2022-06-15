@@ -1,5 +1,4 @@
 public class Boss extends Monster implements HeroicUnit{
-    public int visionRange;
     public int abilityFrequency;
     public int combatTicks;
     private final Player player = b.getPlayer();
@@ -34,6 +33,13 @@ public class Boss extends Monster implements HeroicUnit{
     @Override
     public void castAbility() {
         dealDamage(player);
+        /**
+        if (attackPoints > Board.getInstance().player.defensePoints) {
+            Board.getInstance().player.healthAmount -= attackPoints;
+            if (Board.getInstance().player.healthAmount <= 0)
+                Board.getInstance().player.death();
+        }
+        */
     }
 
     /**
@@ -45,10 +51,17 @@ public class Boss extends Monster implements HeroicUnit{
      */
     @Override
     public void onGameTick() {
-        if (range(player) < visionRange)
+        if (range(Board.getInstance().player) < visionRange)
             moveProperly();
-        else
+        else {
             combatTicks = 0;
             moveRandomly();
+        }
+    }
+
+    @Override
+    public String description() {
+        return super.description() +
+            "Cooldown: " + (abilityFrequency - combatTicks) + " out of " + abilityFrequency + "\n";
     }
 }

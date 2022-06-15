@@ -1,6 +1,6 @@
 public class Monster extends Enemy{
     public int visionRange;
-    private final Tile player = b.getPlayer(); //TODO: remove this
+    private final Tile player = b.getPlayer();
 
     public Monster(int exp) {
         setExperienceValue(exp);
@@ -10,8 +10,8 @@ public class Monster extends Enemy{
      * This method describes a proper movement for a monster - is called when the monster is in range of the player
      */
     protected void moveProperly() {
-        int dx = pos.x - player.pos.x;
-        int dy = pos.y - player.pos.y;
+        int dx = pos.x - Board.getInstance().player.pos.x;
+        int dy = pos.y - Board.getInstance().player.pos.y;
         if (Math.abs(dx) > Math.abs(dy)) {
             if (dx > 0)
                 move(Direction.LEFT);
@@ -37,9 +37,15 @@ public class Monster extends Enemy{
      */
     @Override
     public void onGameTick() {
-        if (range(player) < visionRange)
+        if (range(Board.getInstance().player) < visionRange)
             moveProperly();
         else
             moveRandomly();
+    }
+
+    @Override
+    public String description() {
+        return super.description() +
+            "Vision Range: " + visionRange + "\n";
     }
 }

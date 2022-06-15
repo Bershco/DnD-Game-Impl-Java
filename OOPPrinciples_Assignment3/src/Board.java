@@ -6,7 +6,7 @@ public class Board {
     public Tile[][] currentPosition;
     private ArrayList<Enemy> allEnemies;
     private ArrayList<Wall> allWalls;
-    private Player player;
+    public Player player;
 
     /**
      * The board is a singleton.

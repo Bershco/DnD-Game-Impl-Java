@@ -28,6 +28,7 @@ public class Enemy extends Unit{
      */
     public void death() {
         b.currentPosition[pos.x][pos.y] = new Empty();
+        b.player.addExp(experienceValue);
         b.removeEnemy(this);
     }
 
@@ -50,7 +51,9 @@ public class Enemy extends Unit{
                         b.currentPosition[pos.x][pos.y] = middleman;
                         pos.y++;
                     }
-                    //case '@' -> return; //TODO: Implement attacking sequence
+                    case '@' -> {
+                        dealDamage(b.player);
+                    }
                     default -> randomizeMove();
                 }
             }
@@ -62,7 +65,9 @@ public class Enemy extends Unit{
                         b.currentPosition[pos.x][pos.y] = middleman;
                         pos.y--;
                     }
-                    //case '@' -> return; //TODO: Implement attacking sequence
+                    case '@' -> {
+                        dealDamage(b.player);
+                    }
                     default -> randomizeMove();
                 }
             }
@@ -74,7 +79,9 @@ public class Enemy extends Unit{
                         b.currentPosition[pos.x][pos.y] = middleman;
                         pos.x++;
                     }
-                    //case '@' -> return; //TODO: Implement attacking sequence
+                    case '@' -> {
+                        dealDamage(b.player);
+                    }
                     default -> randomizeMove();
                 }
             }
@@ -86,7 +93,9 @@ public class Enemy extends Unit{
                         b.currentPosition[pos.x][pos.y] = middleman;
                         pos.x--;
                     }
-                    //case '@' -> return; //TODO: Implement attacking sequence
+                    case '@' -> {
+                        dealDamage(b.player);
+                    }
                     default -> randomizeMove();
                 }
             }
@@ -106,5 +115,11 @@ public class Enemy extends Unit{
             case 5 -> move(Direction.STAND);
         }
 
+    }
+
+    @Override
+    public String description() {
+        return super.description() +
+            "Experience Value: " + experienceValue + "\n";
     }
 }

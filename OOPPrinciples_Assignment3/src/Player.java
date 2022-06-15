@@ -58,6 +58,12 @@ public class Player extends Unit implements HeroicUnit{
     public void death() {
         b.gameOverLose();
     }
+    /**
+     * This method describes how experience is added to the player
+     */
+    public void addExp(int exp) {
+        experience += exp;
+    }
 
     /**
      * This method dictates if the player has enough resources to use his ability
@@ -66,5 +72,12 @@ public class Player extends Unit implements HeroicUnit{
      * */
     protected boolean enoughResources() {
         return true;
+    }
+
+    @Override
+    public String description() {
+        return super.description() +
+            "Experience: " + experience + "\n" +
+            "Level: " + playerLevel + "\n";
     }
 }

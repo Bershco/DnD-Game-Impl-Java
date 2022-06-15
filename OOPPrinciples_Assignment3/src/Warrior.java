@@ -58,4 +58,11 @@ public class Warrior extends Player {
         }
 
     }
+
+    @Override
+    public String description() {
+        return super.description() +
+            "Ability Range: 3\n" +
+            "Cooldown: " + remainingCooldown + " out of " + abilityCooldown + "\n";
+    }
 }
