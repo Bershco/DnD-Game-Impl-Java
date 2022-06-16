@@ -5,15 +5,11 @@ public class Trap extends Enemy{
     public boolean visible = true;
     Board b = Board.getInstance();
     Player player = b.getPlayer();
-
-    /**
-     * This method is a helper method to invert the trap from invisible to visible and vice versa
-     */
-    private void invert() { visible = !visible;}
-  
-    public Trap(int vis, int invis) {
-        visibilityTime = vis;
-        invisibilityTime = invis;
+    
+    public Trap(String _name, char _tile, int _healthPool, int _attackPoints, int _defensePoints, int _experienceValue,int _visionRange, int _visibility, int _invisibility) {
+        super(_name,_tile,_healthPool,_attackPoints,_defensePoints,_experienceValue);
+        visibilityTime = _visibility;
+        invisibilityTime = _invisibility;
     }
 
     /**
@@ -35,13 +31,6 @@ public class Trap extends Enemy{
         if (range(player) < 2) attackPlayer();
     }
 
-    /**
-     * This method describes a death of a trap, which shouldn't happen
-     */
-    @Override
-    public void death() {
-        throw new IllegalArgumentException("a trap cannot die, something went wrong");
-
     @Override
     public String description() {
         String output = super.description() +
@@ -52,7 +41,6 @@ public class Trap extends Enemy{
             output += "Time Until Invisibility: " + (visibilityTime - ticksCount) + "\n";
         else
             output += "Time Until Visibility: " + (visibilityTime + invisibilityTime - ticksCount) + "\n";
-
         return output;
     }
 }

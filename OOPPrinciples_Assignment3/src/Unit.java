@@ -9,7 +9,8 @@ public class Unit extends Tile{
         return name;
     }
 
-    public Unit(String _name, int _healthPool, int _attackPoints, int _defensePoints) {
+    public Unit(String _name, char _tile, int _healthPool, int _attackPoints, int _defensePoints) {
+        super(_tile);
         name = _name;
         healthPool = _healthPool;
         healthAmount = healthPool;
