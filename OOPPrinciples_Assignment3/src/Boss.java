@@ -3,8 +3,8 @@ public class Boss extends Monster implements HeroicUnit{
     public int combatTicks;
     private final Player player = b.getPlayer();
 
-    public Boss(int _experienceValue,int _visionRange, int _abilityFrequency, int _combatTicks) {
-        super(_experienceValue);
+    public Boss(String _name, char _tile, int _healthPool, int _attackPoints, int _defensePoints,int _visionRange, int _experienceValue, int _abilityFrequency, int _combatTicks) {
+        super(_name,_tile,_healthPool,_attackPoints,_defensePoints,_experienceValue,_visionRange);
         visionRange = _visionRange;
         abilityFrequency = _abilityFrequency;
         combatTicks = _combatTicks;
@@ -33,7 +33,7 @@ public class Boss extends Monster implements HeroicUnit{
     @Override
     public void castAbility() {
         dealDamage(player);
-        /**
+        /*
         if (attackPoints > Board.getInstance().player.defensePoints) {
             Board.getInstance().player.healthAmount -= attackPoints;
             if (Board.getInstance().player.healthAmount <= 0)
