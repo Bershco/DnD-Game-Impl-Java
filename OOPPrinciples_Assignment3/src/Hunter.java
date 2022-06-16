@@ -5,9 +5,9 @@ public class Hunter extends Player {
     private int arrowCount;
     private int tickCount;
 
-    public Hunter(String _name, int _healthPool, int _attackPoints, int _defensePoints, int range){
+    public Hunter(String _name, int _healthPool, int _attackPoints, int _defensePoints, int _range){
         super(_name,_healthPool,_attackPoints,_defensePoints);
-        this.range = range;
+        range = _range;
         arrowCount = playerLevel * 10;
         tickCount = 0;
     }
@@ -30,7 +30,8 @@ public class Hunter extends Player {
      */
     @Override
     protected boolean enoughResources() {
-        return super.enoughResources();
+        ArrayList<Enemy> enemies = Board.getInstance().getEnemies(range);
+        return (arrowCount != 0) && (!enemies.isEmpty());
     }
 
     /**
@@ -58,12 +59,11 @@ public class Hunter extends Player {
             ArrayList<Enemy> enemies = Board.getInstance().getEnemies(range);
             Enemy closestEnemy = enemies.get(0);
             for (Enemy enemy : enemies) {
-                if(this.range(enemy) > this.range(closestEnemy))
+                if(range(enemy) < range(closestEnemy))
                     closestEnemy = enemy;
             }
 
-            if(attackPoints > closestEnemy.defensePoints)
-                closestEnemy.healthAmount -= attackPoints;
+            dealDamage(closestEnemy);
         }
         //TODO: provide error message
     }
