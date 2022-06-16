@@ -5,7 +5,8 @@ public class Warrior extends Player {
     private final int abilityCooldown;
     private int remainingCooldown;
 
-    public Warrior(int cooldown){
+    public Warrior(String _name, int _healthAmount, int _attackPoints, int _defensePoints, int cooldown){
+        super(_name,_healthAmount,_attackPoints,_defensePoints);
         abilityCooldown = cooldown;
         remainingCooldown = 0;
     }

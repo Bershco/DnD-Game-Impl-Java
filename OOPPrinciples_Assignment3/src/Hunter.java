@@ -1,11 +1,12 @@
 import java.util.ArrayList;
 
 public class Hunter extends Player {
-    private int range;
+    private final int range;
     private int arrowCount;
     private int tickCount;
 
-    public Hunter(int range){
+    public Hunter(String _name, int _healthPool, int _attackPoints, int _defensePoints, int range){
+        super(_name,_healthPool,_attackPoints,_defensePoints);
         this.range = range;
         arrowCount = playerLevel * 10;
         tickCount = 0;

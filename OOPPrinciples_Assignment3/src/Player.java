@@ -3,7 +3,8 @@ public class Player extends Unit implements HeroicUnit{
     protected int playerLevel;
     protected Board b = Board.getInstance();
 
-    public Player() {
+    public Player(String _name, int _healthPool, int _attackPoints, int _defensePoints) {
+        super(_name,_healthPool,_attackPoints,_defensePoints);
         tile = '@';
         experience = 0;
         playerLevel = 1;
@@ -21,9 +22,12 @@ public class Player extends Unit implements HeroicUnit{
     @Override
     public void onGameTick() {
         super.onGameTick();
+        //TODO: implement visitor pattern to check events for user entered action
 
         if(experience >= playerLevel * 50)
             onLevelUp();
+
+        b.onGameTick();
     }
 
     /**
@@ -69,7 +73,7 @@ public class Player extends Unit implements HeroicUnit{
      * This method dictates if the player has enough resources to use his ability
      * because this method is for a player - which should not be instanced at all, it always returns true
      * @return true
-     * */
+     */
     protected boolean enoughResources() {
         return true;
     }
