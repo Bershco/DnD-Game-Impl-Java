@@ -34,4 +34,9 @@ public class Trap extends Enemy{
             output += "Time Until Visibility: " + (visibilityTime + invisibilityTime - ticksCount) + "\n";
         return output;
     }
+
+    @Override
+    public String toString() {
+        return (ticksCount < visibilityTime) ? super.toString() : ".";
+    }
 }
