@@ -1,11 +1,12 @@
 import java.util.ArrayList;
 
 public class Rogue extends Player {
-    private int cost;
+    private final int cost;
     private int currentEnergy;
 
-    public Rogue(int cost){
-        this.cost = cost;
+    public Rogue(String _name, int _healthPool, int _attackPoints, int _defensePoints, int _cost){
+        super(_name,_healthPool,_attackPoints,_defensePoints);
+        cost = _cost;
         currentEnergy = 100;
     }
 

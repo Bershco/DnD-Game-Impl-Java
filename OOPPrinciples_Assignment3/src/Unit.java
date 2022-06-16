@@ -9,6 +9,14 @@ public class Unit extends Tile{
         return name;
     }
 
+    public Unit(String _name, int _healthPool, int _attackPoints, int _defensePoints) {
+        name = _name;
+        healthPool = _healthPool;
+        healthAmount = healthPool;
+        attackPoints = _attackPoints;
+        defensePoints = _defensePoints;
+    }
+
     /**
      * This method returns full information of the current unit.
      * Mainly used to print the information of each unit during combat / on player's turn

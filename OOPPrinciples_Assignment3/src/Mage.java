@@ -4,18 +4,19 @@ import java.util.Random;
 public class Mage extends  Player{
     private int manaPool;
     private int currentMana;
-    private int manaCost;
+    private final int manaCost;
     private int spellPower;
-    private int hitCount;
-    private int abilityRange;
+    private final int hitCount;
+    private final int abilityRange;
 
-    public Mage(int manaPool, int manaCost, int spellPower, int hitCount, int abilityRange) {
-        this.manaPool = manaPool;
+    public Mage(String _name, int _healthPool, int _attackPoints, int _defensePoints, int _manaPool, int _manaCost, int _spellPower, int _hitCount, int _abilityRange) {
+        super(_name,_healthPool,_attackPoints,_defensePoints);
+        manaPool = _manaPool;
         currentMana = manaPool / 4;
-        this.manaCost = manaCost;
-        this.spellPower = spellPower;
-        this.hitCount = hitCount;
-        this.abilityRange = abilityRange;
+        manaCost = _manaCost;
+        spellPower = _spellPower;
+        hitCount = _hitCount;
+        abilityRange = _abilityRange;
     }
 
     /**
