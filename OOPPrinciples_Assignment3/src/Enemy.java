@@ -3,7 +3,7 @@ public class Enemy extends Unit{
     private final int experienceValue;
     protected Board b = Board.getInstance();
 
-    public int getExperienceValue() {
+    protected int getExperienceValue() {
         return experienceValue;
     }
 

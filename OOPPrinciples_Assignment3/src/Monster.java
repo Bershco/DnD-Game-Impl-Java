@@ -1,6 +1,5 @@
 public class Monster extends Enemy{
     protected int visionRange;
-    private final Tile player = b.getPlayer();
 
     public Monster(String _name, char _tile, int _healthPool, int _attackPoints, int _defensePoints, int _experienceValue,int _visionRange) {
         super(_name,_tile,_healthPool,_attackPoints,_defensePoints,_experienceValue);
