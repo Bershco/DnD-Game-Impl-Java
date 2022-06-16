@@ -1,14 +1,10 @@
 public class Enemy extends Unit{
 
-    private int experienceValue;
+    private final int experienceValue;
     Board b = Board.getInstance();
 
     public int getExperienceValue() {
         return experienceValue;
-    }
-
-    protected void setExperienceValue(int exp) {
-        experienceValue = exp;
     }
 
 
@@ -56,7 +52,7 @@ public class Enemy extends Unit{
                         b.currentPosition[pos.x][pos.y] = middleman;
                         pos.y++;
                     }
-                    case '@' -> dealDamage(b.player);
+                    case '@' -> attackPlayer();
                     default -> randomizeMove();
                 }
             }
@@ -68,7 +64,7 @@ public class Enemy extends Unit{
                         b.currentPosition[pos.x][pos.y] = middleman;
                         pos.y--;
                     }
-                    case '@' -> dealDamage(b.player);
+                    case '@' -> attackPlayer();
                     default -> randomizeMove();
                 }
             }
@@ -80,7 +76,7 @@ public class Enemy extends Unit{
                         b.currentPosition[pos.x][pos.y] = middleman;
                         pos.x++;
                     }
-                    case '@' -> dealDamage(b.player);
+                    case '@' -> attackPlayer();
                     default -> randomizeMove();
                 }
             }
@@ -92,13 +88,16 @@ public class Enemy extends Unit{
                         b.currentPosition[pos.x][pos.y] = middleman;
                         pos.x--;
                     }
-                    case '@' -> dealDamage(b.player);
+                    case '@' -> attackPlayer();
                     default -> randomizeMove();
                 }
             }
         }
     }
 
+    public void attackPlayer() {
+        dealDamage(b.player);
+    }
     /**
      * This method moves the enemy randomly using a simple Math.random method call
      */
