@@ -23,7 +23,7 @@ public class Mage extends  Player{
      * This method describes the process of a level up
      */
     @Override
-    public void onLevelUp() {
+    protected void onLevelUp() {
         super.onLevelUp();
 
         manaPool += playerLevel * 25;
@@ -35,7 +35,7 @@ public class Mage extends  Player{
      * This method describes the action and background activity of the mage regarding their turn
      */
     @Override
-    public void onGameTick() {
+    protected void onGameTick() {
         super.onGameTick();
 
         currentMana = Math.min(manaPool, currentMana + playerLevel);

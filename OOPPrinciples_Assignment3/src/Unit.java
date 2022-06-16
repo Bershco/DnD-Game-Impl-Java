@@ -1,11 +1,11 @@
 public class Unit extends Tile{
-    public String name;
-    public int healthPool;
-    public int healthAmount;
-    public int attackPoints;
-    public int defensePoints;
+    private String name;
+    protected int healthPool;
+    protected int healthAmount;
+    protected int attackPoints;
+    protected int defensePoints;
 
-    public String getName() {
+    protected String getName() {
         return name;
     }
 
@@ -38,24 +38,24 @@ public class Unit extends Tile{
      * This method moves a unit
      * @param d the direction to attempt movement towards
      */
-    public void move(Direction d) {
+    protected void move(Direction d) {
     }
 
     /**
      * This method describes a unit's play when the turn is theirs
      */
-    public void onGameTick() {}
+    protected void onGameTick() {}
 
     /**
      * This method describes a death of a unit
      */
-    public void death() {}
+    protected void death() {}
 
     /**
      * This method is part of the combat system of the game, it is used to attack another unit
      * @param target The unit to attack
      */
-    public void dealDamage(Unit target) {
+    protected void dealDamage(Unit target) {
         int attackRoll = (int)Math.round(Math.random()*(attackPoints+1));
         int defenseRoll = (int)Math.round(Math.random()*(target.defensePoints+1));
         int damage = attackRoll - defenseRoll;

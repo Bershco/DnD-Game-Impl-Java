@@ -1,6 +1,6 @@
 public class Grave extends Tile {
     public Grave(Position _pos) {
-        tile = 'X';
+        super('X');
         pos = _pos;
     }
 }

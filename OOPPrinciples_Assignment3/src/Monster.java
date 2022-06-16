@@ -1,5 +1,5 @@
 public class Monster extends Enemy{
-    public int visionRange;
+    protected int visionRange;
     private final Tile player = b.getPlayer();
 
     public Monster(String _name, char _tile, int _healthPool, int _attackPoints, int _defensePoints, int _experienceValue,int _visionRange) {
@@ -37,7 +37,7 @@ public class Monster extends Enemy{
      * This method describes the action a monster acts upon after the player's turn
      */
     @Override
-    public void onGameTick() {
+    protected void onGameTick() {
         if (range(Board.getInstance().player) < visionRange)
             moveProperly();
         else

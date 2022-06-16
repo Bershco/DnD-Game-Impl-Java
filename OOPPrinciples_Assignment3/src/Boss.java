@@ -1,9 +1,9 @@
 public class Boss extends Monster implements HeroicUnit{
-    public int abilityFrequency;
-    public int combatTicks;
+    private final int abilityFrequency;
+    private int combatTicks;
     private final Player player = b.getPlayer();
 
-    public Boss(String _name, char _tile, int _healthPool, int _attackPoints, int _defensePoints,int _visionRange, int _experienceValue, int _abilityFrequency, int _combatTicks) {
+    protected Boss(String _name, char _tile, int _healthPool, int _attackPoints, int _defensePoints,int _visionRange, int _experienceValue, int _abilityFrequency, int _combatTicks) {
         super(_name,_tile,_healthPool,_attackPoints,_defensePoints,_experienceValue,_visionRange);
         visionRange = _visionRange;
         abilityFrequency = _abilityFrequency;
@@ -14,7 +14,7 @@ public class Boss extends Monster implements HeroicUnit{
      * This method is a followup to a player action if player is in vision range
      */
     @Override
-    public void moveProperly() {
+    protected void moveProperly() {
         if (combatTicks == abilityFrequency) {
             combatTicks = 0;
             castAbility();
@@ -33,13 +33,6 @@ public class Boss extends Monster implements HeroicUnit{
     @Override
     public void castAbility() {
         dealDamage(player);
-        /*
-        if (attackPoints > Board.getInstance().player.defensePoints) {
-            Board.getInstance().player.healthAmount -= attackPoints;
-            if (Board.getInstance().player.healthAmount <= 0)
-                Board.getInstance().player.death();
-        }
-        */
     }
 
     /**
@@ -50,7 +43,7 @@ public class Boss extends Monster implements HeroicUnit{
      *      move randomly and stop being agro
      */
     @Override
-    public void onGameTick() {
+    protected void onGameTick() {
         if (range(Board.getInstance().player) < visionRange)
             moveProperly();
         else {
