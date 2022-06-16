@@ -11,6 +11,11 @@ public class Enemy extends Unit{
         experienceValue = exp;
     }
 
+
+    public Enemy(String _name, char _tile, int _healthPool, int _attackPoints, int _defensePoints, int _experienceValue) {
+        super(_name,_tile,_healthPool,_attackPoints,_defensePoints);
+        experienceValue = _experienceValue;
+    }
     /**
      * This method is part of the combat system of the game, it is used to attack another unit (primarily the player)
      * @param target The unit to attack

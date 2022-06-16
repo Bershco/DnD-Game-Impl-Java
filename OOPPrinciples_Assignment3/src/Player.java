@@ -4,8 +4,7 @@ public class Player extends Unit implements HeroicUnit{
     protected Board b = Board.getInstance();
 
     public Player(String _name, int _healthPool, int _attackPoints, int _defensePoints) {
-        super(_name,_healthPool,_attackPoints,_defensePoints);
-        tile = '@';
+        super(_name,'@',_healthPool,_attackPoints,_defensePoints);
         experience = 0;
         playerLevel = 1;
     }

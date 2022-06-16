@@ -4,9 +4,10 @@ import java.util.Random;
 public class Warrior extends Player {
     private final int abilityCooldown;
     private int remainingCooldown;
+    private final int range = 3;
 
-    public Warrior(String _name, int _healthAmount, int _attackPoints, int _defensePoints, int cooldown){
-        super(_name,_healthAmount,_attackPoints,_defensePoints);
+    public Warrior(String _name, int _healthPool, int _attackPoints, int _defensePoints, int cooldown){
+        super(_name,_healthPool,_attackPoints,_defensePoints);
         abilityCooldown = cooldown;
         remainingCooldown = 0;
     }
@@ -51,7 +52,7 @@ public class Warrior extends Player {
         if (enoughResources()) {
             remainingCooldown = abilityCooldown;
             healthAmount = Math.min(healthPool, healthAmount + defensePoints * 10);
-            ArrayList<Enemy> closeEnemies = Board.getInstance().getEnemies(3);
+            ArrayList<Enemy> closeEnemies = Board.getInstance().getEnemies(range);
             Random rnd = new Random();
             int index = rnd.nextInt(closeEnemies.size());
             Enemy enemy = closeEnemies.get(index);
@@ -63,7 +64,7 @@ public class Warrior extends Player {
     @Override
     public String description() {
         return super.description() +
-            "Ability Range: 3\n" +
+            "Ability Range: "+range+"\n" +
             "Cooldown: " + remainingCooldown + " out of " + abilityCooldown + "\n";
     }
 }

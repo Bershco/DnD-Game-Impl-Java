@@ -2,6 +2,10 @@ public class Tile {
     public char tile;
     public Position pos;
 
+
+    public Tile(char _tile) {
+        tile = _tile;
+    }
     /**
      * This method describes a euclidean distance calculation for the purpose of finding a range between
      * 'this' tile and another tile
