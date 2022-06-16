@@ -16,7 +16,7 @@ public class Warrior extends Player {
      * This method describes the process of a level up
      */
     @Override
-    public void onLevelUp() {
+    protected void onLevelUp() {
         super.onLevelUp();
         remainingCooldown = 0;
         healthPool += playerLevel * 5;
@@ -28,7 +28,7 @@ public class Warrior extends Player {
      * This method describes the action and background activity of the warrior regarding their turn
      */
     @Override
-    public void onGameTick() {
+    protected void onGameTick() {
         super.onGameTick();
 
         remainingCooldown = Math.max(0, remainingCooldown - 1);

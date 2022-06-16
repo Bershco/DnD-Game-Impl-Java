@@ -1,7 +1,7 @@
 public class Enemy extends Unit{
 
     private final int experienceValue;
-    Board b = Board.getInstance();
+    protected Board b = Board.getInstance();
 
     public int getExperienceValue() {
         return experienceValue;
@@ -17,7 +17,7 @@ public class Enemy extends Unit{
      * @param target The unit to attack
      */
     @Override
-    public void dealDamage(Unit target) {
+    protected void dealDamage(Unit target) {
         super.dealDamage(target);
         if (target.healthAmount <= 0) {
             target.death();
@@ -27,7 +27,7 @@ public class Enemy extends Unit{
     /**
      * This method describes a death of an enemy
      */
-    public void death() {
+    protected void death() {
         b.currentPosition[pos.x][pos.y] = new Empty();
         b.player.addExp(experienceValue);
         b.removeEnemy(this);
@@ -41,7 +41,7 @@ public class Enemy extends Unit{
      * @param d the attempted direction to move towards
      */
     @Override
-    public void move(Direction d) {
+    protected void move(Direction d) {
         Board b = Board.getInstance();
         switch (d) {
             case UP -> {
@@ -95,13 +95,13 @@ public class Enemy extends Unit{
         }
     }
 
-    public void attackPlayer() {
+    protected void attackPlayer() {
         dealDamage(b.player);
     }
     /**
      * This method moves the enemy randomly using a simple Math.random method call
      */
-    public void randomizeMove() {
+    protected void randomizeMove() {
         int direction = Math.round((float)Math.random()*5) + 1;
         switch (direction) {
             case 1 -> move(Direction.UP);

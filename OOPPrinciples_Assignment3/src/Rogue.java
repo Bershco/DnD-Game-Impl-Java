@@ -14,7 +14,7 @@ public class Rogue extends Player {
      * This method describes the process of a level up
      */
     @Override
-    public void onLevelUp() {
+    protected void onLevelUp() {
         super.onLevelUp();
 
         currentEnergy = 100;
@@ -25,7 +25,7 @@ public class Rogue extends Player {
      * This method describes the action and background activity of the rogue regarding their turn
      */
     @Override
-    public void onGameTick() {
+    protected void onGameTick() {
         super.onGameTick();
 
         currentEnergy = Math.min(100, currentEnergy + 10);

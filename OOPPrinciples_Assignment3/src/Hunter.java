@@ -16,7 +16,7 @@ public class Hunter extends Player {
      * This method describes the process of a level up
      */
     @Override
-    public void onLevelUp() {
+    protected void onLevelUp() {
         super.onLevelUp();
 
         arrowCount += playerLevel * 10;
@@ -38,7 +38,7 @@ public class Hunter extends Player {
      * This method describes the action and background activity of the hunter regarding their turn
      */
     @Override
-    public void onGameTick() {
+    protected void onGameTick() {
         super.onGameTick();
 
         if(tickCount == 10) {

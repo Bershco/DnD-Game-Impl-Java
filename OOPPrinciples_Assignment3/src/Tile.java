@@ -1,6 +1,6 @@
 public class Tile {
-    public char tile;
-    public Position pos;
+    protected char tile;
+    protected Position pos;
 
 
     public Tile(char _tile) {
@@ -12,7 +12,7 @@ public class Tile {
      * @param other the tile we are looking the range towards
      * @return a double representing the distance from 'this' tile to another
      */
-    public double range(Tile other) {
+    protected double range(Tile other) {
         return Math.sqrt(Math.pow((pos.x - other.pos.x),2)+Math.pow((pos.x - other.pos.x),2));
     }
 

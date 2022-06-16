@@ -1,8 +1,8 @@
 public class Trap extends Enemy{
-    public int visibilityTime;
-    public int invisibilityTime;
-    public int ticksCount = 0;
-    public boolean visible = true;
+    private final int visibilityTime;
+    private final int invisibilityTime;
+    private int ticksCount = 0;
+    private boolean visible = true;
 
     public Trap(String _name, char _tile, int _healthPool, int _attackPoints, int _defensePoints, int _experienceValue,int _visionRange, int _visibility, int _invisibility) {
         super(_name,_tile,_healthPool,_attackPoints,_defensePoints,_experienceValue);
@@ -14,7 +14,7 @@ public class Trap extends Enemy{
      * This method describes the actions of the trap after a given player action
      */
     @Override
-    public void onGameTick() {
+    protected void onGameTick() {
         visible = ticksCount < visibilityTime;
         if (ticksCount == (visibilityTime + invisibilityTime))
             ticksCount = 0;

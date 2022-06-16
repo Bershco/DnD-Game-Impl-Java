@@ -3,10 +3,10 @@ import java.util.List;
 
 public class Board {
     private static Board instance;
-    public Tile[][] currentPosition;
+    protected Tile[][] currentPosition;
     private ArrayList<Enemy> allEnemies;
     private ArrayList<Wall> allWalls;
-    public Player player;
+    protected Player player;
 
     /**
      * The board is a singleton.
@@ -20,7 +20,7 @@ public class Board {
      * This method returns an instance of the player being played by the user
      * @return an instance of the player
      */
-    public Player getPlayer() {
+    protected Player getPlayer() {
         return player;
     }
 
@@ -28,7 +28,7 @@ public class Board {
      * This method returns an instance of the board as it is a singleton and shouldn't occur more than once
      * @return an instance of the current board
      */
-    public static Board getInstance() {
+    protected static Board getInstance() {
         if(instance == null)
             instance = new Board();
         return instance;
@@ -40,7 +40,7 @@ public class Board {
      * @param range the valid range
      * @return a list of enemies in given range
      */
-    public ArrayList<Enemy> getEnemies(int range) {
+    protected ArrayList<Enemy> getEnemies(int range) {
         ArrayList<Enemy> closeEnemies = new ArrayList<>();
         allEnemies.forEach(enemy -> {
             if(player.range(enemy) < range)
@@ -52,16 +52,16 @@ public class Board {
     /**
      * This method removes an enemy from the enemy list so that it won't exist in the game anymore
      *      This method is only called from death() of enemy
-     * @param e
+     * @param e the enemy to be removed
      */
-    public void removeEnemy(Enemy e) {
+    protected void removeEnemy(Enemy e) {
         allEnemies.remove(e);
     }
 
     /**
      * This method acts after a player action - calling all enemies to play their turn
      */
-    public void onGameTick() {
+    protected void onGameTick() {
         for (Enemy e : allEnemies) {
             e.onGameTick();
         }
@@ -70,9 +70,14 @@ public class Board {
     /**
      * This method describes the turn of events when you lose the game
      */
-    public void gameOverLose() {
+    protected void gameOverLose() {
         Tile grave = new Grave(player.pos);
         currentPosition[grave.pos.x][grave.pos.y] = grave;
         //TODO: provide error message
+    }
+
+    protected void gameOverWin() {
+        throw new UnsupportedOperationException("Not implemented yet");
+        //TODO: Implement gameOverWin()
     }
 }

@@ -1,7 +1,7 @@
 public class Player extends Unit implements HeroicUnit{
-    protected int experience;
+    private int experience;
     protected int playerLevel;
-    protected Board b = Board.getInstance();
+    private final Board b = Board.getInstance();
 
     public Player(String _name, int _healthPool, int _attackPoints, int _defensePoints) {
         super(_name,'@',_healthPool,_attackPoints,_defensePoints);
@@ -19,7 +19,7 @@ public class Player extends Unit implements HeroicUnit{
     }
 
     @Override
-    public void onGameTick() {
+    protected void onGameTick() {
         super.onGameTick();
         //TODO: implement visitor pattern to check events for user entered action
 
@@ -41,7 +41,7 @@ public class Player extends Unit implements HeroicUnit{
      * @param target The unit to attack
      */
     @Override
-    public void dealDamage(Unit target) {
+    protected void dealDamage(Unit target) {
         super.dealDamage(target);
         if (target.healthAmount <= 0) {
             experience += ((Enemy) target).getExperienceValue();
@@ -58,13 +58,13 @@ public class Player extends Unit implements HeroicUnit{
      * This method describes the death of the player - simply calling the method gameOverLose() in our singleton board - in order to finish the game
      */
     @Override
-    public void death() {
+    protected void death() {
         b.gameOverLose();
     }
     /**
      * This method describes how experience is added to the player
      */
-    public void addExp(int exp) {
+    protected void addExp(int exp) {
         experience += exp;
     }
 
