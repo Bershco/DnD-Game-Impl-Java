@@ -1,5 +1,5 @@
 public class Unit extends Tile{
-    private String name;
+    private final String name;
     protected int healthPool;
     protected int healthAmount;
     protected int attackPoints;
