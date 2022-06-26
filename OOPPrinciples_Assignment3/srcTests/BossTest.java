@@ -30,7 +30,7 @@ class BossTest {
     @Test
     void onGameTick() {
         //TODO: check if onGameTick() test is even needed (method only calls other methods)
-        
+
     }
 
     @Test

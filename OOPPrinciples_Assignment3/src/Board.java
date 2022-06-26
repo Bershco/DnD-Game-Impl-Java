@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import org.json.*;
 
 public class Board {
     private static Board instance;
@@ -82,6 +84,8 @@ public class Board {
     }
 
     protected void initialiseGame() {
-        //TODO: Implement initializeGame()
+        //1. let the user choose his player
+        //2. automatically load board
+        //
     }
 }
