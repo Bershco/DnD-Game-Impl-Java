@@ -5,7 +5,7 @@ public class Boss extends Monster implements HeroicUnit{
     protected Boss(String _name, char _tile, int _healthPool, int _attackPoints, int _defensePoints,int _visionRange, int _experienceValue, int _abilityFrequency) {
         this(_name, _tile, _healthPool, _attackPoints, _defensePoints,_visionRange, _experienceValue, _abilityFrequency,0);
     }
-    protected Boss(String _name, char _tile, int _healthPool, int _attackPoints, int _defensePoints,int _visionRange, int _experienceValue, int _abilityFrequency, int _combatTicks) {
+    private Boss(String _name, char _tile, int _healthPool, int _attackPoints, int _defensePoints,int _visionRange, int _experienceValue, int _abilityFrequency, int _combatTicks) {
         super(_name,_tile,_healthPool,_attackPoints,_defensePoints,_experienceValue,_visionRange);
         visionRange = _visionRange;
         abilityFrequency = _abilityFrequency;
