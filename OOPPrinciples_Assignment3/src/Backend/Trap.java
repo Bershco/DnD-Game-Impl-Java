@@ -1,3 +1,5 @@
+package Backend;
+
 public class Trap extends Enemy{
     private final int visibilityTime;
     private final int invisibilityTime;

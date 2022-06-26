@@ -1,3 +1,5 @@
+package Backend;
+
 public class Tile {
     protected char tile;
     protected Position pos;
@@ -20,6 +22,12 @@ public class Tile {
         return Math.sqrt(Math.pow((pos.x - other.pos.x),2)+Math.pow((pos.x - other.pos.x),2));
     }
 
+    public char getTile() {
+        return tile;
+    }
+    public Position getPos() {
+        return pos;
+    }
     public String toString() {
         return "" + tile;
     }

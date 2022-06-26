@@ -1,7 +1,8 @@
+package Backend;
+
 public class Enemy extends Unit{
 
     private final int experienceValue;
-    protected Board b = Board.getInstance();
 
     protected int getExperienceValue() {
         return experienceValue;
@@ -31,6 +32,7 @@ public class Enemy extends Unit{
         b.currentPosition[pos.x][pos.y] = new Empty();
         b.player.addExp(experienceValue);
         b.removeEnemy(this);
+        //TODO: implement enemy death
     }
 
     /**

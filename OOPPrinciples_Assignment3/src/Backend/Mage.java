@@ -1,3 +1,5 @@
+package Backend;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -75,7 +77,7 @@ public class Mage extends  Player{
     @Override
     public String description() {
         return super.description() +
-            "Class: Mage\n" +
+            "Class: Backend.Mage\n" +
             "Mana: " + currentMana + " out of " + manaPool + "\n" +
             "Spell Cost: " + manaCost + "\n" +
             "Spell Power: " + spellPower + "\n" +

@@ -1,3 +1,5 @@
+package Backend;
+
 public class Player extends Unit implements HeroicUnit{
     private int experience;
     protected int playerLevel;
@@ -25,8 +27,6 @@ public class Player extends Unit implements HeroicUnit{
 
         if(experience >= playerLevel * 50)
             onLevelUp();
-
-        b.onGameTick();
     }
 
     /**

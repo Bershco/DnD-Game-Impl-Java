@@ -1,3 +1,6 @@
+import Backend.Board;
+import Backend.Boss;
+import Backend.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,7 +11,7 @@ class BossTest {
     Boss testBossOnlyVisionRange = new Boss("TestBoss",'T',1,69,420,Integer.MAX_VALUE,0,abilityFreq);
     Board b = Board.getInstance();
     Player p = b.getPlayer();
-    int pHPBefore = p.healthAmount;
+    int pHPBefore = p.getHealthAmount();
     @BeforeEach
     void setUp() {
     }
@@ -19,12 +22,12 @@ class BossTest {
             int ct = testBossNoVisionRange.getCombatTicks();
             assertEquals(ct,i);
         }
-        assertNotEquals(pHPBefore,p.healthAmount);
+        assertNotEquals(pHPBefore,p.getHealthAmount());
     }
 
     @Test
     void castAbility() {
-        assertNotEquals(pHPBefore,p.healthAmount);
+        assertNotEquals(pHPBefore,p.getHealthAmount());
     }
 
     @Test
