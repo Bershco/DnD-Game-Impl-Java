@@ -57,5 +57,6 @@ class BoardTest {
     @Test
     void initialiseGame() {
         //TODO: Implement initialiseGame() test
+        //maybe check if there a board
     }
 }
