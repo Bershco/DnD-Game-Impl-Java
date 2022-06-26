@@ -1,3 +1,4 @@
+import Backend.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -42,10 +43,11 @@ class BoardTest {
 
     @Test
     void gameOverLose() {
+        Tile[][] currPos = b.getCurrentPosition();
         boolean graveCheck = false;
-        for (int i = 0; !graveCheck && i < b.currentPosition.length; i++)
-            for (int j = 0; !graveCheck && j < b.currentPosition[i].length; j++)
-                if (b.currentPosition[i][j].tile == 'X') graveCheck = true;
+        for (int i = 0; !graveCheck && i < currPos.length; i++)
+            for (int j = 0; !graveCheck && j < currPos[i].length; j++)
+                if (currPos[i][j].getTile() == 'X') graveCheck = true;
         assertTrue(graveCheck);
     }
 

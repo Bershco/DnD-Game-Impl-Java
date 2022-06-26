@@ -1,3 +1,5 @@
+package Backend;
+
 public class Monster extends Enemy{
     protected int visionRange;
 

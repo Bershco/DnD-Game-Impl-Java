@@ -1,3 +1,5 @@
+package Backend;
+
 public class Unit extends Tile{
     private final String name;
     protected int healthPool;
@@ -50,6 +52,14 @@ public class Unit extends Tile{
      * This method describes a death of a unit
      */
     protected void death() {}
+
+    protected void register() {
+
+    }
+
+    public int getHealthAmount() {
+        return healthAmount;
+    }
 
     /**
      * This method is part of the combat system of the game, it is used to attack another unit

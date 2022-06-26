@@ -1,3 +1,5 @@
+package Backend;
+
 import java.io.*;
 import java.util.*;
 
@@ -10,7 +12,7 @@ public class Board {
     private final static String defaultMobPath = (new File("mobs.txt")).getPath();
     private final static String defaultBossPath = (new File("bosses.txt")).getPath();
     private final static String defaultPlayerPath = (new File("players.txt")).getPath();
-    private final static String defaultLevelPath = (new File("levels\\level")).getPath();
+    private String defaultLevelPath = "";
     private int currLevel;
 
     /**
@@ -20,13 +22,19 @@ public class Board {
         currLevel = 0;
         currentPosition = readNextLevel();
     }
-    
 
+    public Tile[][] getCurrentPosition() {
+        return currentPosition;
+    }
+
+    public void setDefaultLevelPath(String path) {
+        defaultLevelPath = (new File(path)).getPath();
+    }
     /**
      * This method returns an instance of the player being played by the user
      * @return an instance of the player
      */
-    protected Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
@@ -47,7 +55,7 @@ public class Board {
      * @param range the valid range
      * @return a list of enemies in given range
      */
-    protected ArrayList<Enemy> getEnemies(int range) {
+    public ArrayList<Enemy> getEnemies(int range) {
         ArrayList<Enemy> closeEnemies = new ArrayList<>();
         allEnemies.forEach(enemy -> {
             if(player.range(enemy) < range)
@@ -61,7 +69,7 @@ public class Board {
      *      This method is only called from death() of enemy
      * @param e the enemy to be removed
      */
-    protected void removeEnemy(Enemy e) {
+    public void removeEnemy(Enemy e) {
         allEnemies.remove(e);
     }
 
@@ -69,6 +77,7 @@ public class Board {
      * This method acts after a player action - calling all enemies to play their turn
      */
     protected void onGameTick() {
+        player.onGameTick();
         for (Enemy e : allEnemies) {
             e.onGameTick();
         }
@@ -105,15 +114,15 @@ public class Board {
                     int attack = Integer.parseInt(playerDescription[4]);
                     int defense = Integer.parseInt(playerDescription[5]);
                     switch (playerClass) {
-                        case "Rogue" -> {
+                        case "Backend.Rogue" -> {
                             int cost = Integer.parseInt(playerDescription[6]);
                             return new Rogue(name,health,attack,defense,cost);
                         }
-                        case "Warrior" -> {
+                        case "Backend.Warrior" -> {
                             int cd = Integer.parseInt(playerDescription[6]);
                             return new Warrior(name,health,attack,defense,cd);
                         }
-                        case "Mage" -> {
+                        case "Backend.Mage" -> {
                             int mp = Integer.parseInt(playerDescription[6]);
                             int mCost = Integer.parseInt(playerDescription[7]);
                             int spellPower = Integer.parseInt(playerDescription[8]);
@@ -121,7 +130,7 @@ public class Board {
                             int abilityRange = Integer.parseInt(playerDescription[10]);
                             return new Mage(name,health,attack,defense,mp,mCost,spellPower,hitCount,abilityRange);
                         }
-                        case "Hunter" -> {
+                        case "Backend.Hunter" -> {
                             int range = Integer.parseInt(playerDescription[6]);
                             return new Hunter(name,health,attack,defense,range);
                         }
@@ -235,5 +244,16 @@ public class Board {
             boardTiles[lineCount++] = currLineInTiles;
         }
         return boardTiles;
+    }
+
+    public String description() {
+        StringBuilder outputBoard = new StringBuilder();
+        for (Tile[] t : currentPosition) {
+            for (Tile tt : t) {
+                outputBoard.append(tt.toString());
+            }
+            outputBoard.append("\n");
+        }
+        return outputBoard.toString();
     }
 }
