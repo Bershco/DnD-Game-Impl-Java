@@ -6,6 +6,10 @@ public class Tile {
     public Tile(char _tile) {
         tile = _tile;
     }
+
+    protected void setPos(int x, int y) {
+        pos = new Position(x,y);
+    }
     /**
      * This method describes a euclidean distance calculation for the purpose of finding a range between
      * 'this' tile and another tile
