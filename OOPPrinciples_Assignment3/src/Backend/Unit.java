@@ -7,12 +7,12 @@ public class Unit extends Tile{
     protected int attackPoints;
     protected int defensePoints;
 
-    protected String getName() {
+    public String getName() {
         return name;
     }
 
-    public Unit(String _name, char _tile, int _healthPool, int _attackPoints, int _defensePoints) {
-        super(_tile);
+    public Unit(String _name, char _tile, int _healthPool, int _attackPoints, int _defensePoints, int x, int y) {
+        super(_tile, x, y);
         name = _name;
         healthPool = _healthPool;
         healthAmount = healthPool;
@@ -32,6 +32,8 @@ public class Unit extends Tile{
                 "Defense: " + defensePoints + "\n";
     }
 
+
+
     public String toString() {
         return super.toString();
     }
@@ -40,7 +42,7 @@ public class Unit extends Tile{
      * This method moves a unit
      * @param d the direction to attempt movement towards
      */
-    protected void move(Direction d) {
+    protected void move(Action d) {
     }
 
     /**

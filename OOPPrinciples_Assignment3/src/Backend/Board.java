@@ -6,7 +6,6 @@ import java.util.*;
 
 public class Board {
     protected Tile[][] currentPosition;
-    public String defaultLevelPath;
     public int currLevel;
 
     /**
@@ -21,13 +20,12 @@ public class Board {
         return currentPosition;
     }
 
-    public void setDefaultLevelPath(String path) {
-        defaultLevelPath = (new File(path)).getPath();
-    } //TODO: work with command line argument
-
 
     public void replaceEnemyWithEmpty(Position enemyPos) {
         currentPosition[enemyPos.x][enemyPos.y] = new Empty(enemyPos);
+    }
+    public void replacePlayerWithGrave(Position playerPos) {
+        currentPosition[playerPos.x][playerPos.y] = new Grave(playerPos);
     }
 
     protected void loadLevel(Tile[][] t) {

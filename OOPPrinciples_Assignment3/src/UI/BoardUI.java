@@ -1,13 +1,15 @@
 package UI;
 import Backend.*;
 
-
 public class BoardUI {
-    public void initialiseGame() {
-        //TODO: lets the user choose his fighter
+    private final gameManager gm = new gameManager();
+
+    public void initialiseGame(String path) {
+        gm.initialiseGame(path);
     }
 
-    public void setPath(String path) {
-
+    public void printCurrBoard() {
+        System.out.println(gm.getCurrentBoard());
     }
+
 }
