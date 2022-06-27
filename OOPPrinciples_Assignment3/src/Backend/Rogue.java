@@ -9,8 +9,8 @@ public class Rogue extends Player {
     private int currentEnergy;
     private final int range = 2;
 
-    public Rogue(String _name, int _healthPool, int _attackPoints, int _defensePoints, int _cost){
-        super(_name,_healthPool,_attackPoints,_defensePoints);
+    public Rogue(String _name, int _healthPool, int _attackPoints, int _defensePoints, int _cost, int x, int y){
+        super(_name,_healthPool,_attackPoints,_defensePoints,x,y);
         cost = _cost;
         currentEnergy = 100;
     }
@@ -30,8 +30,8 @@ public class Rogue extends Player {
      * This method describes the action and background activity of the rogue regarding their turn
      */
     @Override
-    protected void onGameTick() {
-        super.onGameTick();
+    protected void onGameTick(Action a) {
+        super.onGameTick(a);
 
         currentEnergy = Math.min(100, currentEnergy + 10);
     }

@@ -8,8 +8,8 @@ public class Warrior extends Player {
     private int remainingCooldown;
     private final int range = 3;
 
-    public Warrior(String _name, int _healthPool, int _attackPoints, int _defensePoints, int cooldown){
-        super(_name,_healthPool,_attackPoints,_defensePoints);
+    public Warrior(String _name, int _healthPool, int _attackPoints, int _defensePoints, int cooldown, int x, int y){
+        super(_name,_healthPool,_attackPoints,_defensePoints,x,y);
         abilityCooldown = cooldown;
         remainingCooldown = 0;
     }
@@ -30,8 +30,8 @@ public class Warrior extends Player {
      * This method describes the action and background activity of the warrior regarding their turn
      */
     @Override
-    protected void onGameTick() {
-        super.onGameTick();
+    protected void onGameTick(Action a) {
+        super.onGameTick(a);
         remainingCooldown = Math.max(0, remainingCooldown - 1);
     }
 

@@ -14,8 +14,8 @@ public class Enemy extends Unit implements Observable{
     }
 
 
-    public Enemy(String _name, char _tile, int _healthPool, int _attackPoints, int _defensePoints, int _experienceValue) {
-        super(_name,_tile,_healthPool,_attackPoints,_defensePoints);
+    public Enemy(String _name, char _tile, int _healthPool, int _attackPoints, int _defensePoints, int _experienceValue, int x, int y) {
+        super(_name,_tile,_healthPool,_attackPoints,_defensePoints, x, y);
         experienceValue = _experienceValue;
     }
     /**
@@ -30,12 +30,16 @@ public class Enemy extends Unit implements Observable{
         }
     }
 
+    public int getExp() {
+        return experienceValue;
+    }
+
     public void onGameTick(List<Unit> enemiesOfEnemy) {} //Because the enemy of my enemy is my friend.
     /**
      * This method describes a death of an enemy
      */
     protected void enemyDeath() {
-        notifyObservers();
+        notifyDeathObservers();
     }
 
     /**
@@ -46,7 +50,7 @@ public class Enemy extends Unit implements Observable{
      * @param d the attempted direction to move towards
      */
     @Override
-    protected void move(Direction d) {
+    protected void move(Action d) {
         switch (d) {
             case UP -> swap(getAbove());
             case DOWN -> swap(getBelow());
@@ -62,11 +66,11 @@ public class Enemy extends Unit implements Observable{
         Random random = new Random();
         int direction = random.nextInt(5);
         switch (direction) {
-            case 0 -> move(Direction.UP);
-            case 1 -> move(Direction.LEFT);
-            case 2 -> move(Direction.DOWN);
-            case 3 -> move(Direction.RIGHT);
-            case 4 -> move(Direction.STAND);
+            case 0 -> move(Action.UP);
+            case 1 -> move(Action.LEFT);
+            case 2 -> move(Action.DOWN);
+            case 3 -> move(Action.RIGHT);
+            case 4 -> move(Action.STAND);
         }
 
     }
@@ -78,13 +82,19 @@ public class Enemy extends Unit implements Observable{
     }
 
     @Override
-    public void addObserver(DeathObserver o) {
+    public void addDeathObserver(DeathObserver o) {
         observers.add(o);
     }
 
     @Override
-    public void notifyObservers() {
+    public void addWinObserver(WinObserver o) {} //Won't do anything, monsters can't win unless the player loses, and that's just dumb.
+
+    @Override
+    public void notifyDeathObservers() {
         for (DeathObserver observer : observers)
             observer.onEnemyEvent(this);
     }
+
+    @Override
+    public void notifyWinObservers() {} //Won't do anything, monsters can't win unless the player loses, and that's just dumb.
 }

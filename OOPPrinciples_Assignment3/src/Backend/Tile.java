@@ -8,7 +8,7 @@ public class Tile {
     private Tile onTheRight;
     private Tile onTheLeft;
 
-    public Tile(char _tile) {
+    public Tile(char _tile, int x, int y) {
         tile = _tile;
     }
     protected void setPos(int x, int y) {

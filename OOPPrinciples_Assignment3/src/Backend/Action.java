@@ -1,9 +1,10 @@
 package Backend;
 
-public enum Direction {
+public enum Action {
     UP,
     DOWN,
     LEFT,
     RIGHT,
-    STAND
+    STAND,
+    ABILITYCAST
 }

@@ -7,8 +7,8 @@ public class Hunter extends Player {
     private int arrowCount;
     private int tickCount;
 
-    public Hunter(String _name, int _healthPool, int _attackPoints, int _defensePoints, int _range){
-        super(_name,_healthPool,_attackPoints,_defensePoints);
+    public Hunter(String _name, int _healthPool, int _attackPoints, int _defensePoints, int _range, int x, int y){
+        super(_name,_healthPool,_attackPoints,_defensePoints,x,y);
         range = _range;
         arrowCount = playerLevel * 10;
         tickCount = 0;
@@ -39,8 +39,8 @@ public class Hunter extends Player {
      * This method describes the action and background activity of the hunter regarding their turn
      */
     @Override
-    protected void onGameTick() {
-        super.onGameTick();
+    protected void onGameTick(Action a) {
+        super.onGameTick(a);
 
         if(tickCount == 10) {
             arrowCount += playerLevel;

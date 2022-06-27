@@ -7,10 +7,11 @@ import java.util.List;
 public class Player extends Unit implements HeroicUnit,Observable{
     private int experience;
     protected int playerLevel;
-    List<DeathObserver> observers = new LinkedList<>();
+    List<DeathObserver> deathObservers = new LinkedList<>();
+    List<WinObserver> winObservers = new LinkedList<>();
 
-    public Player(String _name, int _healthPool, int _attackPoints, int _defensePoints) {
-        super(_name,'@',_healthPool,_attackPoints,_defensePoints);
+    public Player(String _name, int _healthPool, int _attackPoints, int _defensePoints, int x, int y) {
+        super(_name,'@',_healthPool,_attackPoints,_defensePoints,x,y);
         experience = 0;
         playerLevel = 1;
     }
@@ -24,7 +25,7 @@ public class Player extends Unit implements HeroicUnit,Observable{
         defensePoints += playerLevel;
     }
 
-    protected void onGameTick() {
+    protected void onGameTick(Action a) {
         //TODO: implement observer pattern to check events for user entered action
         if(experience >= playerLevel * 50)
             onLevelUp();
@@ -57,7 +58,7 @@ public class Player extends Unit implements HeroicUnit,Observable{
      */
     @Override
     protected Tile death() {
-        notifyObservers();
+        notifyDeathObservers();
         return new Grave(pos);
     }
     /**
@@ -90,14 +91,24 @@ public class Player extends Unit implements HeroicUnit,Observable{
     }
 
     @Override
-    public void addObserver(DeathObserver o) {
-        observers.add(o);
+    public void addDeathObserver(DeathObserver o) {
+        deathObservers.add(o);
     }
 
     @Override
-    public void notifyObservers() {
-        for (DeathObserver o : observers) {
+    public void addWinObserver(WinObserver o) {
+        winObservers.add(o);
+    }
+
+    @Override
+    public void notifyDeathObservers() {
+        for (DeathObserver o : deathObservers)
             o.onPlayerEvent();
-        }
+    }
+
+    @Override
+    public void notifyWinObservers() {
+        for (WinObserver o : winObservers)
+            o.onWinEvent();
     }
 }

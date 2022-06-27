@@ -13,8 +13,8 @@ public class Mage extends  Player{
     private final int hitCount;
     private final int abilityRange;
 
-    public Mage(String _name, int _healthPool, int _attackPoints, int _defensePoints, int _manaPool, int _manaCost, int _spellPower, int _hitCount, int _abilityRange) {
-        super(_name,_healthPool,_attackPoints,_defensePoints);
+    public Mage(String _name, int _healthPool, int _attackPoints, int _defensePoints, int _manaPool, int _manaCost, int _spellPower, int _hitCount, int _abilityRange, int x, int y) {
+        super(_name,_healthPool,_attackPoints,_defensePoints,x,y);
         manaPool = _manaPool;
         currentMana = manaPool / 4;
         manaCost = _manaCost;
@@ -39,8 +39,8 @@ public class Mage extends  Player{
      * This method describes the action and background activity of the mage regarding their turn
      */
     @Override
-    protected void onGameTick() {
-        super.onGameTick();
+    protected void onGameTick(Action a) {
+        super.onGameTick(a);
 
         currentMana = Math.min(manaPool, currentMana + playerLevel);
     }

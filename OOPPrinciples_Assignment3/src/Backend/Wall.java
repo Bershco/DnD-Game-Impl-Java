@@ -1,8 +1,8 @@
 package Backend;
 
 public class Wall extends Tile {
-    public Wall() {
-        super('#');
+    public Wall(Position _pos) {
+        super('#', _pos.x,_pos.y);
     }
 
     @Override

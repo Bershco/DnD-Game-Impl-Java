@@ -5,8 +5,8 @@ import java.util.List;
 public class Monster extends Enemy{
     protected int visionRange;
 
-    public Monster(String _name, char _tile, int _healthPool, int _attackPoints, int _defensePoints, int _experienceValue,int _visionRange) {
-        super(_name,_tile,_healthPool,_attackPoints,_defensePoints,_experienceValue);
+    public Monster(String _name, char _tile, int _healthPool, int _attackPoints, int _defensePoints, int _experienceValue,int _visionRange,int x, int y) {
+        super(_name,_tile,_healthPool,_attackPoints,_defensePoints,_experienceValue,x,y);
         visionRange = _visionRange;
     }
 
@@ -18,14 +18,14 @@ public class Monster extends Enemy{
         int dy = pos.y - playerPos.y;
         if (Math.abs(dx) > Math.abs(dy)) {
             if (dx > 0)
-                move(Direction.LEFT);
+                move(Action.LEFT);
             else
-                move(Direction.RIGHT);
+                move(Action.RIGHT);
         } else {
             if (dy > 0)
-                move(Direction.UP);
+                move(Action.UP);
             else
-                move(Direction.DOWN);
+                move(Action.DOWN);
         }
     }
 
