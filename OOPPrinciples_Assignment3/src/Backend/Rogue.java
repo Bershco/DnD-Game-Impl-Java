@@ -1,10 +1,13 @@
 package Backend;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Rogue extends Player {
     private final int cost;
     private int currentEnergy;
+    private final int range = 2;
 
     public Rogue(String _name, int _healthPool, int _attackPoints, int _defensePoints, int _cost){
         super(_name,_healthPool,_attackPoints,_defensePoints);
@@ -46,10 +49,13 @@ public class Rogue extends Player {
      * This method describes the ability a rogue can cast
      */
     @Override
-    public void castAbility() {
+    public void castAbility(List<Unit> enemiesOverall) {
+        List<Unit> enemies = new LinkedList<>();
+        for (Unit enemy : enemiesOverall)
+            if (range(enemy) < range)
+                enemies.add(enemy);
         if (enoughResources()) {
             currentEnergy -= cost;
-            ArrayList<Enemy> enemies = Board.getInstance().getEnemies(2);
             enemies.forEach(enemy -> {
                 if(attackPoints > enemy.defensePoints)
                     enemy.healthAmount -= attackPoints;

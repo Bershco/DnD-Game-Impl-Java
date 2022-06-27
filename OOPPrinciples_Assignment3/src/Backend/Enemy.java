@@ -1,8 +1,13 @@
 package Backend;
 
-public class Enemy extends Unit{
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+
+public class Enemy extends Unit implements Observable{
 
     private final int experienceValue;
+    private final List<DeathObserver> observers = new LinkedList<>();
 
     protected int getExperienceValue() {
         return experienceValue;
@@ -25,14 +30,12 @@ public class Enemy extends Unit{
         }
     }
 
+    public void onGameTick(List<Unit> enemiesOfEnemy) {} //Because the enemy of my enemy is my friend.
     /**
      * This method describes a death of an enemy
      */
-    protected void death() {
-        b.currentPosition[pos.x][pos.y] = new Empty();
-        b.player.addExp(experienceValue);
-        b.removeEnemy(this);
-        //TODO: implement enemy death
+    protected void enemyDeath() {
+        notifyObservers();
     }
 
     /**
@@ -44,73 +47,26 @@ public class Enemy extends Unit{
      */
     @Override
     protected void move(Direction d) {
-        Board b = Board.getInstance();
         switch (d) {
-            case UP -> {
-                switch (b.currentPosition[pos.x][pos.y+1].tile) {
-                    case '.' -> {
-                        Tile middleman = b.currentPosition[pos.x][pos.y+1];
-                        b.currentPosition[pos.x][pos.y+1] = this;
-                        b.currentPosition[pos.x][pos.y] = middleman;
-                        pos.y++;
-                    }
-                    case '@' -> attackPlayer();
-                    default -> randomizeMove();
-                }
-            }
-            case DOWN -> {
-                switch (b.currentPosition[pos.x][pos.y-1].tile) {
-                    case '.' -> {
-                        Tile middleman = b.currentPosition[pos.x][pos.y-1];
-                        b.currentPosition[pos.x][pos.y-1] = this;
-                        b.currentPosition[pos.x][pos.y] = middleman;
-                        pos.y--;
-                    }
-                    case '@' -> attackPlayer();
-                    default -> randomizeMove();
-                }
-            }
-            case LEFT -> {
-                switch (b.currentPosition[pos.x+1][pos.y].tile) {
-                    case '.' -> {
-                        Tile middleman = b.currentPosition[pos.x+1][pos.y];
-                        b.currentPosition[pos.x+1][pos.y] = this;
-                        b.currentPosition[pos.x][pos.y] = middleman;
-                        pos.x++;
-                    }
-                    case '@' -> attackPlayer();
-                    default -> randomizeMove();
-                }
-            }
-            case RIGHT -> {
-                switch (b.currentPosition[pos.x-1][pos.y].tile) {
-                    case '.' -> {
-                        Tile middleman = b.currentPosition[pos.x-1][pos.y];
-                        b.currentPosition[pos.x-1][pos.y] = this;
-                        b.currentPosition[pos.x][pos.y] = middleman;
-                        pos.x--;
-                    }
-                    case '@' -> attackPlayer();
-                    default -> randomizeMove();
-                }
-            }
+            case UP -> swap(getAbove());
+            case DOWN -> swap(getBelow());
+            case LEFT -> swap(getOnTheLeft());
+            case RIGHT -> swap(getOnTheRight());
         }
     }
 
-    protected void attackPlayer() {
-        dealDamage(b.player);
-    }
     /**
      * This method moves the enemy randomly using a simple Math.random method call
      */
     protected void randomizeMove() {
-        int direction = Math.round((float)Math.random()*5) + 1;
+        Random random = new Random();
+        int direction = random.nextInt(5);
         switch (direction) {
-            case 1 -> move(Direction.UP);
-            case 2 -> move(Direction.LEFT);
-            case 3 -> move(Direction.DOWN);
-            case 4 -> move(Direction.RIGHT);
-            case 5 -> move(Direction.STAND);
+            case 0 -> move(Direction.UP);
+            case 1 -> move(Direction.LEFT);
+            case 2 -> move(Direction.DOWN);
+            case 3 -> move(Direction.RIGHT);
+            case 4 -> move(Direction.STAND);
         }
 
     }
@@ -119,5 +75,16 @@ public class Enemy extends Unit{
     public String description() {
         return super.description() +
             "Experience Value: " + experienceValue + "\n";
+    }
+
+    @Override
+    public void addObserver(DeathObserver o) {
+        observers.add(o);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (DeathObserver observer : observers)
+            observer.onEnemyEvent(this);
     }
 }

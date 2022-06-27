@@ -9,7 +9,6 @@ class BossTest {
     final int abilityFreq = 3;
     Boss testBossNoVisionRange = new Boss("TestBoss",'T',100,69,420,0,42069, abilityFreq);
     Boss testBossOnlyVisionRange = new Boss("TestBoss",'T',1,69,420,Integer.MAX_VALUE,0,abilityFreq);
-    Board b = Board.getInstance();
     Player p = b.getPlayer();
     int pHPBefore = p.getHealthAmount();
     @BeforeEach

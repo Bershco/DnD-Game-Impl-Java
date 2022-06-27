@@ -3,7 +3,6 @@ import Backend.*;
 
 
 public class BoardUI {
-    private Board b = Board.getInstance();
     public void initialiseGame() {
         //TODO: lets the user choose his fighter
     }

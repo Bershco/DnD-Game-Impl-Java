@@ -1,6 +1,8 @@
 package Backend;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 public class Mage extends  Player{
@@ -56,15 +58,18 @@ public class Mage extends  Player{
      * This method describes the ability a hunter can cast
      */
     @Override
-    public void castAbility() {
+    public void castAbility(List<Unit> enemiesOverall) {
+        List<Unit> enemies = new LinkedList<>();
+        for (Unit enemy : enemiesOverall)
+            if (range(enemy)<abilityRange)
+                enemies.add(enemy);
         if(enoughResources()) {
             currentMana -= manaCost;
             int hits = 0;
-            ArrayList<Enemy> enemies = Board.getInstance().getEnemies(abilityRange);
             while (hits < hitCount && enemies.size() > 0) {
                 Random rnd = new Random();
                 int index = rnd.nextInt(enemies.size());
-                Enemy enemy = enemies.get(index);
+                Unit enemy = enemies.get(index);
                 if(attackPoints > enemy.defensePoints)
                     enemy.healthAmount -= spellPower;
                 hits++;

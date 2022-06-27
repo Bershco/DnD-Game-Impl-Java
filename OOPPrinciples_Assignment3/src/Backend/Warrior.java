@@ -1,6 +1,6 @@
 package Backend;
-
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 public class Warrior extends Player {
@@ -32,7 +32,6 @@ public class Warrior extends Player {
     @Override
     protected void onGameTick() {
         super.onGameTick();
-
         remainingCooldown = Math.max(0, remainingCooldown - 1);
     }
 
@@ -49,18 +48,22 @@ public class Warrior extends Player {
      * This method describes the ability a warrior can cast
      */
     @Override
-    public void castAbility() {
-        //TODO: provide error message
+    public void castAbility(List<Unit> enemiesOverall) {
+        List<Unit> enemies = new LinkedList<>();
+        for (Unit enemy : enemiesOverall)
+            if (range(enemy) < range)
+                enemies.add(enemy);
         if (enoughResources()) {
             remainingCooldown = abilityCooldown;
             healthAmount = Math.min(healthPool, healthAmount + defensePoints * 10);
-            ArrayList<Enemy> closeEnemies = Board.getInstance().getEnemies(range);
             Random rnd = new Random();
-            int index = rnd.nextInt(closeEnemies.size());
-            Enemy enemy = closeEnemies.get(index);
+            int index = rnd.nextInt(enemies.size());
+            Unit enemy = enemies.get(index);
             enemy.healthAmount -= healthPool * 10;
         }
-
+        else {
+            //TODO: provide error message
+        }
     }
 
     @Override

@@ -1,6 +1,6 @@
 package Backend;
-
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Hunter extends Player {
     private final int range;
@@ -32,8 +32,7 @@ public class Hunter extends Player {
      */
     @Override
     protected boolean enoughResources() {
-        ArrayList<Enemy> enemies = Board.getInstance().getEnemies(range);
-        return (arrowCount != 0) && (!enemies.isEmpty());
+        return arrowCount != 0;
     }
 
     /**
@@ -55,19 +54,23 @@ public class Hunter extends Player {
      * This method describes the ability a hunter can cast
      */
     @Override
-    public void castAbility() {
-        if(enoughResources()) {
+    public void castAbility(List<Unit> enemiesOverall) {
+        List<Unit> enemies = new LinkedList<>();
+        for (Unit enemy : enemiesOverall)
+            if (range(enemy)<=range)
+                enemies.add(enemy);
+        if(enoughResources() && !enemies.isEmpty()) {
             arrowCount--;
-            ArrayList<Enemy> enemies = Board.getInstance().getEnemies(range);
-            Enemy closestEnemy = enemies.get(0);
-            for (Enemy enemy : enemies) {
+            Unit closestEnemy = enemies.get(0);
+            for (Unit enemy : enemies) {
                 if(range(enemy) < range(closestEnemy))
                     closestEnemy = enemy;
             }
-
             dealDamage(closestEnemy);
         }
-        //TODO: provide error message
+        else {
+            //TODO: provide error message
+        }
     }
 
     @Override
