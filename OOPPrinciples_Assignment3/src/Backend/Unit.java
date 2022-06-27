@@ -12,7 +12,7 @@ public class Unit extends Tile{
     }
 
     public Unit(String _name, char _tile, int _healthPool, int _attackPoints, int _defensePoints, int x, int y) {
-        super(_tile, x, y);
+        super(_tile, new Position(x,y));
         name = _name;
         healthPool = _healthPool;
         healthAmount = healthPool;
@@ -26,8 +26,8 @@ public class Unit extends Tile{
      * @return description of the unit
      */
     public String description() {
-        return "" + name + ":\n" +
-                "Health: " + healthAmount + " out of " + healthPool + "\n" +
+        return name + ":\n" +
+                "Health: " + healthAmount + "/" + healthPool + "\n" +
                 "Attack: " + attackPoints + "\n" +
                 "Defense: " + defensePoints + "\n";
     }
@@ -42,8 +42,7 @@ public class Unit extends Tile{
      * This method moves a unit
      * @param d the direction to attempt movement towards
      */
-    protected void move(Action d) {
-    }
+    protected Action move(Action d) { return d;}
 
     /**
      * This method describes a death of a unit
@@ -65,6 +64,7 @@ public class Unit extends Tile{
         if (damage > 0)
             target.healthAmount -= damage;
     }
+
 
     public boolean accept(Unit t) {
         return super.accept(t);

@@ -13,39 +13,39 @@ public class Monster extends Enemy{
     /**
      * This method describes a proper movement for a monster - is called when the monster is in range of the player
      */
-    protected void moveProperly(Position playerPos) {
+    protected Action moveProperly(Position playerPos) {
         int dx = pos.x - playerPos.x;
         int dy = pos.y - playerPos.y;
         if (Math.abs(dx) > Math.abs(dy)) {
             if (dx > 0)
-                move(Action.LEFT);
+                return move(Action.LEFT);
             else
-                move(Action.RIGHT);
+                return move(Action.RIGHT);
         } else {
             if (dy > 0)
-                move(Action.UP);
+                return move(Action.UP);
             else
-                move(Action.DOWN);
+                return move(Action.DOWN);
         }
     }
 
     /**
      * This method describes a random movement for a monster - is called when the monster is NOT in range of the player
      */
-    protected void moveRandomly() {
-        super.randomizeMove();
+    protected Action moveRandomly() {
+        return super.randomizeMove();
     }
 
     /**
      * This method describes the action a monster acts upon after the player's turn
      */
     @Override
-    public void onGameTick(List<Unit> enemiesOfEnemy) {
+    public Action onGameTick(List<Unit> enemiesOfEnemy) {
         Position playerPos = enemiesOfEnemy.get(0).pos;
         if (range(playerPos) < visionRange)
-            moveProperly(playerPos);
+            return moveProperly(playerPos);
         else
-            moveRandomly();
+            return moveRandomly();
     }
 
     public boolean accept(Monster m) {

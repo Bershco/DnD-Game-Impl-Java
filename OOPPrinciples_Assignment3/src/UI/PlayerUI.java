@@ -6,11 +6,10 @@ import java.util.Scanner;
 import java.io.*;
 
 public class PlayerUI {
-    private final gameManager gm = new gameManager();
+    private final GameMaster gm = new GameMaster();
 
     public void initialisePlayer() {
         Scanner scanner = new Scanner(System.in);
-        //TODO: lets the user choose his fighter
         System.out.println("CHOOSE YOUR FIGHTER:");
         printFighters();
         gm.initialisePlayer(Integer.parseInt(scanner.nextLine()));
@@ -36,7 +35,7 @@ public class PlayerUI {
             String[] playerDescription = line.split(","); //TODO: check if regex works
             String playerClass = playerDescription[1];
             System.out.println();
-            System.out.println("======= Press " + counter + " for ===");
+            System.out.println("======= Press " + counter++ + " for ===");
             System.out.println("Name : " + playerDescription[2]);
             System.out.println("Class : " + playerClass);
             System.out.println("Max. Health : " + playerDescription[3]);

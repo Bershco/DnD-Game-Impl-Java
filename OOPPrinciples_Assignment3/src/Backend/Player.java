@@ -7,6 +7,7 @@ import java.util.List;
 public class Player extends Unit implements HeroicUnit,Observable{
     private int experience;
     protected int playerLevel;
+    private final int experiencePerLevel = 50;
     List<DeathObserver> deathObservers = new LinkedList<>();
     List<WinObserver> winObservers = new LinkedList<>();
 
@@ -17,7 +18,7 @@ public class Player extends Unit implements HeroicUnit,Observable{
     }
 
     protected void onLevelUp() {
-        experience -= playerLevel * 50;
+        experience -= playerLevel * experiencePerLevel;
         playerLevel++;
         healthPool += playerLevel * 4;
         healthAmount = healthPool;
@@ -25,10 +26,27 @@ public class Player extends Unit implements HeroicUnit,Observable{
         defensePoints += playerLevel;
     }
 
-    protected void onGameTick(Action a) {
-        //TODO: implement observer pattern to check events for user entered action
-        if(experience >= playerLevel * 50)
+    protected Action onGameTick(Action a) {
+        if(experience >= playerLevel * experiencePerLevel)
             onLevelUp();
+        switch (a) {
+            case UP -> {
+                return (swap(getAbove()) ? a : Action.STAND);
+            }
+            case DOWN -> {
+                return (swap(getBelow()) ? a : Action.STAND);
+            }
+            case LEFT -> {
+                return (swap(getOnTheLeft()) ? a : Action.STAND);
+            }
+            case RIGHT -> {
+                return (swap(getOnTheRight()) ? a : Action.STAND);
+            }
+            case STAND -> {
+                return a;
+            }
+            default -> throw new IllegalArgumentException("Something went wrong while performing onGameTick.");
+        }
     }
 
     /**
@@ -36,7 +54,7 @@ public class Player extends Unit implements HeroicUnit,Observable{
      * and implement it differently according to their abilities.
      */
     @Override
-    public void castAbility(List<Unit> enemies) {}
+    public void castAbility(List<? extends Unit> enemies) {}
 
     /**
      * This method is part of the combat system of the game, it is used to attack another unit (primarily enemies)
@@ -47,7 +65,7 @@ public class Player extends Unit implements HeroicUnit,Observable{
         super.dealDamage(target);
         if (target.healthAmount <= 0) {
             addExp(target.getExperienceValue());
-            Tile newTarget = target.death();
+            Tile newTarget = target.enemyDeath();
             swap(newTarget);
         }
     }
@@ -83,10 +101,14 @@ public class Player extends Unit implements HeroicUnit,Observable{
         return false;
     }
 
+    public void swap(Enemy e) {
+        dealDamage(e);
+    }
+
     @Override
     public String description() {
         return super.description() +
-            "Experience: " + experience + "\n" +
+            "Experience: " + experience + "/" + experiencePerLevel*playerLevel + "\n" +
             "Level: " + playerLevel + "\n";
     }
 
@@ -107,8 +129,8 @@ public class Player extends Unit implements HeroicUnit,Observable{
     }
 
     @Override
-    public void notifyWinObservers() {
+    public void notifyWinObservers(boolean endGame) {
         for (WinObserver o : winObservers)
-            o.onWinEvent();
+            o.onWinEvent(endGame);
     }
 }

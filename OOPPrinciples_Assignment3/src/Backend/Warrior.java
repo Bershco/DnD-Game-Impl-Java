@@ -30,9 +30,9 @@ public class Warrior extends Player {
      * This method describes the action and background activity of the warrior regarding their turn
      */
     @Override
-    protected void onGameTick(Action a) {
-        super.onGameTick(a);
+    protected Action onGameTick(Action a) {
         remainingCooldown = Math.max(0, remainingCooldown - 1);
+        return super.onGameTick(a);
     }
 
     /**
@@ -48,7 +48,7 @@ public class Warrior extends Player {
      * This method describes the ability a warrior can cast
      */
     @Override
-    public void castAbility(List<Unit> enemiesOverall) {
+    public void castAbility(List<? extends Unit> enemiesOverall) {
         List<Unit> enemies = new LinkedList<>();
         for (Unit enemy : enemiesOverall)
             if (range(enemy) < range)

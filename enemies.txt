@@ -1,0 +1,9 @@
+s,Monster,Lannister Soldier,80,8,3,3,25
+k,Monster,Lannister Knight,200,14,8,4,50
+q,Monster,Queen's Guard,400,20,15,5,100
+z,Monster,Wright,600,30,15,3,100
+b,Monster,Bear-Wright,1000,75,30,4,250
+g,Monster,Giant-Wright,1500,100,40,5,500
+w,Monster,White Walker,2000,150,50,6,1000
+l,Monster,Easter Egg,1,1,1,1,1
+O,Boss,Easter Egg,1,1,1,1,1,1

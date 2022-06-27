@@ -1,11 +1,9 @@
 package UI;
-import Backend.Enemy;
-import Backend.WinObserver;
-import Backend.DeathObserver;
-import Backend.gameManager;
+import Backend.*;
+import java.util.Scanner;
 
 public class GameUI implements DeathObserver,WinObserver {
-    private final gameManager gm = new gameManager();
+    private final GameMaster gm = new GameMaster();
     private final BoardUI bui;
     private final PlayerUI pui;
     private boolean win = false;
@@ -20,14 +18,42 @@ public class GameUI implements DeathObserver,WinObserver {
     public void startGame() {
         bui.printCurrBoard();
         pui.printCurrPlayerDesc();
+        Scanner scanner = new Scanner(System.in);
+        String availableChars = "wasdeq";
         while (!win && !dead) {
-
+            String input = scanner.nextLine().toLowerCase();
+            while (!availableChars.contains(input) || input.length() != 1)
+                input = scanner.nextLine().toLowerCase();
+            switch (input) {
+                case "w" -> {
+                    gm.onGameTick(Action.UP);
+                }
+                case "a" -> {
+                    gm.onGameTick(Action.LEFT);
+                }
+                case "s" -> {
+                    gm.onGameTick(Action.DOWN);
+                }
+                case "d" -> {
+                    gm.onGameTick(Action.RIGHT);
+                }
+                case "e" -> {
+                    System.out.println(gm.onGameTick(Action.ABILITYCAST));
+                }
+                case "q" -> {
+                    gm.onGameTick(Action.STAND);
+                }
+            }
+            bui.printCurrBoard();
+            pui.printCurrPlayerDesc();
         }
+        bui.printCurrBoard();
     }
 
     @Override
     public void onPlayerEvent() {
         dead = true;
+        System.out.println("Game over.....................?"); //TODO: maybe have a lose board as well as the win board
     }
 
     @Override
@@ -37,7 +63,8 @@ public class GameUI implements DeathObserver,WinObserver {
     }
 
     @Override
-    public void onWinEvent() {
-        win = true;
+    public void onWinEvent(boolean endGame) {
+        win = endGame;
+        System.out.println((!endGame) ? "Level completed, congratulations, here's the next one:" : "Game over.....................?");
     }
 }
