@@ -6,13 +6,10 @@ import java.util.*;
 
 public class Board {
     protected Tile[][] currentPosition;
-    public int currLevel;
-
     /**
      * The board is a singleton.
      */
     public Board(Tile[][] t){
-        currLevel = 0;
         loadLevel(t);
     }
 
@@ -34,12 +31,33 @@ public class Board {
 
     public String description() {
         StringBuilder outputBoard = new StringBuilder();
-        for (Tile[] t : currentPosition) {
-            for (Tile tt : t) {
-                outputBoard.append(tt.toString());
+        for (Tile[] tArray : currentPosition) {
+            for (Tile t : tArray) {
+                outputBoard.append(t.toString());
             }
             outputBoard.append("\n");
         }
         return outputBoard.toString();
+    }
+    public void swapTiles(Position pos, Action a) {
+        Tile temp = currentPosition[pos.x][pos.y];
+        switch (a) {
+            case RIGHT -> {
+                currentPosition[pos.x][pos.y] = currentPosition[pos.x+1][pos.y];
+                currentPosition[pos.x+1][pos.y] = temp;
+            }
+            case LEFT -> {
+                currentPosition[pos.x][pos.y] = currentPosition[pos.x-1][pos.y];
+                currentPosition[pos.x-1][pos.y] = temp;
+            }
+            case DOWN -> {
+                currentPosition[pos.x][pos.y] = currentPosition[pos.x][pos.y+1];
+                currentPosition[pos.x][pos.y+1] = temp;
+            }
+            case UP -> {
+                currentPosition[pos.x][pos.y] = currentPosition[pos.x][pos.y-1];
+                currentPosition[pos.x][pos.y-1] = temp;
+            }
+        }
     }
 }

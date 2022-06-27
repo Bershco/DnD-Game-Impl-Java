@@ -23,14 +23,15 @@ public class Boss extends Monster implements HeroicUnit{
     /**
      * This method is a followup to a player action if player is in vision range
      */
-    protected void moveProperly(List<Unit> enemiesOfEnemy) {
+    protected Action moveProperly(List<Unit> enemiesOfEnemy) {
         if (combatTicks >= abilityFrequency) {
             combatTicks = 0;
             castAbility(enemiesOfEnemy);
+            return Action.STAND;
         }
         else {
             combatTicks++;
-            super.moveProperly(enemiesOfEnemy.get(0).pos);
+            return super.moveProperly(enemiesOfEnemy.get(0).pos);
         }
     }
 
@@ -40,7 +41,7 @@ public class Boss extends Monster implements HeroicUnit{
      *** Could later be improved or simply changed without touching moveProperly.
      */
     @Override
-    public void castAbility(List<Unit> enemies) {
+    public void castAbility(List<? extends Unit> enemies) {
         for (Unit enemy : enemies) {
             dealDamage(enemy);
         }
@@ -54,12 +55,12 @@ public class Boss extends Monster implements HeroicUnit{
      *      move randomly and stop being agro
      */
     @Override
-    public void onGameTick(List<Unit> enemiesOfEnemy) {
+    public Action onGameTick(List<Unit> enemiesOfEnemy) {
         if (range(enemiesOfEnemy.get(0).pos) < visionRange)
-            moveProperly(enemiesOfEnemy);
+            return moveProperly(enemiesOfEnemy);
         else {
             combatTicks = 0;
-            moveRandomly();
+            return moveRandomly();
         }
     }
 

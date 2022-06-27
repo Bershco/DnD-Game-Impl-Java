@@ -39,37 +39,36 @@ public class Hunter extends Player {
      * This method describes the action and background activity of the hunter regarding their turn
      */
     @Override
-    protected void onGameTick(Action a) {
-        super.onGameTick(a);
-
+    protected Action onGameTick(Action a) {
         if(tickCount == 10) {
             arrowCount += playerLevel;
             tickCount = 0;
         }
         else
             tickCount++;
+        return super.onGameTick(a);
     }
 
     /**
      * This method describes the ability a hunter can cast
      */
     @Override
-    public void castAbility(List<Unit> enemiesOverall) {
-        List<Unit> enemies = new LinkedList<>();
+    public void castAbility(List<? extends Unit> enemiesOverall) {
+        List<Unit> enemiesInRange = new LinkedList<>();
         for (Unit enemy : enemiesOverall)
             if (range(enemy)<=range)
-                enemies.add(enemy);
-        if(enoughResources() && !enemies.isEmpty()) {
+                enemiesInRange.add(enemy);
+        if(enoughResources() && !enemiesInRange.isEmpty()) {
             arrowCount--;
-            Unit closestEnemy = enemies.get(0);
-            for (Unit enemy : enemies) {
+            Unit closestEnemy = enemiesInRange.get(0);
+            for (Unit enemy : enemiesInRange) {
                 if(range(enemy) < range(closestEnemy))
                     closestEnemy = enemy;
             }
-            dealDamage(closestEnemy);
+            dealDamage(closestEnemy); //TODO: change to what needed
         }
         else {
-            //TODO: provide error message
+            throw new IllegalStateException("You can't use that right now!");
         }
     }
 

@@ -2,10 +2,14 @@ package UI;
 import Backend.*;
 
 public class BoardUI {
-    private final gameManager gm = new gameManager();
+    private final GameMaster gm = new GameMaster();
 
     public void initialiseGame(String path) {
-        gm.initialiseGame(path);
+        try {
+            gm.initialiseGame(path);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void printCurrBoard() {

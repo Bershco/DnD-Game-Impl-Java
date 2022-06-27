@@ -30,10 +30,9 @@ public class Rogue extends Player {
      * This method describes the action and background activity of the rogue regarding their turn
      */
     @Override
-    protected void onGameTick(Action a) {
-        super.onGameTick(a);
-
+    protected Action onGameTick(Action a) {
         currentEnergy = Math.min(100, currentEnergy + 10);
+        return super.onGameTick(a);
     }
 
     /**
@@ -49,7 +48,7 @@ public class Rogue extends Player {
      * This method describes the ability a rogue can cast
      */
     @Override
-    public void castAbility(List<Unit> enemiesOverall) {
+    public void castAbility(List<? extends Unit> enemiesOverall) {
         List<Unit> enemies = new LinkedList<>();
         for (Unit enemy : enemiesOverall)
             if (range(enemy) < range)
@@ -58,7 +57,7 @@ public class Rogue extends Player {
             currentEnergy -= cost;
             enemies.forEach(enemy -> {
                 if(attackPoints > enemy.defensePoints)
-                    enemy.healthAmount -= attackPoints;
+                    enemy.healthAmount -= attackPoints; //TODO: this isn't true
             });
         }
         //TODO: provide error message

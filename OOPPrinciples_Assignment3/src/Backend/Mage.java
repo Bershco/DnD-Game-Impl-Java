@@ -39,10 +39,9 @@ public class Mage extends  Player{
      * This method describes the action and background activity of the mage regarding their turn
      */
     @Override
-    protected void onGameTick(Action a) {
-        super.onGameTick(a);
-
+    protected Action onGameTick(Action a) {
         currentMana = Math.min(manaPool, currentMana + playerLevel);
+        return super.onGameTick(a);
     }
 
     /**
@@ -58,7 +57,7 @@ public class Mage extends  Player{
      * This method describes the ability a hunter can cast
      */
     @Override
-    public void castAbility(List<Unit> enemiesOverall) {
+    public void castAbility(List<? extends Unit> enemiesOverall) {
         List<Unit> enemies = new LinkedList<>();
         for (Unit enemy : enemiesOverall)
             if (range(enemy)<abilityRange)
@@ -71,7 +70,7 @@ public class Mage extends  Player{
                 int index = rnd.nextInt(enemies.size());
                 Unit enemy = enemies.get(index);
                 if(attackPoints > enemy.defensePoints)
-                    enemy.healthAmount -= spellPower;
+                    enemy.healthAmount -= spellPower; //TODO: might be wrong (probably)
                 hits++;
             }
         }

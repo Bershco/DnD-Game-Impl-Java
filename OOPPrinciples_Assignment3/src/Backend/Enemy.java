@@ -34,12 +34,15 @@ public class Enemy extends Unit implements Observable{
         return experienceValue;
     }
 
-    public void onGameTick(List<Unit> enemiesOfEnemy) {} //Because the enemy of my enemy is my friend.
+    public Action onGameTick(List<Unit> enemiesOfEnemy) {
+        return Action.STAND;
+    } //Because the enemy of my enemy is my friend.
     /**
      * This method describes a death of an enemy
      */
-    protected void enemyDeath() {
+    protected Tile enemyDeath() {
         notifyDeathObservers();
+        return new Empty(pos);
     }
 
     /**
@@ -50,29 +53,54 @@ public class Enemy extends Unit implements Observable{
      * @param d the attempted direction to move towards
      */
     @Override
-    protected void move(Action d) {
+    protected Action move(Action d) {
         switch (d) {
-            case UP -> swap(getAbove());
-            case DOWN -> swap(getBelow());
-            case LEFT -> swap(getOnTheLeft());
-            case RIGHT -> swap(getOnTheRight());
+            case UP -> {
+                return swap(getAbove()) ? d : Action.STAND;
+            }
+            case DOWN -> {
+                return swap(getBelow()) ? d : Action.STAND;
+            }
+            case LEFT -> {
+                return swap(getOnTheLeft()) ? d : Action.STAND;
+            }
+            case RIGHT -> {
+                return swap(getOnTheRight()) ? d : Action.STAND;
+            }
+            default -> {
+                return Action.STAND;
+            }
         }
     }
 
     /**
      * This method moves the enemy randomly using a simple Math.random method call
      */
-    protected void randomizeMove() {
+    protected Action randomizeMove() {
         Random random = new Random();
         int direction = random.nextInt(5);
         switch (direction) {
-            case 0 -> move(Action.UP);
-            case 1 -> move(Action.LEFT);
-            case 2 -> move(Action.DOWN);
-            case 3 -> move(Action.RIGHT);
-            case 4 -> move(Action.STAND);
+            case 0 -> {
+                return move(Action.UP);
+            }
+            case 1 -> {
+                return move(Action.LEFT);
+            }
+            case 2 -> {
+                return move(Action.DOWN);
+            }
+            case 3 -> {
+                return move(Action.RIGHT);
+            }
+            default -> { //this is for "4" and for compilation.
+                return Action.STAND;
+            }
         }
+    }
 
+    public void swap(Enemy e) {}
+    public void swap(Player p) {
+        p.accept(this);
     }
 
     @Override
@@ -94,7 +122,6 @@ public class Enemy extends Unit implements Observable{
         for (DeathObserver observer : observers)
             observer.onEnemyEvent(this);
     }
-
     @Override
-    public void notifyWinObservers() {} //Won't do anything, monsters can't win unless the player loses, and that's just dumb.
+    public void notifyWinObservers(boolean endGame) {} //Won't do anything, monsters can't win unless the player loses, and that's just dumb.
 }
