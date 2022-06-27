@@ -57,7 +57,7 @@ public class Unit extends Tile{
      * This method is part of the combat system of the game, it is used to attack another unit
      * @param target The unit to attack
      */
-    protected void dealDamage(Unit target) {
+    protected void dealDamage(Unit target) { //TODO: print all combat description
         int attackRoll = (int)Math.round(Math.random()*(attackPoints+1));
         int defenseRoll = (int)Math.round(Math.random()*(target.defensePoints+1));
         int damage = attackRoll - defenseRoll;

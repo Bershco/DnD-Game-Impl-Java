@@ -10,6 +10,10 @@ public class Program {
         pui.initialisePlayer();
         printTutorial();
         gui.startGame();
+        //TODO: UML
+        //TODO: javadocs
+        //TODO: run over the game again
+        //TODO: Unit tests
     }
 
     public static void printTutorial() {
