@@ -1,5 +1,7 @@
 package Backend;
 
+import java.util.List;
+
 public class Trap extends Enemy{
     private final int visibilityTime;
     private final int invisibilityTime;
@@ -16,12 +18,15 @@ public class Trap extends Enemy{
      * This method describes the actions of the trap after a given player action
      */
     @Override
-    protected void onGameTick() {
+    public void onGameTick(List<Unit> enemiesOfEnemy) {
+        Unit player = enemiesOfEnemy.get(0);
         visible = ticksCount < visibilityTime;
         if (ticksCount == (visibilityTime + invisibilityTime))
             ticksCount = 0;
-        else ticksCount++;
-        if (range(Board.getInstance().getPlayer()) < 2) attackPlayer();
+        else
+            ticksCount++;
+        if (range(player.pos) < 2)
+            dealDamage(player);
     }
 
     @Override

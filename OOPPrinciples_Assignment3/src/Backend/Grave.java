@@ -5,4 +5,9 @@ public class Grave extends Tile {
         super('X');
         pos = _pos;
     }
+
+    @Override
+    public boolean accept(Tile t) {
+        return false;
+    }
 }

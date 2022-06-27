@@ -1,5 +1,7 @@
 package Backend;
 
+import java.util.List;
+
 public class Monster extends Enemy{
     protected int visionRange;
 
@@ -11,9 +13,9 @@ public class Monster extends Enemy{
     /**
      * This method describes a proper movement for a monster - is called when the monster is in range of the player
      */
-    protected void moveProperly() {
-        int dx = pos.x - Board.getInstance().player.pos.x;
-        int dy = pos.y - Board.getInstance().player.pos.y;
+    protected void moveProperly(Position playerPos) {
+        int dx = pos.x - playerPos.x;
+        int dy = pos.y - playerPos.y;
         if (Math.abs(dx) > Math.abs(dy)) {
             if (dx > 0)
                 move(Direction.LEFT);
@@ -38,11 +40,21 @@ public class Monster extends Enemy{
      * This method describes the action a monster acts upon after the player's turn
      */
     @Override
-    protected void onGameTick() {
-        if (range(Board.getInstance().player) < visionRange)
-            moveProperly();
+    public void onGameTick(List<Unit> enemiesOfEnemy) {
+        Position playerPos = enemiesOfEnemy.get(0).pos;
+        if (range(playerPos) < visionRange)
+            moveProperly(playerPos);
         else
             moveRandomly();
+    }
+
+    public boolean accept(Monster m) {
+        return false;
+    }
+
+    public boolean accept(Player p) {
+        p.dealDamage(this);
+        return false;
     }
 
     @Override

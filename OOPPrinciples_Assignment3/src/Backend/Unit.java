@@ -44,18 +44,9 @@ public class Unit extends Tile{
     }
 
     /**
-     * This method describes a unit's play when the turn is theirs
-     */
-    protected void onGameTick() {}
-
-    /**
      * This method describes a death of a unit
      */
-    protected void death() {}
-
-    protected void register() {
-
-    }
+    protected Tile death() {return null;}
 
     public int getHealthAmount() {
         return healthAmount;
@@ -71,7 +62,9 @@ public class Unit extends Tile{
         int damage = attackRoll - defenseRoll;
         if (damage > 0)
             target.healthAmount -= damage;
-        if (target.healthAmount <= 0)
-            target.death();
+    }
+
+    public boolean accept(Unit t) {
+        return super.accept(t);
     }
 }

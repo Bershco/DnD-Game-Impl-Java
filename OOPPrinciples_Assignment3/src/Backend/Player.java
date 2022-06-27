@@ -1,9 +1,13 @@
 package Backend;
 
-public class Player extends Unit implements HeroicUnit{
+
+import java.util.LinkedList;
+import java.util.List;
+
+public class Player extends Unit implements HeroicUnit,Observable{
     private int experience;
     protected int playerLevel;
-    private final Board b = Board.getInstance();
+    List<DeathObserver> observers = new LinkedList<>();
 
     public Player(String _name, int _healthPool, int _attackPoints, int _defensePoints) {
         super(_name,'@',_healthPool,_attackPoints,_defensePoints);
@@ -20,46 +24,41 @@ public class Player extends Unit implements HeroicUnit{
         defensePoints += playerLevel;
     }
 
-    @Override
     protected void onGameTick() {
-        super.onGameTick();
-        //TODO: implement visitor pattern to check events for user entered action
-
+        //TODO: implement observer pattern to check events for user entered action
         if(experience >= playerLevel * 50)
             onLevelUp();
     }
 
     /**
-     * This method is partially redundant and is for making sure each sub-class will override it
+     * This method is practically redundant and is for making sure each sub-class will override it
      * and implement it differently according to their abilities.
      */
     @Override
-    public void castAbility() {}
+    public void castAbility(List<Unit> enemies) {}
 
     /**
      * This method is part of the combat system of the game, it is used to attack another unit (primarily enemies)
      * @param target The unit to attack
      */
-    @Override
-    protected void dealDamage(Unit target) {
+
+    protected void dealDamage(Enemy target) {
         super.dealDamage(target);
         if (target.healthAmount <= 0) {
-            experience += ((Enemy) target).getExperienceValue();
-            Position newPos = target.pos; //TODO: Make sure it updates the currentPosition properly in board
-            target.death();
-            Tile middleman = b.currentPosition[newPos.x][newPos.y];
-            b.currentPosition[newPos.x][newPos.y] = this;
-            b.currentPosition[pos.x][pos.y] = middleman;
-            pos = newPos;
+            addExp(target.getExperienceValue());
+            Tile newTarget = target.death();
+            swap(newTarget);
         }
     }
+
 
     /**
      * This method describes the death of the player - simply calling the method gameOverLose() in our singleton board - in order to finish the game
      */
     @Override
-    protected void death() {
-        b.gameOverLose();
+    protected Tile death() {
+        notifyObservers();
+        return new Grave(pos);
     }
     /**
      * This method describes how experience is added to the player
@@ -78,9 +77,27 @@ public class Player extends Unit implements HeroicUnit{
     }
 
     @Override
+    public boolean accept(Unit t) {
+        t.dealDamage(this);
+        return false;
+    }
+
+    @Override
     public String description() {
         return super.description() +
             "Experience: " + experience + "\n" +
             "Level: " + playerLevel + "\n";
+    }
+
+    @Override
+    public void addObserver(DeathObserver o) {
+        observers.add(o);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (DeathObserver o : observers) {
+            o.onPlayerEvent();
+        }
     }
 }

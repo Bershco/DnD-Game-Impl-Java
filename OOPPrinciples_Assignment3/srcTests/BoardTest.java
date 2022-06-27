@@ -15,7 +15,6 @@ class BoardTest {
     ArrayList<Enemy> closeEnemies;
     @BeforeEach
     void setUp() {
-        b = Board.getInstance();
         allEnemies.add(e1);
         closeEnemies = b.getEnemies(Integer.MAX_VALUE);
         allEnemies.add(basicallyMeme);
