@@ -74,8 +74,9 @@ public class Mage extends  Player{
                 hits++;
             }
         }
-
-        //TODO: provide error message
+        else {
+            throw new IllegalStateException("You can't use that right now!");
+        }
     }
 
     @Override

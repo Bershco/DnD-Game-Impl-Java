@@ -62,7 +62,7 @@ public class Warrior extends Player {
             enemy.healthAmount -= healthPool * 10;
         }
         else {
-            //TODO: provide error message
+            throw new IllegalStateException("You can't use that right now!");
         }
     }
 

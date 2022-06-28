@@ -11,8 +11,8 @@ public class GameMaster implements DeathObserver,Observable{
     private final LinkedList<Enemy> enemies = new LinkedList<>();
     private final static String defaultEnemyPath = (new File("enemies.txt")).getPath();
     private final static String defaultPlayerPath = (new File("players.txt")).getPath();
-    private final static String defaultWinLevelPath = (new File("dontREADME.txt")).getPath(); //TODO: modify the text file
-    private final static String defaultLoseLevelPath = (new File("dontREADME2.txt")).getPath(); //TODO: modify the text file
+    private final static String defaultWinLevelPath = (new File("dontREADME.txt")).getPath();
+    private final static String defaultLoseLevelPath = (new File("dontREADME2.txt")).getPath();
 
     public String defaultLevelPath;
     private File[] levels;
@@ -34,22 +34,12 @@ public class GameMaster implements DeathObserver,Observable{
         player = txtToPlayer(playerInt,player.pos.x,player.pos.y);
         player.addDeathObserver(this);
     }
-    /*
-    public void attemptSwapTiles() {
-        if (player.swap(player.getAbove())) {
-            //board.swap();
-        }
-    } TODO: might not be needed
-     */
 
     public String getPlayerDescription() { return player.description();}
     public String getCurrentBoard() { return board.description();}
     public String getPlayerName() { return player.getName();}
     public String getDefaultPlayerPath() {
         return defaultPlayerPath;
-    }
-    public int getCurrLevel() {
-        return currLevel;
     }
 
     public String onGameTick(Action a) {
