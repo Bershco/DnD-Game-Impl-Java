@@ -72,15 +72,17 @@ public class GameMaster implements DeathObserver,Observable{
             }
         }
         else {
+            Position playerPos = player.pos;
             if (player.onGameTick(a) != Action.STAND)
-                board.swapTiles(player.pos, a);
+                board.swapTiles(playerPos, a);
         }
         List<Unit> onlyThePlayer = new LinkedList<>();
         onlyThePlayer.add(player);
         for (Enemy e : enemies) {
+            Position ePos = e.pos;
             Action enemyMovement = e.onGameTick(onlyThePlayer);
             if (enemyMovement != Action.STAND)
-                board.swapTiles(e.pos,enemyMovement);
+                board.swapTiles(ePos,enemyMovement);
         }
         if (enemies.isEmpty())
             onLevelWon();

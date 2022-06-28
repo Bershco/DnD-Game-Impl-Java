@@ -49,18 +49,56 @@ public class Tile {
 
     public boolean swap(Tile t, Action a) {
         if (t.accept(this)) {
-            Tile tUp = t.above;
-            Tile tDown = t.below;
-            Tile tRight = t.onTheRight;
-            Tile tLeft = t.onTheLeft;
-            t.above = above;
-            t.below = below;
-            t.onTheRight = onTheRight;
-            t.onTheLeft = onTheLeft;
-            above = tUp;
-            below = tDown;
-            onTheRight = tRight;
-            onTheLeft = tLeft;
+            switch (a) {
+                case UP -> {
+                    above = t.above;
+                    t.above = this;
+                    t.below = below;
+                    below = t;
+                    Tile tLeft = t.onTheLeft;
+                    Tile tRight = t.onTheRight;
+                    t.onTheRight = onTheRight;
+                    t.onTheLeft = onTheLeft;
+                    onTheLeft = tLeft;
+                    onTheRight = tRight;
+                }
+                case LEFT -> {
+                    onTheLeft = t.onTheLeft;
+                    t.onTheLeft = this;
+                    t.onTheRight = onTheRight;
+                    onTheRight = t;
+                    Tile tAbove = t.above;
+                    Tile tBelow = t.below;
+                    t.above = above;
+                    t.below = below;
+                    above = tAbove;
+                    below = tBelow;
+                }
+                case DOWN -> {
+                    below = t.below;
+                    t.below = this;
+                    t.above = above;
+                    above = t;
+                    Tile tLeft = t.onTheLeft;
+                    Tile tRight = t.onTheRight;
+                    t.onTheRight = onTheRight;
+                    t.onTheLeft = onTheLeft;
+                    onTheLeft = tLeft;
+                    onTheRight = tRight;
+                }
+                case RIGHT -> {
+                    onTheRight = t.onTheRight;
+                    t.onTheRight = this;
+                    t.onTheLeft = onTheLeft;
+                    onTheLeft = t;
+                    Tile tAbove = t.above;
+                    Tile tBelow = t.below;
+                    t.above = above;
+                    t.below = below;
+                    above = tAbove;
+                    below = tBelow;
+                }
+            }
 
             Position tPos = t.pos;
             t.pos = pos;
