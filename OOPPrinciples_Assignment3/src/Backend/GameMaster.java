@@ -9,9 +9,11 @@ public class GameMaster implements DeathObserver,Observable{
     private Player player;
     private Board board;
     private final LinkedList<Enemy> enemies = new LinkedList<>();
-    private final static String defaultEnemyPath = (new File("enemies.txt")).getPath(); //TODO: add all mobs from list
-    private final static String defaultPlayerPath = (new File("players.txt")).getPath(); //TODO: add all players from list
+    private final static String defaultEnemyPath = (new File("enemies.txt")).getPath();
+    private final static String defaultPlayerPath = (new File("players.txt")).getPath();
     private final static String defaultWinLevelPath = (new File("dontREADME.txt")).getPath(); //TODO: modify the text file
+    private final static String defaultLoseLevelPath = (new File("dontREADME2.txt")).getPath(); //TODO: modify the text file
+
     public String defaultLevelPath;
     private File[] levels;
     private final List<DeathObserver> deathObservers = new LinkedList<>();
@@ -46,7 +48,9 @@ public class GameMaster implements DeathObserver,Observable{
     public String getDefaultPlayerPath() {
         return defaultPlayerPath;
     }
-
+    public int getCurrLevel() {
+        return currLevel;
+    }
 
     public String onGameTick(Action a) {
         if (a == Action.ABILITYCAST) {
@@ -75,9 +79,9 @@ public class GameMaster implements DeathObserver,Observable{
 
     public void gameOverLose() {
         board.replacePlayerWithGrave(player.pos);
-        notifyDeathObservers();
-        //TODO: UI should output "you have lost" or smth like that
-        //TODO: UI should output final board layout using board.description()
+        currLevel = -1;
+        readNextLevel();
+        //TODO: UI should output final board layout using board.description() - make sure both the "WIN/LOSE" board and the final board are output.
     }
     public void onLevelWon() {
         board.currentPosition = readNextLevel();
@@ -195,6 +199,12 @@ public class GameMaster implements DeathObserver,Observable{
             notifyWinObservers(true);
             levels = new File[1];
             levels[0] = new File(defaultWinLevelPath);
+            currLevel = 0;
+        }
+        else if (currLevel < 0) {
+            notifyDeathObservers();
+            levels = new File[1];
+            levels[0] = new File(defaultLoseLevelPath);
             currLevel = 0;
         }
         LinkedList<String> lines = new LinkedList<>();
