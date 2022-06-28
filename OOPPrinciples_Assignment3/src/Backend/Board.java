@@ -19,10 +19,10 @@ public class Board {
 
 
     public void replaceEnemyWithEmpty(Position enemyPos) {
-        currentPosition[enemyPos.x][enemyPos.y] = new Empty(enemyPos);
+        currentPosition[enemyPos.y][enemyPos.x] = new Empty(enemyPos);
     }
     public void replacePlayerWithGrave(Position playerPos) {
-        currentPosition[playerPos.x][playerPos.y] = new Grave(playerPos);
+        currentPosition[playerPos.y][playerPos.x] = new Grave(playerPos);
     }
 
     protected void loadLevel(Tile[][] t) {
@@ -40,24 +40,33 @@ public class Board {
         return outputBoard.toString();
     }
     public void swapTiles(Position pos, Action a) {
-        Tile temp = currentPosition[pos.x][pos.y];
+        Tile temp = currentPosition[pos.y][pos.x];
         switch (a) {
             case RIGHT -> {
-                currentPosition[pos.x][pos.y] = currentPosition[pos.x+1][pos.y];
-                currentPosition[pos.x+1][pos.y] = temp;
+                currentPosition[pos.y][pos.x] = currentPosition[pos.y][pos.x+1];
+                currentPosition[pos.y][pos.x+1] = temp;
             }
             case LEFT -> {
-                currentPosition[pos.x][pos.y] = currentPosition[pos.x-1][pos.y];
-                currentPosition[pos.x-1][pos.y] = temp;
+                currentPosition[pos.y][pos.x] = currentPosition[pos.y][pos.x-1];
+                currentPosition[pos.y][pos.x-1] = temp;
             }
             case DOWN -> {
-                currentPosition[pos.x][pos.y] = currentPosition[pos.x][pos.y+1];
-                currentPosition[pos.x][pos.y+1] = temp;
+                currentPosition[pos.y][pos.x] = currentPosition[pos.y+1][pos.x];
+                currentPosition[pos.y+1][pos.x] = temp;
             }
             case UP -> {
-                currentPosition[pos.x][pos.y] = currentPosition[pos.x][pos.y-1];
-                currentPosition[pos.x][pos.y-1] = temp;
+                currentPosition[pos.y][pos.x] = currentPosition[pos.y-1][pos.x];
+                currentPosition[pos.y-1][pos.x] = temp;
             }
         }
+    }
+
+    public Tile[] getSurroundings(Position pos) {
+        Tile[] output = new Tile[4];
+        output[0] = (pos.y == 0) ? null : currentPosition[pos.y-1][pos.x];
+        output[1] = (pos.x == 0) ? null : currentPosition[pos.y][pos.x-1];
+        output[2] = (pos.y == currentPosition.length-1) ? null : currentPosition[pos.y+1][pos.x];
+        output[3] = (pos.x == currentPosition[pos.y].length-1) ? null : currentPosition[pos.y][pos.x+1];
+        return output;
     }
 }

@@ -24,6 +24,7 @@ public class Player extends Unit implements HeroicUnit,Observable{
         healthAmount = healthPool;
         attackPoints += playerLevel * 4;
         defensePoints += playerLevel;
+        messageCallback.send(getName() + " has reached level " + playerLevel); // TODO: Complete
     }
 
     protected Action onGameTick(Action a) {
@@ -31,16 +32,16 @@ public class Player extends Unit implements HeroicUnit,Observable{
             onLevelUp();
         switch (a) {
             case UP -> {
-                return (swap(getAbove()) ? a : Action.STAND);
+                return (swap(getAbove(),a) ? a : Action.STAND);
             }
             case DOWN -> {
-                return (swap(getBelow()) ? a : Action.STAND);
+                return (swap(getBelow(),a) ? a : Action.STAND);
             }
             case LEFT -> {
-                return (swap(getOnTheLeft()) ? a : Action.STAND);
+                return (swap(getOnTheLeft(),a) ? a : Action.STAND);
             }
             case RIGHT -> {
-                return (swap(getOnTheRight()) ? a : Action.STAND);
+                return (swap(getOnTheRight(),a) ? a : Action.STAND);
             }
             case STAND -> {
                 return a;
@@ -61,12 +62,12 @@ public class Player extends Unit implements HeroicUnit,Observable{
      * @param target The unit to attack
      */
 
-    protected void dealDamage(Enemy target) {
+    protected void dealDamage(Enemy target, Action a) {
         super.dealDamage(target);
         if (target.healthAmount <= 0) {
             addExp(target.getExperienceValue());
             Tile newTarget = target.enemyDeath();
-            swap(newTarget);
+            swap(newTarget,a);
         }
     }
 
@@ -101,9 +102,6 @@ public class Player extends Unit implements HeroicUnit,Observable{
         return false;
     }
 
-    public void swap(Enemy e) {
-        dealDamage(e);
-    }
 
     @Override
     public String description() {

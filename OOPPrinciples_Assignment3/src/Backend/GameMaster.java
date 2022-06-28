@@ -13,12 +13,17 @@ public class GameMaster implements DeathObserver,Observable{
     private final static String defaultPlayerPath = (new File("players.txt")).getPath();
     private final static String defaultWinLevelPath = (new File("dontREADME.txt")).getPath();
     private final static String defaultLoseLevelPath = (new File("dontREADME2.txt")).getPath();
+    private MessageCallback messageCallback;
 
     public String defaultLevelPath;
     private File[] levels;
     private final List<DeathObserver> deathObservers = new LinkedList<>();
     private final List<WinObserver> winObservers = new LinkedList<>();
     private int currLevel = 0;
+
+    public GameMaster(MessageCallback messageCallback){
+        this.messageCallback = messageCallback;
+    }
 
     public void initialiseGame(String path) {
         player = new Player("default_player",1,1,1,-1,-1);
@@ -29,9 +34,24 @@ public class GameMaster implements DeathObserver,Observable{
         else
             throw new IllegalArgumentException("Something went wrong while loading level files.");
         board = new Board(readNextLevel());
+        initialiseTileSurroundings();
+        initialiseEnemySurroundings();
+    }
+
+    public void initialiseEnemySurroundings() {
+        for (Enemy curr : enemies) {
+            curr.setSurroundings(board.getSurroundings(curr.pos));
+        }
+    }
+    public void initialiseTileSurroundings() {
+        for (Tile[] tArray : board.currentPosition)
+            for (Tile t : tArray)
+                t.setSurroundings(board.getSurroundings(t.pos));
     }
     public void initialisePlayer(int playerInt) {
         player = txtToPlayer(playerInt,player.pos.x,player.pos.y);
+        player.setSurroundings(board.getSurroundings(player.pos));
+        player.setMessageCallback(messageCallback);
         player.addDeathObserver(this);
     }
 
@@ -90,7 +110,7 @@ public class GameMaster implements DeathObserver,Observable{
             BufferedReader reader = new BufferedReader(new FileReader(defaultPlayerPath));
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.charAt(0) == playerInt) { //if we want to use more than 10 players, just swap this while with a for loop
+                if (Integer.parseInt(""+line.charAt(0)) == playerInt) { //if we want to use more than 10 players, just swap this while with a for loop
                     String[] playerDescription = line.split(","); //TODO: check if regex works
                     String playerClass = playerDescription[1];
                     String name = playerDescription[2];
@@ -177,6 +197,7 @@ public class GameMaster implements DeathObserver,Observable{
         }
         else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
             Enemy curr = txtToEnemy(c,x,y);
+            curr.setMessageCallback(messageCallback);
             enemies.add(curr);
             return curr;
         }

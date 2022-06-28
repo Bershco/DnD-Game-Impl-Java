@@ -52,10 +52,11 @@ public class Monster extends Enemy{
         return false;
     }
 
-    public boolean accept(Player p) {
-        p.dealDamage(this);
-        return false;
-    }
+
+//    public boolean accept(Player p) {
+//        p.dealDamage(this);
+//        return false;
+//    }
 
     @Override
     public String description() {

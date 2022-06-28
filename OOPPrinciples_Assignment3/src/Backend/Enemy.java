@@ -56,16 +56,16 @@ public class Enemy extends Unit implements Observable{
     protected Action move(Action d) {
         switch (d) {
             case UP -> {
-                return swap(getAbove()) ? d : Action.STAND;
+                return swap(getAbove(),d) ? d : Action.STAND;
             }
             case DOWN -> {
-                return swap(getBelow()) ? d : Action.STAND;
+                return swap(getBelow(),d) ? d : Action.STAND;
             }
             case LEFT -> {
-                return swap(getOnTheLeft()) ? d : Action.STAND;
+                return swap(getOnTheLeft(),d) ? d : Action.STAND;
             }
             case RIGHT -> {
-                return swap(getOnTheRight()) ? d : Action.STAND;
+                return swap(getOnTheRight(),d) ? d : Action.STAND;
             }
             default -> {
                 return Action.STAND;

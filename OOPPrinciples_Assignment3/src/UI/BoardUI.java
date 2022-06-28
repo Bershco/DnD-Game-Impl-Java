@@ -2,7 +2,11 @@ package UI;
 import Backend.*;
 
 public class BoardUI {
-    private final GameMaster gm = new GameMaster();
+    private final GameMaster gm;
+
+    public BoardUI(GameMaster gm){
+        this.gm = gm;
+    }
 
     public void initialiseGame(String path) {
         try {

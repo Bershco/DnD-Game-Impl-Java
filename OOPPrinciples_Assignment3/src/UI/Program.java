@@ -1,18 +1,16 @@
 package UI;
+import Backend.GameMaster;
+
 import java.util.Scanner;
 public class Program {
 
     public static void main(String[] args) {
-        BoardUI bui = new BoardUI();
-        PlayerUI pui = new PlayerUI();
-        GameUI gui = new GameUI(bui,pui);
-        bui.initialiseGame(args[0]);
-        pui.initialisePlayer();
+        GameUI gui = new GameUI(args[0]);
         printTutorial();
         gui.startGame();
         //TODO: UML
         //TODO: javadocs
-        //TODO: run over the game again
+        //TODO: run over the game again and maybe run it
         //TODO: Unit tests
     }
 

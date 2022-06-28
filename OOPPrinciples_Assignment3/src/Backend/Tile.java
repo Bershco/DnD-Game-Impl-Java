@@ -47,7 +47,7 @@ public class Tile {
         return onTheRight;
     }
 
-    public boolean swap(Tile t) {
+    public boolean swap(Tile t, Action a) {
         if (t.accept(this)) {
             Tile tUp = t.above;
             Tile tDown = t.below;
@@ -76,5 +76,12 @@ public class Tile {
     }
     public String toString() {
         return "" + tile;
+    }
+
+    public void setSurroundings(Tile[] surroundings) {
+        above = surroundings[0];
+        onTheLeft = surroundings[1];
+        below = surroundings[2];
+        onTheRight = surroundings[3];
     }
 }

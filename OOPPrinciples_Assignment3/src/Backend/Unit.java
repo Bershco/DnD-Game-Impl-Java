@@ -6,6 +6,7 @@ public class Unit extends Tile{
     protected int healthAmount;
     protected int attackPoints;
     protected int defensePoints;
+    protected MessageCallback messageCallback;
 
     public String getName() {
         return name;
@@ -51,6 +52,10 @@ public class Unit extends Tile{
 
     public int getHealthAmount() {
         return healthAmount;
+    }
+
+    public void setMessageCallback(MessageCallback messageCallback){
+        this.messageCallback = messageCallback;
     }
 
     /**
