@@ -7,3 +7,9 @@ g,Monster,Giant-Wright,1500,100,40,5,500
 w,Monster,White Walker,2000,150,50,6,1000
 l,Monster,Easter Egg,1,1,1,1,1
 O,Boss,Easter Egg,1,1,1,1,1,1
+M,Boss,The Mountain,1000,60,25,6,500,5
+C,Boss,Queen Cersei,100,10,10,1,1000,8
+K,Boss,Night's King,5000,300,150,8,5000,3
+B,Trap,Bonus Trap,1,1,1,250,1,5
+Q,Trap,Queen's Trap,250,50,10,100,3,7
+D,Trap,Death Trap,500,100,20,250,1,10

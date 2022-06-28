@@ -134,7 +134,7 @@ public class GameMaster implements DeathObserver,Observable{
             System.out.println(e.getMessage());
         }
         throw new IllegalArgumentException("Something went wrong while importing player from text");
-    } //TODO: add all player options to players.txt
+    }
     private Enemy txtToEnemy(char c, int x, int y) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(defaultEnemyPath));
@@ -173,7 +173,7 @@ public class GameMaster implements DeathObserver,Observable{
             System.out.println(e.getMessage());
         }
         throw new IllegalArgumentException("Something went wrong while importing mobs from text");
-    } //TODO: add all traps and bosses to enemies.txt
+    }
     private Tile processTile(char c, int x, int y) {
         if (c == '.') return new Empty(new Position(x,y));
         else if (c == '#') return new Wall(new Position(x,y));
