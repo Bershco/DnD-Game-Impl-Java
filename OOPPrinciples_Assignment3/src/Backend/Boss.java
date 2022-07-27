@@ -31,7 +31,7 @@ public class Boss extends Monster implements HeroicUnit{
         }
         else {
             combatTicks++;
-            return super.moveProperly(enemiesOfEnemy.get(0).pos);
+            return super.movementBasedOnFunction(enemiesOfEnemy.get(0).pos);
         }
     }
 
@@ -60,7 +60,7 @@ public class Boss extends Monster implements HeroicUnit{
             return moveProperly(enemiesOfEnemy);
         else {
             combatTicks = 0;
-            return moveRandomly();
+            return randomizeMove();
         }
     }
 

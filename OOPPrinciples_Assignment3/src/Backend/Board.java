@@ -39,26 +39,27 @@ public class Board {
         }
         return outputBoard.toString();
     }
-    public void swapTiles(Position pos, Action a) {
-        Tile temp = currentPosition[pos.y][pos.x];
-        switch (a) {
-            case RIGHT -> {
-                currentPosition[pos.y][pos.x] = currentPosition[pos.y][pos.x+1];
-                currentPosition[pos.y][pos.x+1] = temp;
-            }
-            case LEFT -> {
-                currentPosition[pos.y][pos.x] = currentPosition[pos.y][pos.x-1];
-                currentPosition[pos.y][pos.x-1] = temp;
-            }
-            case DOWN -> {
-                currentPosition[pos.y][pos.x] = currentPosition[pos.y+1][pos.x];
-                currentPosition[pos.y+1][pos.x] = temp;
-            }
-            case UP -> {
-                currentPosition[pos.y][pos.x] = currentPosition[pos.y-1][pos.x];
-                currentPosition[pos.y-1][pos.x] = temp;
-            }
-        }
+    public void swapTiles(Tile curr, Tile desired) {
+        currentPosition[curr.pos.y][curr.pos.x] = curr;
+        currentPosition[desired.pos.y][desired.pos.x] = desired;
+//        switch (a) {
+//            case RIGHT -> {
+//                currentPosition[pos.y][pos.x] = currentPosition[pos.y][pos.x+1];
+//                currentPosition[pos.y][pos.x+1] = temp;
+//            }
+//            case LEFT -> {
+//                currentPosition[pos.y][pos.x] = currentPosition[pos.y][pos.x-1];
+//                currentPosition[pos.y][pos.x-1] = temp;
+//            }
+//            case DOWN -> {
+//                currentPosition[pos.y][pos.x] = currentPosition[pos.y+1][pos.x];
+//                currentPosition[pos.y+1][pos.x] = temp;
+//            }
+//            case UP -> {
+//                currentPosition[pos.y][pos.x] = currentPosition[pos.y-1][pos.x];
+//                currentPosition[pos.y-1][pos.x] = temp;
+//            }
+//        }
     }
 
     public Tile[] getSurroundings(Position pos) {

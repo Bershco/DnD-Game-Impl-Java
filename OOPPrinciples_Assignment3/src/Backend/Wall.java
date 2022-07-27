@@ -6,7 +6,7 @@ public class Wall extends Tile {
     }
 
     @Override
-    public boolean accept(Tile t) {
+    public boolean accept(Unit u) {
         return false;
     }
 }

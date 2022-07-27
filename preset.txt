@@ -1,0 +1,22 @@
+==============================
+Name             : Jon Snow
+Class            : Warrior
+Max. Health      : 300
+Attack Damage    : 30
+Defense Points   : 4
+Ability Cooldown : 3
+==============================
+
+
+
+=====Press 1 For==============
+Name             : The hound
+Class            : Warrior
+Max. Health      : 300
+Attack Damage    : 30
+Defense Points   : 4
+Ability Cooldown : 3
+==============================
+
+
+X,playerClass,name,health,attack,defense,SPECIAL_1 (Rogue->cost,Warrior->cd,Hunter->range,Mage->manaPoints),(ONLYMAGE):manacost,spellpower,hitcount,abilityrange

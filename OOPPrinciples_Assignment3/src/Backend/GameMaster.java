@@ -72,9 +72,8 @@ public class GameMaster implements DeathObserver,Observable{
             }
         }
         else {
-            Position playerPos = player.pos;
             if (player.onGameTick(a) != Action.STAND)
-                board.swapTiles(playerPos, a);
+                goTo(player,a);
         }
         List<Unit> onlyThePlayer = new LinkedList<>();
         onlyThePlayer.add(player);
@@ -82,13 +81,25 @@ public class GameMaster implements DeathObserver,Observable{
             Position ePos = e.pos;
             Action enemyMovement = e.onGameTick(onlyThePlayer);
             if (enemyMovement != Action.STAND)
-                board.swapTiles(ePos,enemyMovement);
+                goTo(e,enemyMovement);
         }
         if (enemies.isEmpty())
             onLevelWon();
         return "";
     }
 
+    public void goTo(Unit curr, Action direction) {
+        //This method is for readability purposes.
+        Tile temp = curr;
+        switch (direction) {
+            case UP -> temp = curr.getAbove();
+            case LEFT -> temp = curr.getOnTheLeft();
+            case DOWN -> temp = curr.getBelow();
+            case RIGHT -> temp = curr.getOnTheRight();
+        }
+        if (curr.visit(temp))
+            board.swapTiles(curr,temp);
+    }
     public void gameOverLose() {
         board.replacePlayerWithGrave(player.pos);
         currLevel = -1;
@@ -215,7 +226,7 @@ public class GameMaster implements DeathObserver,Observable{
             currLevel = 0;
         }
         else if (currLevel < 0) {
-            notifyDeathObservers();
+            //notifyDeathObservers(player, );
             levels = new File[1];
             levels[0] = new File(defaultLoseLevelPath);
             currLevel = 0;
@@ -254,7 +265,7 @@ public class GameMaster implements DeathObserver,Observable{
         winObservers.add(o);
     }
     @Override
-    public void notifyDeathObservers() {
+    public void notifyDeathObservers(Unit Killer, Position DeathPos) {
         for (DeathObserver deathObserver : deathObservers)
             deathObserver.onPlayerEvent();
     }
