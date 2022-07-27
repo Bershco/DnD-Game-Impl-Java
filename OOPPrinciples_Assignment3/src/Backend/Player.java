@@ -24,29 +24,13 @@ public class Player extends Unit implements HeroicUnit,Observable{
         healthAmount = healthPool;
         attackPoints += playerLevel * 4;
         defensePoints += playerLevel;
+        messageCallback.send(getName() + " has reached level " + playerLevel); // TODO: Complete
     }
 
     protected Action onGameTick(Action a) {
         if(experience >= playerLevel * experiencePerLevel)
             onLevelUp();
-        switch (a) {
-            case UP -> {
-                return (swap(getAbove()) ? a : Action.STAND);
-            }
-            case DOWN -> {
-                return (swap(getBelow()) ? a : Action.STAND);
-            }
-            case LEFT -> {
-                return (swap(getOnTheLeft()) ? a : Action.STAND);
-            }
-            case RIGHT -> {
-                return (swap(getOnTheRight()) ? a : Action.STAND);
-            }
-            case STAND -> {
-                return a;
-            }
-            default -> throw new IllegalArgumentException("Something went wrong while performing onGameTick.");
-        }
+        return a;
     }
 
     /**
@@ -61,23 +45,22 @@ public class Player extends Unit implements HeroicUnit,Observable{
      * @param target The unit to attack
      */
 
-    protected void dealDamage(Enemy target) {
+    protected void dealDamage(Enemy target, Action a) {
         super.dealDamage(target);
         if (target.healthAmount <= 0) {
             addExp(target.getExperienceValue());
-            Tile newTarget = target.enemyDeath();
-            swap(newTarget);
+            target.death(this);
         }
     }
 
 
     /**
      * This method describes the death of the player - simply calling the method gameOverLose() in our singleton board - in order to finish the game
+     * @param killer
      */
     @Override
-    protected Tile death() {
-        notifyDeathObservers();
-        return new Grave(pos);
+    protected void death(Unit killer) {
+        notifyDeathObservers(killer,pos);
     }
     /**
      * This method describes how experience is added to the player
@@ -96,14 +79,11 @@ public class Player extends Unit implements HeroicUnit,Observable{
     }
 
     @Override
-    public boolean accept(Unit t) {
-        t.dealDamage(this);
+    public boolean accept(Unit u) {
+        u.dealDamage(this);
         return false;
     }
 
-    public void swap(Enemy e) {
-        dealDamage(e);
-    }
 
     @Override
     public String description() {
@@ -123,7 +103,7 @@ public class Player extends Unit implements HeroicUnit,Observable{
     }
 
     @Override
-    public void notifyDeathObservers() {
+    public void notifyDeathObservers(Unit Killer, Position DeathPos) {
         for (DeathObserver o : deathObservers)
             o.onPlayerEvent();
     }

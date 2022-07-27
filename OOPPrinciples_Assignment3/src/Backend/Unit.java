@@ -1,11 +1,12 @@
 package Backend;
 
-public class Unit extends Tile{
+public class Unit extends Tile implements Visitor{
     private final String name;
     protected int healthPool;
     protected int healthAmount;
     protected int attackPoints;
     protected int defensePoints;
+    protected MessageCallback messageCallback;
 
     public String getName() {
         return name;
@@ -32,8 +33,15 @@ public class Unit extends Tile{
                 "Defense: " + defensePoints + "\n";
     }
 
+    public boolean visit(Tile desired) {
+        if (desired.accept(this)) {
+            swapSurroundingsWith(desired);
+            swapPositionsWith(desired);
+            return true;
+        }
 
-
+        return false;
+    }
     public String toString() {
         return super.toString();
     }
@@ -46,11 +54,16 @@ public class Unit extends Tile{
 
     /**
      * This method describes a death of a unit
+     * @param killer
      */
-    protected Tile death() {return null;}
+    protected void death(Unit killer) {}
 
     public int getHealthAmount() {
         return healthAmount;
+    }
+
+    public void setMessageCallback(MessageCallback messageCallback){
+        this.messageCallback = messageCallback;
     }
 
     /**
@@ -66,7 +79,7 @@ public class Unit extends Tile{
     }
 
 
-    public boolean accept(Unit t) {
-        return super.accept(t);
+    public boolean accept(Unit u) {
+        return false;
     }
 }

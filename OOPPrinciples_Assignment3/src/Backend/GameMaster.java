@@ -13,12 +13,17 @@ public class GameMaster implements DeathObserver,Observable{
     private final static String defaultPlayerPath = (new File("players.txt")).getPath();
     private final static String defaultWinLevelPath = (new File("dontREADME.txt")).getPath();
     private final static String defaultLoseLevelPath = (new File("dontREADME2.txt")).getPath();
+    private MessageCallback messageCallback;
 
     public String defaultLevelPath;
     private File[] levels;
     private final List<DeathObserver> deathObservers = new LinkedList<>();
     private final List<WinObserver> winObservers = new LinkedList<>();
     private int currLevel = 0;
+
+    public GameMaster(MessageCallback messageCallback){
+        this.messageCallback = messageCallback;
+    }
 
     public void initialiseGame(String path) {
         player = new Player("default_player",1,1,1,-1,-1);
@@ -29,9 +34,24 @@ public class GameMaster implements DeathObserver,Observable{
         else
             throw new IllegalArgumentException("Something went wrong while loading level files.");
         board = new Board(readNextLevel());
+        initialiseTileSurroundings();
+        initialiseEnemySurroundings();
+    }
+
+    public void initialiseEnemySurroundings() {
+        for (Enemy curr : enemies) {
+            curr.setSurroundings(board.getSurroundings(curr.pos));
+        }
+    }
+    public void initialiseTileSurroundings() {
+        for (Tile[] tArray : board.currentPosition)
+            for (Tile t : tArray)
+                t.setSurroundings(board.getSurroundings(t.pos));
     }
     public void initialisePlayer(int playerInt) {
         player = txtToPlayer(playerInt,player.pos.x,player.pos.y);
+        player.setSurroundings(board.getSurroundings(player.pos));
+        player.setMessageCallback(messageCallback);
         player.addDeathObserver(this);
     }
 
@@ -53,20 +73,33 @@ public class GameMaster implements DeathObserver,Observable{
         }
         else {
             if (player.onGameTick(a) != Action.STAND)
-                board.swapTiles(player.pos, a);
+                goTo(player,a);
         }
         List<Unit> onlyThePlayer = new LinkedList<>();
         onlyThePlayer.add(player);
         for (Enemy e : enemies) {
+            Position ePos = e.pos;
             Action enemyMovement = e.onGameTick(onlyThePlayer);
             if (enemyMovement != Action.STAND)
-                board.swapTiles(e.pos,enemyMovement);
+                goTo(e,enemyMovement);
         }
         if (enemies.isEmpty())
             onLevelWon();
         return "";
     }
 
+    public void goTo(Unit curr, Action direction) {
+        //This method is for readability purposes.
+        Tile temp = curr;
+        switch (direction) {
+            case UP -> temp = curr.getAbove();
+            case LEFT -> temp = curr.getOnTheLeft();
+            case DOWN -> temp = curr.getBelow();
+            case RIGHT -> temp = curr.getOnTheRight();
+        }
+        if (curr.visit(temp))
+            board.swapTiles(curr,temp);
+    }
     public void gameOverLose() {
         board.replacePlayerWithGrave(player.pos);
         currLevel = -1;
@@ -90,7 +123,7 @@ public class GameMaster implements DeathObserver,Observable{
             BufferedReader reader = new BufferedReader(new FileReader(defaultPlayerPath));
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.charAt(0) == playerInt) { //if we want to use more than 10 players, just swap this while with a for loop
+                if (Integer.parseInt(""+line.charAt(0)) == playerInt) { //if we want to use more than 10 players, just swap this while with a for loop
                     String[] playerDescription = line.split(","); //TODO: check if regex works
                     String playerClass = playerDescription[1];
                     String name = playerDescription[2];
@@ -177,6 +210,7 @@ public class GameMaster implements DeathObserver,Observable{
         }
         else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
             Enemy curr = txtToEnemy(c,x,y);
+            curr.setMessageCallback(messageCallback);
             enemies.add(curr);
             return curr;
         }
@@ -192,7 +226,7 @@ public class GameMaster implements DeathObserver,Observable{
             currLevel = 0;
         }
         else if (currLevel < 0) {
-            notifyDeathObservers();
+            //notifyDeathObservers(player, );
             levels = new File[1];
             levels[0] = new File(defaultLoseLevelPath);
             currLevel = 0;
@@ -231,7 +265,7 @@ public class GameMaster implements DeathObserver,Observable{
         winObservers.add(o);
     }
     @Override
-    public void notifyDeathObservers() {
+    public void notifyDeathObservers(Unit Killer, Position DeathPos) {
         for (DeathObserver deathObserver : deathObservers)
             deathObserver.onPlayerEvent();
     }

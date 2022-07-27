@@ -3,15 +3,18 @@ import Backend.*;
 import java.util.Scanner;
 
 public class GameUI implements DeathObserver,WinObserver {
-    private final GameMaster gm = new GameMaster();
+    private final GameMaster gm;
     private final BoardUI bui;
     private final PlayerUI pui;
     private boolean win = false;
     private boolean dead = false;
 
-    public GameUI(BoardUI _bui, PlayerUI _pui) {
-        bui = _bui;
-        pui = _pui;
+    public GameUI(String levelPath) {
+        gm = new GameMaster(this::print);
+        bui = new BoardUI(gm);
+        pui = new PlayerUI(gm);
+        bui.initialiseGame(levelPath);
+        pui.initialisePlayer();
         gm.addDeathObserver(this);
         gm.addWinObserver(this);
     }
@@ -66,5 +69,9 @@ public class GameUI implements DeathObserver,WinObserver {
     public void onWinEvent(boolean endGame) {
         win = endGame;
         System.out.println((!endGame) ? "Level completed, congratulations, here's the next one:" : "Game over.....................?");
+    }
+
+    public void print(String message){
+        System.out.println(message);
     }
 }

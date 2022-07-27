@@ -1,6 +1,6 @@
 package Backend;
 
-public class Tile {
+public class Tile implements Visited{
     protected char tile;
     protected Position pos;
     private Tile above;
@@ -47,34 +47,92 @@ public class Tile {
         return onTheRight;
     }
 
-    public boolean swap(Tile t) {
-        if (t.accept(this)) {
-            Tile tUp = t.above;
-            Tile tDown = t.below;
-            Tile tRight = t.onTheRight;
-            Tile tLeft = t.onTheLeft;
-            t.above = above;
-            t.below = below;
-            t.onTheRight = onTheRight;
-            t.onTheLeft = onTheLeft;
-            above = tUp;
-            below = tDown;
-            onTheRight = tRight;
-            onTheLeft = tLeft;
+    public void swapPositionsWith(Tile t) {
+        Position tPos = t.pos;
+        t.pos = pos;
+        pos = tPos;
+    }
 
-            Position tPos = t.pos;
-            t.pos = pos;
-            pos = tPos;
-            return true;
+    public void swapSurroundingsWith(Tile t) {
+        int dx = t.pos.x - pos.x; //RIGHT   = +1  | LEFT = -1 | UP/DOWN    = 0
+        int dy = t.pos.y - pos.y; //DOWN    = +1  | UP   = -1 | RIGHT/LEFT = 0
+        if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
+            //Teleportation isn't implemented but we put this in anyways
+            Tile[] temp = new Tile[4];
+            temp[0] = t.getAbove();
+            temp[1] = t.getOnTheLeft();
+            temp[2] = t.getBelow();
+            temp[3] = t.getOnTheRight();
+            t.setSurroundings(getSurroundings());
+            setSurroundings(temp);
         }
-        return false;
+        else { //Now we're walking
+            Tile[] tempT = t.getSurroundings();
+            Tile[] tempThis = getSurroundings();
+            if (dx == 0) {
+                if (dy == -1) {
+                    tempT[2] = t;
+                    tempThis[0] = this;
+                }
+                else if (dy == 1) {
+                    tempT[0] = t;
+                    tempThis[2] = this;
+                }
+            }
+            else {
+                if (dx == -1) {
+                    tempT[3] = t;
+                    tempThis[1] = this;
+                }
+                else if (dx == 1) {
+                    tempT[1] = t;
+                    tempThis[3] = this;
+                }
+            }
+            t.setSurroundings(tempThis);
+            setSurroundings(tempT);
+        }
+        t.updateTheSurroundings();
+        updateTheSurroundings();
     }
 
 
-    public boolean accept(Tile t) {
+    public boolean accept(Unit u) { //TODO fix overrides
         return true;
     }
     public String toString() {
         return "" + tile;
+    }
+
+    public void setSurroundings(Tile[] surroundings) {
+        above = surroundings[0];
+        onTheLeft = surroundings[1];
+        below = surroundings[2];
+        onTheRight = surroundings[3];
+    }
+
+    public Tile[] getSurroundings() {
+        Tile[] output = new Tile[4];
+        output[0] = above;
+        output[1] = onTheLeft;
+        output[2] = below;
+        output[3] = onTheRight;
+        return output;
+    }
+
+    public void acknowledge(Tile t, Action a) {
+        switch (a) {
+            case UP -> above = t;
+            case LEFT -> onTheLeft = t;
+            case DOWN -> below = t;
+            case RIGHT -> onTheRight = t;
+        }
+    }
+
+    public void updateTheSurroundings() {
+        above.acknowledge(this,Action.DOWN);
+        onTheLeft.acknowledge(this, Action.RIGHT);
+        below.acknowledge(this,Action.UP);
+        onTheRight.acknowledge(this,Action.LEFT);
     }
 }

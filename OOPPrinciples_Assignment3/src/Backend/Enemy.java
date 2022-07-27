@@ -26,7 +26,7 @@ public class Enemy extends Unit implements Observable{
     protected void dealDamage(Unit target) {
         super.dealDamage(target);
         if (target.healthAmount <= 0) {
-            target.death();
+            target.death(this);
         }
     }
 
@@ -39,38 +39,12 @@ public class Enemy extends Unit implements Observable{
     } //Because the enemy of my enemy is my friend.
     /**
      * This method describes a death of an enemy
+     * @param killer
      */
-    protected Tile enemyDeath() {
-        notifyDeathObservers();
-        return new Empty(pos);
-    }
 
-    /**
-     * This method attempts movement of the enemy to a certain direction, followed by the following options:
-     *      1. If the attempted tile is empty, simply move
-     *      2. If the attempted tile is the player, attempt fighting sequence
-     *      3. If the attempted tile is a wall, just randomly move to a different direction
-     * @param d the attempted direction to move towards
-     */
     @Override
-    protected Action move(Action d) {
-        switch (d) {
-            case UP -> {
-                return swap(getAbove()) ? d : Action.STAND;
-            }
-            case DOWN -> {
-                return swap(getBelow()) ? d : Action.STAND;
-            }
-            case LEFT -> {
-                return swap(getOnTheLeft()) ? d : Action.STAND;
-            }
-            case RIGHT -> {
-                return swap(getOnTheRight()) ? d : Action.STAND;
-            }
-            default -> {
-                return Action.STAND;
-            }
-        }
+    protected void death(Unit killer) {
+        notifyDeathObservers(killer,pos);
     }
 
     /**
@@ -81,16 +55,16 @@ public class Enemy extends Unit implements Observable{
         int direction = random.nextInt(5);
         switch (direction) {
             case 0 -> {
-                return move(Action.UP);
+                return Action.UP;
             }
             case 1 -> {
-                return move(Action.LEFT);
+                return Action.LEFT;
             }
             case 2 -> {
-                return move(Action.DOWN);
+                return Action.DOWN;
             }
             case 3 -> {
-                return move(Action.RIGHT);
+                return Action.RIGHT;
             }
             default -> { //this is for "4" and for compilation.
                 return Action.STAND;
@@ -98,10 +72,6 @@ public class Enemy extends Unit implements Observable{
         }
     }
 
-    public void swap(Enemy e) {}
-    public void swap(Player p) {
-        p.accept(this);
-    }
 
     @Override
     public String description() {
@@ -118,7 +88,7 @@ public class Enemy extends Unit implements Observable{
     public void addWinObserver(WinObserver o) {} //Won't do anything, monsters can't win unless the player loses, and that's just dumb.
 
     @Override
-    public void notifyDeathObservers() {
+    public void notifyDeathObservers(Unit Killer, Position DeathPos) {
         for (DeathObserver observer : observers)
             observer.onEnemyEvent(this);
     }

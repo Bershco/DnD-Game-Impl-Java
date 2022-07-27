@@ -6,7 +6,11 @@ import java.util.Scanner;
 import java.io.*;
 
 public class PlayerUI {
-    private final GameMaster gm = new GameMaster();
+    private final GameMaster gm;
+
+    public PlayerUI(GameMaster gm){
+        this.gm = gm;
+    }
 
     public void initialisePlayer() {
         Scanner scanner = new Scanner(System.in);
