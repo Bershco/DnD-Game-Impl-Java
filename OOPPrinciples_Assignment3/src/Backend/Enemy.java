@@ -61,7 +61,6 @@ public class Enemy extends Unit implements Observable{
         }
     }
 
-
     @Override
     public String description() {
         return super.description() +
@@ -84,29 +83,22 @@ public class Enemy extends Unit implements Observable{
     @Override
     public void notifyWinObservers(boolean endGame) {} //Won't do anything, monsters can't win unless the player loses, and that's just dumb.
 
-    @Override
-    public boolean accept(Unit u) {
-        u.dealDamage(this);
-        if (healthAmount <= 0) {
-            death(u);
-            return true;
-        }
-        return false;
-    }
 
     @Override
-    public boolean visit(Player p) {
-        if (p.accept(this)) {
-            swapSurroundingsWith(p);
-            swapPositionsWith(p);
-            return true;
-        }
-        return false;
+    public boolean accept(Visitor visitor) {
+        return visitor.visit(this);
     }
+
     @Override
     public boolean visit(Enemy e) {
         return false;
     }
 
-    //create a goTo method in enemy\player
+    @Override
+    public boolean visit(Player p) {
+        if (dealDamage(p)) {
+            p.death(this);
+        }
+        return false;
+    }
 }

@@ -65,24 +65,22 @@ public class Player extends Unit implements HeroicUnit,Observable{
     }
 
     @Override
-    public boolean accept(Unit u) {
-        u.dealDamage(this);
+    public boolean visit(Player p) {
         return false;
     }
 
     @Override
     public boolean visit(Enemy e) {
-        if (e.accept(this)) {
-            swapSurroundingsWith(e);
-            swapPositionsWith(e);
+        if (dealDamage(e)) {
+            e.death(this);
             return true;
         }
         return false;
     }
 
     @Override
-    public boolean visit(Player p) {
-        return false;
+    public boolean accept(Visitor visitor) {
+        return visitor.visit(this);
     }
 
     @Override

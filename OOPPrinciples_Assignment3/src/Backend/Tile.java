@@ -1,6 +1,6 @@
 package Backend;
 
-public class Tile implements Visited{
+public abstract class Tile implements Visited{
     protected char tile;
     protected Position pos;
     private Tile above;
@@ -96,10 +96,6 @@ public class Tile implements Visited{
         updateTheSurroundings();
     }
 
-
-    public boolean accept(Unit u) { //TODO fix overrides
-        return true;
-    }
     public String toString() {
         return "" + tile;
     }

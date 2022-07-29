@@ -101,11 +101,11 @@ public class GameMaster implements DeathObserver,Observable{
             case DOWN -> temp = curr.getBelow();
             case RIGHT -> temp = curr.getOnTheRight();
         }
-        if (curr.visit(temp))
+        if (curr.goTo(temp))
             board.swapTiles(curr,temp);
     }
 
-    public void goTo(Player curr, Action direction) {
+    public void goTo(Player curr, Action direction) { //TODO might not need overloading
         //This method is for readability purposes.
         Tile temp = curr;
         switch (direction) {
@@ -114,17 +114,14 @@ public class GameMaster implements DeathObserver,Observable{
             case DOWN -> temp = curr.getBelow();
             case RIGHT -> temp = curr.getOnTheRight();
         }
-        if (curr.visit(temp))
+        if (curr.goTo(temp))
             board.swapTiles(curr,temp);
     }
-
-
 
     public void gameOverLose() {
         Grave grave = board.replacePlayerWithGrave(player.pos);
         grave.setSurroundings(player.getSurroundings());
         grave.updateTheSurroundings();
-        //TODO: UI should output final board layout using board.description() - make sure both the "WIN/LOSE" board and the final board are output.
     }
 
     /**
