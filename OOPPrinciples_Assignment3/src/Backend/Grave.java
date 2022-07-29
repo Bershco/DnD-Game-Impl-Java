@@ -6,7 +6,7 @@ public class Grave extends Tile {
     }
 
     @Override
-    public boolean accept(Unit u) {
-        return false;
+    public boolean accept(Visitor visitor) {
+        return visitor.visit(this);
     }
 }

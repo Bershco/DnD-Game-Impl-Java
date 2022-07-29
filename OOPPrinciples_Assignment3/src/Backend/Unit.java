@@ -1,6 +1,6 @@
 package Backend;
 
-public class Unit extends Tile implements Visitor{
+public abstract class Unit extends Tile implements Visitor{
     private final String name;
     protected int healthPool;
     protected int healthAmount;
@@ -36,43 +36,27 @@ public class Unit extends Tile implements Visitor{
                 "Defense: " + defensePoints + "\t\t";
     }
 
-    @Override
-    public boolean visit(Player p) {
-        return false;
-    }
-
-    @Override
-    public boolean visit(Enemy e) {
+    public boolean goTo(Tile t) {
+        if (t.accept(this)) {
+            swapSurroundingsWith(t);
+            swapPositionsWith(t);
+            return true;
+        }
         return false;
     }
 
     @Override
     public boolean visit(Empty e) {
-        if (e.accept(this)) {
-            swapSurroundingsWith(e);
-            swapPositionsWith(e);
-            return true;
-        }
-        return false;
+        return true;
     }
 
     @Override
     public boolean visit(Wall w) {
-        if (w.accept(this)) {
-            swapSurroundingsWith(w);
-            swapPositionsWith(w);
-            return true;
-        }
         return false;
     }
 
     @Override
     public boolean visit(Grave g) {
-        if (g.accept(this)) {
-            swapSurroundingsWith(g);
-            swapPositionsWith(g);
-            return true;
-        }
         return false;
     }
 
@@ -84,7 +68,6 @@ public class Unit extends Tile implements Visitor{
      * This method moves a unit
      * @param d the direction to attempt movement towards
      */
-    protected Action move(Action d) { return d;}
 
     /**
      * This method describes a death of a unit
@@ -104,7 +87,7 @@ public class Unit extends Tile implements Visitor{
      * This method is part of the combat system of the game, it is used to attack another unit
      * @param target The unit to attack
      */
-    protected void dealDamage(Unit target) {
+    protected boolean dealDamage(Unit target) {
         int attackRoll = (int)Math.round(Math.random()*(attackPoints+1));
         int defenseRoll = (int)Math.round(Math.random()*(target.defensePoints+1));
         int damage = attackRoll - defenseRoll;
@@ -112,7 +95,7 @@ public class Unit extends Tile implements Visitor{
             target.healthAmount -= damage;
         }
         messageCallback.send(generateBattleSequence(this,target,damage));
-
+        return target.healthAmount <= 0;
     }
 
     public String generateBattleSequence(Unit attacker, Unit defender, int damage) {
@@ -131,8 +114,4 @@ public class Unit extends Tile implements Visitor{
     }
 
 
-    public boolean accept(Unit u) {
-        u.dealDamage(this);
-        return false;
-    }
 }

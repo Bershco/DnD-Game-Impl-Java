@@ -1,5 +1,5 @@
 package Backend;
 
 public interface Visited {
-    public boolean accept(Unit u);
+    public boolean accept(Visitor visitor);
 }
