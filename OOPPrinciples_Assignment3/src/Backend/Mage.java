@@ -82,11 +82,11 @@ public class Mage extends  Player{
     @Override
     public String description() {
         return super.description() +
-            "Class: Backend.Mage\n" +
-            "Mana: " + currentMana + " out of " + manaPool + "\n" +
-            "Spell Cost: " + manaCost + "\n" +
-            "Spell Power: " + spellPower + "\n" +
-            "Ability Range: " + abilityRange + "\n" +
-            "Hit Count: " + hitCount + "\n";
+            "Class: Mage\t\t" +
+            "Mana: " + currentMana + "/" + manaPool + "\t\t" +
+            "Spell Cost: " + manaCost + "\t\t" +
+            "Spell Power: " + spellPower + "\t\t" +
+            "Ability Range: " + abilityRange + "\t\t" +
+            "Hit Count: " + hitCount + "\t";
     }
 }

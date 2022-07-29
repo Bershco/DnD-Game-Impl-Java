@@ -20,3 +20,10 @@ Ability Cooldown : 3
 
 
 X,playerClass,name,health,attack,defense,SPECIAL_1 (Rogue->cost,Warrior->cd,Hunter->range,Mage->manaPoints),(ONLYMAGE):manacost,spellpower,hitcount,abilityrange
+
+
+=====================================================
+	U1_NAME	VS	U2_NAME
+Attack : ____		DEFENSE: _____
+=====================================================
+U1_NAME has inflicted <damageRoll> damage to U2_NAME

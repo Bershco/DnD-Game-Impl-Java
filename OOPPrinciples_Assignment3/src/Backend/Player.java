@@ -41,20 +41,6 @@ public class Player extends Unit implements HeroicUnit,Observable{
     public void castAbility(List<? extends Unit> enemies) {}
 
     /**
-     * This method is part of the combat system of the game, it is used to attack another unit (primarily enemies)
-     * @param target The unit to attack
-     */
-
-    protected void dealDamage(Enemy target, Action a) {
-        super.dealDamage(target);
-        if (target.healthAmount <= 0) {
-            addExp(target.getExperienceValue());
-            target.death(this);
-        }
-    }
-
-
-    /**
      * This method describes the death of the player - simply calling the method gameOverLose() in our singleton board - in order to finish the game
      * @param killer
      */
@@ -84,12 +70,26 @@ public class Player extends Unit implements HeroicUnit,Observable{
         return false;
     }
 
+    @Override
+    public boolean visit(Enemy e) {
+        if (e.accept(this)) {
+            swapSurroundingsWith(e);
+            swapPositionsWith(e);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean visit(Player p) {
+        return false;
+    }
 
     @Override
     public String description() {
         return super.description() +
-            "Experience: " + experience + "/" + experiencePerLevel*playerLevel + "\n" +
-            "Level: " + playerLevel + "\n";
+            "Experience: " + experience + "/" + experiencePerLevel*playerLevel + "\t" +
+            "Level: " + playerLevel + "\t";
     }
 
     @Override
@@ -103,9 +103,9 @@ public class Player extends Unit implements HeroicUnit,Observable{
     }
 
     @Override
-    public void notifyDeathObservers(Unit Killer, Position DeathPos) {
+    public void notifyDeathObservers(Unit killer, Position DeathPos) {
         for (DeathObserver o : deathObservers)
-            o.onPlayerEvent();
+            o.onPlayerEvent(killer);
     }
 
     @Override

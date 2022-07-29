@@ -18,11 +18,15 @@ public class Board {
     }
 
 
-    public void replaceEnemyWithEmpty(Position enemyPos) {
-        currentPosition[enemyPos.y][enemyPos.x] = new Empty(enemyPos);
+    public Empty replaceEnemyWithEmpty(Position enemyPos) {
+        Empty newTile = new Empty(enemyPos);
+        currentPosition[enemyPos.y][enemyPos.x] = newTile;
+        return newTile;
     }
-    public void replacePlayerWithGrave(Position playerPos) {
-        currentPosition[playerPos.y][playerPos.x] = new Grave(playerPos);
+    public Grave replacePlayerWithGrave(Position playerPos) {
+        Grave grave = new Grave(playerPos);
+        currentPosition[playerPos.y][playerPos.x] = grave;
+        return grave;
     }
 
     protected void loadLevel(Tile[][] t) {

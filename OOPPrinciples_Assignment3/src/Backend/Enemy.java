@@ -18,17 +18,6 @@ public class Enemy extends Unit implements Observable{
         super(_name,_tile,_healthPool,_attackPoints,_defensePoints, x, y);
         experienceValue = _experienceValue;
     }
-    /**
-     * This method is part of the combat system of the game, it is used to attack another unit (primarily the player)
-     * @param target The unit to attack
-     */
-    @Override
-    protected void dealDamage(Unit target) {
-        super.dealDamage(target);
-        if (target.healthAmount <= 0) {
-            target.death(this);
-        }
-    }
 
     public int getExp() {
         return experienceValue;
@@ -76,7 +65,7 @@ public class Enemy extends Unit implements Observable{
     @Override
     public String description() {
         return super.description() +
-            "Experience Value: " + experienceValue + "\n";
+            "Experience Value: " + experienceValue + "\t";
     }
 
     @Override
@@ -94,4 +83,30 @@ public class Enemy extends Unit implements Observable{
     }
     @Override
     public void notifyWinObservers(boolean endGame) {} //Won't do anything, monsters can't win unless the player loses, and that's just dumb.
+
+    @Override
+    public boolean accept(Unit u) {
+        u.dealDamage(this);
+        if (healthAmount <= 0) {
+            death(u);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean visit(Player p) {
+        if (p.accept(this)) {
+            swapSurroundingsWith(p);
+            swapPositionsWith(p);
+            return true;
+        }
+        return false;
+    }
+    @Override
+    public boolean visit(Enemy e) {
+        return false;
+    }
+
+    //create a goTo method in enemy\player
 }
