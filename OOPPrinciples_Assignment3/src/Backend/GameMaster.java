@@ -34,10 +34,15 @@ public class GameMaster implements DeathObserver,Observable{
         else
             throw new IllegalArgumentException("Something went wrong while loading level files.");
         board = new Board(readNextLevel());
+        initialiseLevel();
+    }
+
+    public void initialiseLevel() {
+        for (Enemy e : enemies)
+            e.addDeathObserver(this);
         initialiseTileSurroundings();
         initialiseEnemySurroundings();
     }
-
     public void initialiseEnemySurroundings() {
         for (Enemy curr : enemies) {
             curr.setSurroundings(board.getSurroundings(curr.pos));
@@ -62,7 +67,7 @@ public class GameMaster implements DeathObserver,Observable{
         return defaultPlayerPath;
     }
 
-    public String onGameTick(Action a) {
+    public String onGameTick(Action a) { //TODO maybe check if String return type is needed or can be void
         if (a == Action.ABILITYCAST) {
             try {
                 player.castAbility(enemies);
@@ -78,7 +83,6 @@ public class GameMaster implements DeathObserver,Observable{
         List<Unit> onlyThePlayer = new LinkedList<>();
         onlyThePlayer.add(player);
         for (Enemy e : enemies) {
-            Position ePos = e.pos;
             Action enemyMovement = e.onGameTick(onlyThePlayer);
             if (enemyMovement != Action.STAND)
                 goTo(e,enemyMovement);
@@ -88,7 +92,7 @@ public class GameMaster implements DeathObserver,Observable{
         return "";
     }
 
-    public void goTo(Unit curr, Action direction) {
+    public void goTo(Enemy curr, Action direction) {
         //This method is for readability purposes.
         Tile temp = curr;
         switch (direction) {
@@ -100,22 +104,59 @@ public class GameMaster implements DeathObserver,Observable{
         if (curr.visit(temp))
             board.swapTiles(curr,temp);
     }
+
+    public void goTo(Player curr, Action direction) {
+        //This method is for readability purposes.
+        Tile temp = curr;
+        switch (direction) {
+            case UP -> temp = curr.getAbove();
+            case LEFT -> temp = curr.getOnTheLeft();
+            case DOWN -> temp = curr.getBelow();
+            case RIGHT -> temp = curr.getOnTheRight();
+        }
+        if (curr.visit(temp))
+            board.swapTiles(curr,temp);
+    }
+
+
+
     public void gameOverLose() {
-        board.replacePlayerWithGrave(player.pos);
-        currLevel = -1;
-        readNextLevel();
+        Grave grave = board.replacePlayerWithGrave(player.pos);
+        grave.setSurroundings(player.getSurroundings());
+        grave.updateTheSurroundings();
         //TODO: UI should output final board layout using board.description() - make sure both the "WIN/LOSE" board and the final board are output.
     }
+
+    /**
+     * Loads the win board
+     */
+    public void loadWin() {
+        board = new Board(readNextLevel());
+    }
+
+    /**
+     * Loads the lose board
+     */
+    public void loadLose() {
+        currLevel = -1;
+        board = new Board(readNextLevel());
+    }
+
     public void onLevelWon() {
         board.currentPosition = readNextLevel();
+        initialiseLevel();
     }
     @Override
-    public void onPlayerEvent() {
+    public void onPlayerEvent(Unit killer) {
         gameOverLose();
+        notifyDeathObservers(killer,player.getPos());
     }
     @Override
     public void onEnemyEvent(Enemy e) {
-        board.replaceEnemyWithEmpty(e.pos);
+        Empty empty = board.replaceEnemyWithEmpty(e.pos); //TODO update the surroundings
+        empty.setSurroundings(e.getSurroundings());
+        empty.updateTheSurroundings();
+        player.addExp(e.getExperienceValue());
         enemies.remove(e);
     }
     private Player txtToPlayer(int playerInt, int x, int y) {
@@ -230,7 +271,7 @@ public class GameMaster implements DeathObserver,Observable{
             levels = new File[1];
             levels[0] = new File(defaultLoseLevelPath);
             currLevel = 0;
-        }
+        } else notifyWinObservers(false);
         LinkedList<String> lines = new LinkedList<>();
         try {
             BufferedReader reader = new BufferedReader(new FileReader(levels[currLevel++]));
@@ -243,6 +284,7 @@ public class GameMaster implements DeathObserver,Observable{
         } catch (IOException e) {
             System.out.println(e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
         }
+        enemies.clear();
         Tile[][] boardTiles = new Tile[lines.size()][]; //TODO: switch all xs with ys
         int y = 0;
         while (!lines.isEmpty()) {
@@ -265,9 +307,9 @@ public class GameMaster implements DeathObserver,Observable{
         winObservers.add(o);
     }
     @Override
-    public void notifyDeathObservers(Unit Killer, Position DeathPos) {
+    public void notifyDeathObservers(Unit killer, Position DeathPos) {
         for (DeathObserver deathObserver : deathObservers)
-            deathObserver.onPlayerEvent();
+            deathObserver.onPlayerEvent(killer);
     }
     @Override
     public void notifyWinObservers(boolean endGame) {

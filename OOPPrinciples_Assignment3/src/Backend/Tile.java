@@ -22,10 +22,10 @@ public class Tile implements Visited{
      * @return a double representing the distance from 'this' tile to another
      */
     protected double range(Tile other) {
-        return Math.sqrt(Math.pow((pos.x - other.pos.x),2)+Math.pow((pos.x - other.pos.x),2));
+        return Math.sqrt(Math.pow((pos.x - other.pos.x),2)+Math.pow((pos.y - other.pos.y),2));
     }
     protected double range(Position _pos) {
-        return Math.sqrt(Math.pow((pos.x - _pos.x),2)+Math.pow((pos.x - _pos.x),2));
+        return Math.sqrt(Math.pow((pos.x - _pos.x),2)+Math.pow((pos.y - _pos.y),2));
     }
 
     public char getTile() {

@@ -25,6 +25,7 @@ public class GameUI implements DeathObserver,WinObserver {
         String availableChars = "wasdeq";
         while (!win && !dead) {
             String input = scanner.nextLine().toLowerCase();
+            pseudoClearScreen();
             while (!availableChars.contains(input) || input.length() != 1)
                 input = scanner.nextLine().toLowerCase();
             switch (input) {
@@ -50,13 +51,15 @@ public class GameUI implements DeathObserver,WinObserver {
             bui.printCurrBoard();
             pui.printCurrPlayerDesc();
         }
+        if (win) gm.loadWin();
+        else if (dead) gm.loadLose();
         bui.printCurrBoard();
     }
 
     @Override
-    public void onPlayerEvent() {
+    public void onPlayerEvent(Unit killer) {
         dead = true;
-        System.out.println("Game over.....................?"); //TODO: maybe have a lose board as well as the win board
+        System.out.println("\n\nGame over.....................?\n"); //TODO: maybe have a lose board as well as the win board
     }
 
     @Override
@@ -68,10 +71,15 @@ public class GameUI implements DeathObserver,WinObserver {
     @Override
     public void onWinEvent(boolean endGame) {
         win = endGame;
+        pseudoClearScreen();
         System.out.println((!endGame) ? "Level completed, congratulations, here's the next one:" : "Game over.....................?");
     }
 
     public void print(String message){
         System.out.println(message);
+    }
+
+    public void pseudoClearScreen() {
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     }
 }

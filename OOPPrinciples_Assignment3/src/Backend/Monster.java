@@ -41,15 +41,6 @@ public class Monster extends Enemy{
             return randomizeMove();
     }
 
-    public boolean accept(Monster m) {
-        return false;
-    }
-
-
-//    public boolean accept(Player p) {
-//        p.dealDamage(this);
-//        return false;
-//    }
 
     @Override
     public String description() {
