@@ -9,9 +9,6 @@ public class Board {
     }
 
     //Getters
-    public Tile[][] getCurrentPosition() {
-        return currentPosition;
-    }
     public Tile[] getSurroundings(Position pos) {
         Tile[] output = new Tile[4];
         output[0] = (pos.getY() == 0) ? null : currentPosition[pos.getY()-1][pos.getX()];

@@ -45,7 +45,7 @@ public class GameUI implements DeathObserver,WinObserver {
             pui.printCurrPlayerDesc();
         }
         if (win) gm.loadWin();
-        else if (dead) gm.loadLose();
+        else gm.loadLose();
         bui.printCurrBoard();
     }
 
