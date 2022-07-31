@@ -1,5 +1,8 @@
 package UI;
 import Backend.*;
+import Backend.Tiles.EnemyTiles.Enemy;
+import Backend.Tiles.Unit;
+
 import java.util.Scanner;
 
 public class GameUI implements DeathObserver,WinObserver {

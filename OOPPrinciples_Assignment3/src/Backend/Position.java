@@ -5,7 +5,7 @@ public class Position {
     private final int y;
 
     //Constructor
-    Position(int _x, int _y) {
+    public Position(int _x, int _y) {
         x = _x;
         y = _y;
     }

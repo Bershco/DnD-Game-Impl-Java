@@ -1,5 +1,9 @@
 package Backend;
 
+import Backend.Tiles.*;
+import Backend.Tiles.EnemyTiles.*;
+import Backend.Tiles.PlayerTiles.*;
+
 import java.io.*;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -31,6 +35,10 @@ public class GameMaster implements DeathObserver,Observable{
     public String getPlayerName() { return player.getName();}
     public String getDefaultPlayerPath() {
         return defaultPlayerPath;
+    }
+
+    public List<Enemy> getEnemies() {
+        return enemies;
     }
 
     /**

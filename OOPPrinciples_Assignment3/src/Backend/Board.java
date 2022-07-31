@@ -1,5 +1,9 @@
 package Backend;
 
+import Backend.Tiles.Empty;
+import Backend.Tiles.Grave;
+import Backend.Tiles.Tile;
+
 public class Board {
     protected Tile[][] currentPosition;
 
@@ -16,6 +20,9 @@ public class Board {
         output[2] = (pos.getY() == currentPosition.length-1) ? null : currentPosition[pos.getY()+1][pos.getX()];
         output[3] = (pos.getX() == currentPosition[pos.getY()].length-1) ? null : currentPosition[pos.getY()][pos.getX()+1];
         return output;
+    }
+    public Tile[][] getCurrentPosition() {
+        return currentPosition;
     }
 
     /**
