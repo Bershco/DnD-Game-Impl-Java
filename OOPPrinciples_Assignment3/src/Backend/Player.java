@@ -63,6 +63,12 @@ public class Player extends Unit implements HeroicUnit,Observable{
     protected void death(Unit killer) {
         notifyDeathObservers(killer,getPos());
     }
+
+    @Override
+    protected int getExperienceValue() {
+        return experience;
+    }
+
     /**
      * This method describes how experience is added to the player
      */
@@ -79,6 +85,11 @@ public class Player extends Unit implements HeroicUnit,Observable{
         return true;
     }
 
+    public void killed(Unit e) {
+        e.death(this);
+        addExp(e.getExperienceValue());
+        messageCallback.send(getName() + " has received " + e.getExperienceValue() + " experience value.");
+    }
     //Visitor Pattern
     @Override
     public boolean visit(Player p) {
@@ -86,11 +97,8 @@ public class Player extends Unit implements HeroicUnit,Observable{
     }
     @Override
     public boolean visit(Enemy e) {
-        if (dealDamage(e)) {
-            e.death(this);
-            addExp(e.getExperienceValue());
-            messageCallback.send(getName() + " has received " + e.getExperienceValue() + " experience value.");
-        }
+        if (dealDamage(e))
+            killed(e);
         return false;
     }
     @Override

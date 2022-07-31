@@ -64,12 +64,15 @@ public class Warrior extends Player {
                 int index = rnd.nextInt(enemies.size());
                 Unit enemy = enemies.get(index);
                 enemy.alterHealthAmountBy(-getHealthPool() * 10);
+                /* The requirement states the following:
+                 * "Randomly hits one enemy within range < 3 for an amount equals to 10% of the warrior’s health pool"
+                 * so we *intentionally* did not use the method dealDamage.
+                 */
                 if (enemy.getHealthAmount() > 0)
                     messageCallback.send(getName() + " used the special ability against " + enemy.getName() + " and dealt " + (getHealthPool()*10) + " damage.\n" + enemy.getName() + "'s health is now at " + enemy.getHealthAmount());
                 else {
                     messageCallback.send(getName() + " used the special ability against " + enemy.getName() + " and dealt " + (getHealthPool() * 10) + " damage.\n" + enemy.getName() + " is now dead");
-                    enemy.death(this);
-                    enemies.remove(enemy);
+                    killed(enemy);
                 }
             }
         }

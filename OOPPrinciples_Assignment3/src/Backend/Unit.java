@@ -57,7 +57,7 @@ public abstract class Unit extends Tile implements Visitor{
 
     //Abstract Methods
     protected abstract void death(Unit killer);
-
+    protected abstract int getExperienceValue();
 
     /**
      * This method is part of the combat system of the game, it is used to attack another unit
@@ -81,11 +81,10 @@ public abstract class Unit extends Tile implements Visitor{
      * @param damage the damage taken
      * @return the generated String to output
      */
-    private String generateBattleSequence(Unit attacker, Unit defender, int damage) { //TODO apparently "Whole stats for both units" are required
+    private String generateBattleSequence(Unit attacker, Unit defender, int damage) {
         StringBuilder output = new StringBuilder("=======================================\n" +
-                attacker.getName() + "\t\t VS \t" + defender.getName() + "\n" +
-                "Attack: \t" + attacker.getAttackPoints() + "\t\t\t" + "Defense: \t" + defender.getDefensePoints() + "\n" +
-                "Roll results: \t" + damage + "\t\t" + "Health: " +((damage>0) ? defender.getHealthAmount()+damage : defender.getHealthAmount()) + "\n" +
+                attacker.description() + "\n\t\t\tATTACKS\n" + defender.description()+
+                "\nRoll results: \t" + damage + "\t\t" + "Health: " +((damage>0) ? defender.getHealthAmount()+damage : defender.getHealthAmount()) + "\n" +
                 "=======================================\n");
         if (damage > 0) {
             if (defender.getHealthAmount() > 0)

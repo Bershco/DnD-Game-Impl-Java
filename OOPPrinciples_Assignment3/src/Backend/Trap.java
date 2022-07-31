@@ -39,13 +39,13 @@ public class Trap extends Enemy{
     @Override
     public String description() {
         String output = super.description() +
-            "Visible: " + visible + "\n" +
-            "Visibility Time: " + visibilityTime + "\n" +
-            "Invisibility Time: " + invisibilityTime + "\n";
+            "Visible: " + visible + "\t" +
+            "Visibility Time: " + visibilityTime + "\t" +
+            "Invisibility Time: " + invisibilityTime + "\t";
         if (visible)
-            output += "Time Until Invisibility: " + (visibilityTime - ticksCount) + "\n";
+            output += "Time Until Invisibility: " + (visibilityTime - ticksCount) + "\t";
         else
-            output += "Time Until Visibility: " + (visibilityTime + invisibilityTime - ticksCount) + "\n";
+            output += "Time Until Visibility: " + (visibilityTime + invisibilityTime - ticksCount) + "\t";
         return output;
     }
     @Override

@@ -1,6 +1,7 @@
 package UI;
 import Backend.*;
 
+import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.Scanner;
 import java.io.*;
@@ -20,11 +21,29 @@ public class PlayerUI {
         Scanner scanner = new Scanner(System.in);
         System.out.println("CHOOSE YOUR FIGHTER:");
         printFighters();
-        gm.initialisePlayer(Integer.parseInt(scanner.nextLine()));
+        String availableInts = getAvailableInts();
+        int input = 0;
+        while (input == 0)
+        {
+            try {
+                String line = scanner.nextLine();
+                if (availableInts.contains(line) && line.length() == 1)
+                    input = Integer.parseInt(line);
+                else
+                    System.out.println("The character you have entered isn't a number from the list, try again.");
+            }
+            catch (NumberFormatException e) {
+                System.out.println("The character you have entered isn't a number between 1 and 7, try again.");
+            }
+        }
+        gm.initialisePlayer(input);
         System.out.println("YOUR CHOSEN FIGHTER IS :");
         gm.printPlayerDescription();
     }
 
+    public String getAvailableInts() {
+        return gm.getAvailableInts();
+    }
     /**
      * This method prints the available fighters from text
      */

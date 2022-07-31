@@ -67,7 +67,7 @@ public class Hunter extends Player {
                     closestEnemy = enemy;
             }
             if (dealDamage(closestEnemy))
-                closestEnemy.death(this);
+                killed(closestEnemy);
         }
         else {
             throw new IllegalStateException("You can't use your special ability right now as you dont have enough resources or it is still in cooldown");

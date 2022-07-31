@@ -57,7 +57,7 @@ public class Rogue extends Player {
             messageCallback.send("=================================================\n\t\t You have cast the special ability\n=================================================");
             enemies.forEach(enemy -> {
                 if (dealDamage(enemy))
-                    enemy.death(this);
+                    killed(enemy);
             });
         }
         else {

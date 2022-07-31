@@ -70,8 +70,10 @@ public class Mage extends  Player{
                 Random rnd = new Random();
                 int index = rnd.nextInt(enemies.size());
                 Unit enemy = enemies.get(index);
-                if (dealDamage(enemy))
-                    enemy.death(this);
+                if (dealDamage(enemy)) {
+                    killed(enemy);
+                    enemies.remove(enemy);
+                }
                 hits++;
             }
             replaceSPWithAP();
