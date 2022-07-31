@@ -6,6 +6,7 @@ public class Boss extends Monster implements HeroicUnit{
     private final int abilityFrequency;
     private int combatTicks;
 
+    //Constructors
     public Boss(String _name, char _tile, int _healthPool, int _attackPoints, int _defensePoints, int _visionRange, int _experienceValue, int _abilityFrequency, int x, int y) {
         this(_name, _tile, _healthPool, _attackPoints, _defensePoints,_visionRange, _experienceValue, _abilityFrequency,0,x,y);
     }
@@ -15,11 +16,6 @@ public class Boss extends Monster implements HeroicUnit{
         abilityFrequency = _abilityFrequency;
         combatTicks = _combatTicks;
     }
-
-    public int getCombatTicks() {
-        return combatTicks;
-    }
-
     /**
      * This method is a followup to a player action if player is in vision range
      */
@@ -31,10 +27,9 @@ public class Boss extends Monster implements HeroicUnit{
         }
         else {
             combatTicks++;
-            return super.movementBasedOnFunction(enemiesOfEnemy.get(0).pos);
+            return super.movementBasedOnFunction(enemiesOfEnemy.get(0).getPos());
         }
     }
-
     /**
      * This method is primarily for readability, simply called for only from moveProperly,
      * and only calls for dealDamage, because that's the only functionality needed.
@@ -55,8 +50,8 @@ public class Boss extends Monster implements HeroicUnit{
      *      move randomly and stop being agro
      */
     @Override
-    public Action onGameTick(List<Unit> enemiesOfEnemy) {
-        if (range(enemiesOfEnemy.get(0).pos) < visionRange)
+    protected Action onGameTick(List<Unit> enemiesOfEnemy) {
+        if (range(enemiesOfEnemy.get(0).getPos()) < visionRange)
             return moveProperly(enemiesOfEnemy);
         else {
             combatTicks = 0;

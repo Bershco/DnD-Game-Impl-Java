@@ -8,6 +8,7 @@ public class Warrior extends Player {
     private int remainingCooldown;
     private final int range = 3;
 
+    //Constructor
     public Warrior(String _name, int _healthPool, int _attackPoints, int _defensePoints, int cooldown, int x, int y){
         super(_name,_healthPool,_attackPoints,_defensePoints,x,y);
         abilityCooldown = cooldown;
@@ -21,9 +22,9 @@ public class Warrior extends Player {
     protected void onLevelUp() {
         super.onLevelUp();
         remainingCooldown = 0;
-        healthPool += playerLevel * 5;
-        attackPoints += playerLevel * 2;
-        defensePoints += playerLevel;
+        alterHealthPoolBy(playerLevel * 5);
+        raiseAttackPoints(playerLevel * 2);
+        raiseDefensePoints(playerLevel);
     }
 
     /**
@@ -55,17 +56,21 @@ public class Warrior extends Player {
                 enemies.add(enemy);
         if (enoughResources()) {
             remainingCooldown = abilityCooldown;
-            healthAmount = Math.min(healthPool, healthAmount + defensePoints * 10);
+            setHealthAmount(Math.min(getHealthPool(), getHealthAmount() + getDefensePoints() * 10));
             Random rnd = new Random();
             int index = rnd.nextInt(enemies.size());
             Unit enemy = enemies.get(index);
-            enemy.healthAmount -= healthPool * 10;
+            enemy.alterHealthPoolBy(-getHealthPool() * 10);
         }
         else {
             throw new IllegalStateException("You can't use that right now!");
         }
     }
 
+    /**
+     * This method describes the warrior player
+     * @return String form description
+     */
     @Override
     public String description() {
         return super.description() +

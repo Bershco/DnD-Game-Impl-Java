@@ -4,11 +4,16 @@ import Backend.*;
 public class BoardUI {
     private final GameMaster gm;
 
+    //Constructor
     public BoardUI(GameMaster gm){
         this.gm = gm;
     }
 
-    public void initialiseGame(String path) {
+    /**
+     * This method initialises the game using a specific level directory path
+     * @param path the levels' directory path
+     */
+    protected void initialiseGame(String path) {
         try {
             gm.initialiseGame(path);
         } catch (Exception e) {
@@ -16,8 +21,10 @@ public class BoardUI {
         }
     }
 
-    public void printCurrBoard() {
+    /**
+     * This method prints the current board layout
+     */
+    protected void printCurrBoard() {
         System.out.println(gm.getCurrentBoard());
     }
-
 }

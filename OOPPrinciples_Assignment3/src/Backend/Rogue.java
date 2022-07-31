@@ -1,6 +1,5 @@
 package Backend;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,6 +8,7 @@ public class Rogue extends Player {
     private int currentEnergy;
     private final int range = 2;
 
+    //Constructor
     public Rogue(String _name, int _healthPool, int _attackPoints, int _defensePoints, int _cost, int x, int y){
         super(_name,_healthPool,_attackPoints,_defensePoints,x,y);
         cost = _cost;
@@ -21,9 +21,8 @@ public class Rogue extends Player {
     @Override
     protected void onLevelUp() {
         super.onLevelUp();
-
         currentEnergy = 100;
-        attackPoints += playerLevel * 3;
+        raiseAttackPoints(playerLevel * 3);
     }
 
     /**
@@ -56,8 +55,8 @@ public class Rogue extends Player {
         if (enoughResources()) {
             currentEnergy -= cost;
             enemies.forEach(enemy -> {
-                if(attackPoints > enemy.defensePoints)
-                    enemy.healthAmount -= attackPoints; //TODO: this isn't true
+                if(getAttackPoints() > enemy.getDefensePoints())
+                    enemy.alterHealthPoolBy(getAttackPoints()); //TODO: this isn't true
             });
         }
         else {
@@ -65,6 +64,10 @@ public class Rogue extends Player {
         }
     }
 
+    /**
+     * This method describes the rogue player
+     * @return String form description
+     */
     @Override
     public String description() {
         return super.description() +

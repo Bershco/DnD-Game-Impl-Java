@@ -7,6 +7,7 @@ public class Hunter extends Player {
     private int arrowCount;
     private int tickCount;
 
+    //Constructor
     public Hunter(String _name, int _healthPool, int _attackPoints, int _defensePoints, int _range, int x, int y){
         super(_name,_healthPool,_attackPoints,_defensePoints,x,y);
         range = _range;
@@ -20,10 +21,9 @@ public class Hunter extends Player {
     @Override
     protected void onLevelUp() {
         super.onLevelUp();
-
         arrowCount += playerLevel * 10;
-        attackPoints += playerLevel * 2;
-        defensePoints += playerLevel;
+        raiseAttackPoints(playerLevel * 2);
+        raiseDefensePoints(playerLevel);
     }
 
     /**
@@ -65,13 +65,18 @@ public class Hunter extends Player {
                 if(range(enemy) < range(closestEnemy))
                     closestEnemy = enemy;
             }
-            dealDamage(closestEnemy); //TODO: change to what needed
+            messageCallback.send(getName() + " used his ability."); //TODO: check if more is needed.
+            dealDamage(closestEnemy);
         }
         else {
             throw new IllegalStateException("You can't use that right now!");
         }
     }
 
+    /**
+     * This method describes the hunter player
+     * @return String form description
+     */
     @Override
     public String description() {
         return super.description() +

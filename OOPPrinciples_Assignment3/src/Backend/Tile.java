@@ -1,20 +1,60 @@
 package Backend;
 
 public abstract class Tile implements Visited{
-    protected char tile;
-    protected Position pos;
+    private final char tile;
+    private Position pos;
     private Tile above;
     private Tile below;
     private Tile onTheRight;
     private Tile onTheLeft;
 
+    //Constructor
     public Tile(char _tile, Position _pos) {
         tile = _tile;
         pos = _pos;
     }
+
+    //Getters
+    protected Position getPos() {
+        return pos;
+    }
+    protected int getY() { return pos.getY();}
+    protected int getX() { return pos.getX();}
+    protected Tile getAbove() {
+        return above;
+    }
+    protected Tile getBelow() {
+        return below;
+    }
+    protected Tile getOnTheLeft() {
+        return onTheLeft;
+    }
+    protected Tile getOnTheRight() {
+        return onTheRight;
+    }
+    protected Tile[] getSurroundings() {
+        Tile[] output = new Tile[4];
+        output[0] = above;
+        output[1] = onTheLeft;
+        output[2] = below;
+        output[3] = onTheRight;
+        return output;
+    }
+
+    //Setters
     protected void setPos(int x, int y) {
         pos = new Position(x,y);
     }
+    private void setPos(Position _pos) {
+        pos = _pos;
+    }
+    protected void setSurroundings(Tile[] surroundings) {
+        above = surroundings[0];
+        onTheLeft = surroundings[1];
+        below = surroundings[2];
+        onTheRight = surroundings[3];
+    }
+
     /**
      * This method describes a euclidean distance calculation for the purpose of finding a range between
      * 'this' tile and another tile
@@ -22,40 +62,33 @@ public abstract class Tile implements Visited{
      * @return a double representing the distance from 'this' tile to another
      */
     protected double range(Tile other) {
-        return Math.sqrt(Math.pow((pos.x - other.pos.x),2)+Math.pow((pos.y - other.pos.y),2));
+        return Math.sqrt(Math.pow((getX() - other.getX()),2)+Math.pow((getY() - other.getY()),2));
     }
+    /**
+     * This method describes a euclidean distance calculation for the purpose of finding a range between
+     * 'this' tile and a specific position
+     * @param _pos the position we are looking the range towards
+     * @return a double representing the distance from 'this' tile to another
+     */
     protected double range(Position _pos) {
-        return Math.sqrt(Math.pow((pos.x - _pos.x),2)+Math.pow((pos.y - _pos.y),2));
+        return Math.sqrt(Math.pow((getX() - _pos.getX()),2)+Math.pow((getY() - _pos.getY()),2));
     }
-
-    public char getTile() {
-        return tile;
+    /**
+     * This method swaps the position field between 'this' Tile and another
+     * @param t the other tile to switch positions with
+     */
+    protected void swapPositionsWith(Tile t) {
+        Position tPos = t.getPos();
+        t.setPos(pos);
+        setPos(tPos);
     }
-    public Position getPos() {
-        return pos;
-    }
-    public Tile getAbove() {
-        return above;
-    }
-    public Tile getBelow() {
-        return below;
-    }
-    public Tile getOnTheLeft() {
-        return onTheLeft;
-    }
-    public Tile getOnTheRight() {
-        return onTheRight;
-    }
-
-    public void swapPositionsWith(Tile t) {
-        Position tPos = t.pos;
-        t.pos = pos;
-        pos = tPos;
-    }
-
-    public void swapSurroundingsWith(Tile t) {
-        int dx = t.pos.x - pos.x; //RIGHT   = +1  | LEFT = -1 | UP/DOWN    = 0
-        int dy = t.pos.y - pos.y; //DOWN    = +1  | UP   = -1 | RIGHT/LEFT = 0
+    /**
+     * This method swaps the surroundings of 'this' Tile and another
+     * @param t the other tile to swap surroundings with
+     */
+    protected void swapSurroundingsWith(Tile t) {
+        int dx = t.getX() - getX(); //RIGHT   = +1  | LEFT = -1 | UP/DOWN    = 0
+        int dy = t.getY() - getY(); //DOWN    = +1  | UP   = -1 | RIGHT/LEFT = 0
         if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
             //Teleportation isn't implemented but we put this in anyways
             Tile[] temp = new Tile[4];
@@ -95,28 +128,12 @@ public abstract class Tile implements Visited{
         t.updateTheSurroundings();
         updateTheSurroundings();
     }
-
-    public String toString() {
-        return "" + tile;
-    }
-
-    public void setSurroundings(Tile[] surroundings) {
-        above = surroundings[0];
-        onTheLeft = surroundings[1];
-        below = surroundings[2];
-        onTheRight = surroundings[3];
-    }
-
-    public Tile[] getSurroundings() {
-        Tile[] output = new Tile[4];
-        output[0] = above;
-        output[1] = onTheLeft;
-        output[2] = below;
-        output[3] = onTheRight;
-        return output;
-    }
-
-    public void acknowledge(Tile t, Action a) {
+    /**
+     * This method sets a certain Tile to be one of the surroundings of 'this' Tile
+     * @param t the tile to be recognized
+     * @param a the relation to 'this'
+     */
+    protected void acknowledge(Tile t, Action a) {
         switch (a) {
             case UP -> above = t;
             case LEFT -> onTheLeft = t;
@@ -124,11 +141,16 @@ public abstract class Tile implements Visited{
             case RIGHT -> onTheRight = t;
         }
     }
-
-    public void updateTheSurroundings() {
+    /**
+     * This method uses the method above to update all the surroundings that 'this' Tile is now it and not another
+     */
+    protected void updateTheSurroundings() {
         above.acknowledge(this,Action.DOWN);
         onTheLeft.acknowledge(this, Action.RIGHT);
         below.acknowledge(this,Action.UP);
         onTheRight.acknowledge(this,Action.LEFT);
+    }
+    public String toString() {
+        return "" + tile;
     }
 }

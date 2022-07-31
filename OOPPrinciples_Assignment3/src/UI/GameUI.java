@@ -9,6 +9,7 @@ public class GameUI implements DeathObserver,WinObserver {
     private boolean win = false;
     private boolean dead = false;
 
+    //Constructor
     public GameUI(String levelPath) {
         gm = new GameMaster(this::print);
         bui = new BoardUI(gm);
@@ -18,6 +19,10 @@ public class GameUI implements DeathObserver,WinObserver {
         gm.addDeathObserver(this);
         gm.addWinObserver(this);
     }
+
+    /**
+     * This method starts the game
+     */
     public void startGame() {
         bui.printCurrBoard();
         pui.printCurrPlayerDesc();
@@ -29,24 +34,12 @@ public class GameUI implements DeathObserver,WinObserver {
             while (!availableChars.contains(input) || input.length() != 1)
                 input = scanner.nextLine().toLowerCase();
             switch (input) {
-                case "w" -> {
-                    gm.onGameTick(Action.UP);
-                }
-                case "a" -> {
-                    gm.onGameTick(Action.LEFT);
-                }
-                case "s" -> {
-                    gm.onGameTick(Action.DOWN);
-                }
-                case "d" -> {
-                    gm.onGameTick(Action.RIGHT);
-                }
-                case "e" -> {
-                    System.out.println(gm.onGameTick(Action.ABILITYCAST));
-                }
-                case "q" -> {
-                    gm.onGameTick(Action.STAND);
-                }
+                case "w" -> gm.onGameTick(Action.UP);
+                case "a" -> gm.onGameTick(Action.LEFT);
+                case "s" -> gm.onGameTick(Action.DOWN);
+                case "d" -> gm.onGameTick(Action.RIGHT);
+                case "e" -> gm.onGameTick(Action.ABILITYCAST); //TODO: add ability description in onGameTick returns
+                case "q" -> gm.onGameTick(Action.STAND);
             }
             bui.printCurrBoard();
             pui.printCurrPlayerDesc();
@@ -56,18 +49,30 @@ public class GameUI implements DeathObserver,WinObserver {
         bui.printCurrBoard();
     }
 
+    /**
+     * This method describes what happens on the event of a death of a player
+     * @param killer the unit that killed the player
+     */
     @Override
     public void onPlayerEvent(Unit killer) {
         dead = true;
         System.out.println("\n\nGame over.....................?\n"); //TODO: maybe have a lose board as well as the win board
     }
 
+    /**
+     * This method describes what happens on the event of a death of an enemy
+     * @param e the dead enemy
+     */
     @Override
     public void onEnemyEvent(Enemy e) {
-        System.out.println(pui.getPlayerName() + " killed " + e.getName() + " and gained " + e.getExp() + " experience.");
+        System.out.println(pui.getPlayerName() + " killed " + e.getName() + " and gained " + e.getExperienceValue() + " experience.");
 
     }
 
+    /**
+     * This method describes what happens when the player finishes a level
+     * @param endGame a boolean variable determining whether the player finished a level or the entire game
+     */
     @Override
     public void onWinEvent(boolean endGame) {
         win = endGame;
@@ -75,10 +80,17 @@ public class GameUI implements DeathObserver,WinObserver {
         System.out.println((!endGame) ? "Level completed, congratulations, here's the next one:" : "Game over.....................?");
     }
 
+    /**
+     * This method prints out the message it is received, used by messagecallbacks
+     * @param message the message to be print
+     */
     public void print(String message){
         System.out.println(message);
     }
 
+    /**
+     * This method simply prints a LOT of newline characters in order to clear the screen after each action TODO: need to make sure characters that aren't WASDEQ don't reset the screen
+     */
     public void pseudoClearScreen() {
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     }

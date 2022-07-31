@@ -8,32 +8,32 @@ public class Enemy extends Unit implements Observable{
 
     private final int experienceValue;
     private final List<DeathObserver> observers = new LinkedList<>();
-
-    protected int getExperienceValue() {
+    public int getExperienceValue() {
         return experienceValue;
     }
 
-
+    //Constructor
     public Enemy(String _name, char _tile, int _healthPool, int _attackPoints, int _defensePoints, int _experienceValue, int x, int y) {
         super(_name,_tile,_healthPool,_attackPoints,_defensePoints, x, y);
         experienceValue = _experienceValue;
     }
 
-    public int getExp() {
-        return experienceValue;
+    /**
+     * This method is overridden in each extending class, and if somehow it reached here we need it to return Action.STAND
+     * @param enemiesOfEnemy a list of the player without knowing the player
+     * @return only Action.STAND
+     */
+    protected Action onGameTick(List<Unit> enemiesOfEnemy) {//Because the enemy of my enemy is my friend.
+        return Action.STAND;
     }
 
-    public Action onGameTick(List<Unit> enemiesOfEnemy) {
-        return Action.STAND;
-    } //Because the enemy of my enemy is my friend.
     /**
      * This method describes a death of an enemy
-     * @param killer
+     * @param killer the killer of 'this'
      */
-
     @Override
     protected void death(Unit killer) {
-        notifyDeathObservers(killer,pos);
+        notifyDeathObservers(killer,getPos());
     }
 
     /**
@@ -61,20 +61,23 @@ public class Enemy extends Unit implements Observable{
         }
     }
 
+    /**
+     * This method adds description to Unit's description and returns it as String
+     * @return String form description of 'this' Enemy
+     */
     @Override
     public String description() {
         return super.description() +
             "Experience Value: " + experienceValue + "\t";
     }
 
+    //Observer Pattern
     @Override
     public void addDeathObserver(DeathObserver o) {
         observers.add(o);
     }
-
     @Override
     public void addWinObserver(WinObserver o) {} //Won't do anything, monsters can't win unless the player loses, and that's just dumb.
-
     @Override
     public void notifyDeathObservers(Unit Killer, Position DeathPos) {
         for (DeathObserver observer : observers)
@@ -84,16 +87,15 @@ public class Enemy extends Unit implements Observable{
     public void notifyWinObservers(boolean endGame) {} //Won't do anything, monsters can't win unless the player loses, and that's just dumb.
 
 
+    //Visitor Pattern
     @Override
     public boolean accept(Visitor visitor) {
         return visitor.visit(this);
     }
-
     @Override
     public boolean visit(Enemy e) {
         return false;
     }
-
     @Override
     public boolean visit(Player p) {
         if (dealDamage(p)) {

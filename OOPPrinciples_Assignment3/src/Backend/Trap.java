@@ -8,6 +8,7 @@ public class Trap extends Enemy{
     private int ticksCount = 0;
     private boolean visible = true;
 
+    //Constructor
     public Trap(String _name, char _tile, int _healthPool, int _attackPoints, int _defensePoints, int _experienceValue, int _visibility, int _invisibility, int x, int y) {
         super(_name,_tile,_healthPool,_attackPoints,_defensePoints,_experienceValue,x,y);
         visibilityTime = _visibility;
@@ -18,18 +19,22 @@ public class Trap extends Enemy{
      * This method describes the actions of the trap after a given player action
      */
     @Override
-    public Action onGameTick(List<Unit> enemiesOfEnemy) {
+    protected Action onGameTick(List<Unit> enemiesOfEnemy) {
         Unit player = enemiesOfEnemy.get(0);
         visible = ticksCount < visibilityTime;
         if (ticksCount == (visibilityTime + invisibilityTime))
             ticksCount = 0;
         else
             ticksCount++;
-        if (range(player.pos) < 2)
+        if (range(player.getPos()) < 2)
             dealDamage(player);
         return Action.STAND;
     }
 
+    /**
+     * This method describes the trap
+     * @return String form description
+     */
     @Override
     public String description() {
         String output = super.description() +
