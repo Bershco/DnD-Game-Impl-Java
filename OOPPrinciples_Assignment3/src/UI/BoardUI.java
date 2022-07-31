@@ -25,6 +25,6 @@ public class BoardUI {
      * This method prints the current board layout
      */
     protected void printCurrBoard() {
-        System.out.println(gm.getCurrentBoard());
+        gm.printCurrentBoard();
     }
 }

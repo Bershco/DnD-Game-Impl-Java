@@ -37,10 +37,14 @@ public class Player extends Unit implements HeroicUnit,Observable{
      */
     protected Action onGameTick(Action a) {
         int tempLevel = playerLevel;
+        String prevDesc = description();
         while(experience >= playerLevel * experiencePerLevel)
             onLevelUp();
-        if (tempLevel < playerLevel)
-            messageCallback.send(getName() + " has reached level " + playerLevel + ".");
+        if (tempLevel < playerLevel) {
+            messageCallback.send("\n\n" + getName() + " has reached level " + playerLevel + ".");
+            messageCallback.send("Previous stats were: \n" + prevDesc + "\nAnd now they are: \n" + description());
+
+        }
         return a;
     }
 
@@ -85,6 +89,7 @@ public class Player extends Unit implements HeroicUnit,Observable{
         if (dealDamage(e)) {
             e.death(this);
             addExp(e.getExperienceValue());
+            messageCallback.send(getName() + " has received " + e.getExperienceValue() + " experience value.");
         }
         return false;
     }

@@ -22,7 +22,7 @@ public class PlayerUI {
         printFighters();
         gm.initialisePlayer(Integer.parseInt(scanner.nextLine()));
         System.out.println("YOUR CHOSEN FIGHTER IS :");
-        System.out.println(gm.getPlayerDescription());
+        gm.printPlayerDescription();
     }
 
     /**
@@ -75,15 +75,14 @@ public class PlayerUI {
      * This method prints the chosen player description
      */
     protected void printCurrPlayerDesc() {
-        System.out.println(gm.getPlayerDescription());
+        gm.printPlayerDescription();
     }
 
     /**
      * This method retrieves the player's name
-     * @return
+     * @return the player's name
      */
     protected String getPlayerName() {
         return gm.getPlayerName();
     }
-
 }

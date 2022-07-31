@@ -26,8 +26,8 @@ public class GameMaster implements DeathObserver,Observable{
     }
 
     //Getters
-    public String getPlayerDescription() { return player.description();}
-    public String getCurrentBoard() { return board.description();}
+    public void printPlayerDescription() { messageCallback.send(player.description());}
+    public void printCurrentBoard() { messageCallback.send(board.description());}
     public String getPlayerName() { return player.getName();}
     public String getDefaultPlayerPath() {
         return defaultPlayerPath;

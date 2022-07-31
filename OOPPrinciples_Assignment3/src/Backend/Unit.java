@@ -81,16 +81,22 @@ public abstract class Unit extends Tile implements Visitor{
      * @param damage the damage taken
      * @return the generated String to output
      */
-    private String generateBattleSequence(Unit attacker, Unit defender, int damage) {
+    private String generateBattleSequence(Unit attacker, Unit defender, int damage) { //TODO apparently "Whole stats for both units" are required
         StringBuilder output = new StringBuilder("=======================================\n" +
                 attacker.getName() + "\t\t VS \t" + defender.getName() + "\n" +
                 "Attack: \t" + attacker.getAttackPoints() + "\t\t\t" + "Defense: \t" + defender.getDefensePoints() + "\n" +
                 "Roll results: \t" + damage + "\t\t" + "Health: " +((damage>0) ? defender.getHealthAmount()+damage : defender.getHealthAmount()) + "\n" +
                 "=======================================\n");
-        if (damage > 0)
-            return output +
-                    attacker.getName() + " has inflicted " + damage + " damage to " + defender.getName() + "\n" +
-                    defender.getName() + "'s health points are now: " + defender.getHealthAmount();
+        if (damage > 0) {
+            if (defender.getHealthAmount() > 0)
+                return output +
+                        attacker.getName() + " has inflicted " + damage + " damage to " + defender.getName() + "\n" +
+                        defender.getName() + "'s health points are now: " + defender.getHealthAmount();
+            else
+                return output +
+                        attacker.getName() + " has inflicted " + damage + " damage to " + defender.getName() + "\n" +
+                        defender.getName() + " is now dead";
+        }
         else
             return output +
                     attacker.getName() + " has tried to damage " + defender.getName() + " with no success.";
