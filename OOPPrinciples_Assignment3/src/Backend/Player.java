@@ -24,7 +24,7 @@ public class Player extends Unit implements HeroicUnit,Observable{
     protected void onLevelUp() {
         experience -= playerLevel * experiencePerLevel;
         playerLevel++;
-        alterHealthPoolBy(playerLevel * 4);
+        raiseHealthPoolBy(playerLevel * 4);
         fullHealth();
         raiseAttackPoints(playerLevel * 4);
         raiseDefensePoints(playerLevel);
@@ -37,10 +37,14 @@ public class Player extends Unit implements HeroicUnit,Observable{
      */
     protected Action onGameTick(Action a) {
         int tempLevel = playerLevel;
+        String prevDesc = description();
         while(experience >= playerLevel * experiencePerLevel)
             onLevelUp();
-        if (tempLevel < playerLevel)
-            messageCallback.send(getName() + " has reached level " + playerLevel + ".");
+        if (tempLevel < playerLevel) {
+            messageCallback.send("\n\n" + getName() + " has reached level " + playerLevel + ".");
+            messageCallback.send("Previous stats were: \n" + prevDesc + "\nAnd now they are: \n" + description());
+
+        }
         return a;
     }
 
@@ -59,6 +63,12 @@ public class Player extends Unit implements HeroicUnit,Observable{
     protected void death(Unit killer) {
         notifyDeathObservers(killer,getPos());
     }
+
+    @Override
+    protected int getExperienceValue() {
+        return experience;
+    }
+
     /**
      * This method describes how experience is added to the player
      */
@@ -75,6 +85,11 @@ public class Player extends Unit implements HeroicUnit,Observable{
         return true;
     }
 
+    public void killed(Unit e) {
+        e.death(this);
+        addExp(e.getExperienceValue());
+        messageCallback.send(getName() + " has received " + e.getExperienceValue() + " experience value.");
+    }
     //Visitor Pattern
     @Override
     public boolean visit(Player p) {
@@ -82,10 +97,8 @@ public class Player extends Unit implements HeroicUnit,Observable{
     }
     @Override
     public boolean visit(Enemy e) {
-        if (dealDamage(e)) {
-            e.death(this);
-            addExp(e.getExperienceValue());
-        }
+        if (dealDamage(e))
+            killed(e);
         return false;
     }
     @Override

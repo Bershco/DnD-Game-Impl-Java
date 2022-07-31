@@ -60,16 +60,17 @@ public class Hunter extends Player {
                 enemiesInRange.add(enemy);
         if(enoughResources() && !enemiesInRange.isEmpty()) {
             arrowCount--;
+            messageCallback.send("=================================================\n\t\t You have cast the special ability\n=================================================");
             Unit closestEnemy = enemiesInRange.get(0);
             for (Unit enemy : enemiesInRange) {
                 if(range(enemy) < range(closestEnemy))
                     closestEnemy = enemy;
             }
-            messageCallback.send(getName() + " used his ability."); //TODO: check if more is needed.
-            dealDamage(closestEnemy);
+            if (dealDamage(closestEnemy))
+                killed(closestEnemy);
         }
         else {
-            throw new IllegalStateException("You can't use that right now!");
+            throw new IllegalStateException("You can't use your special ability right now as you dont have enough resources or it is still in cooldown");
         }
     }
 

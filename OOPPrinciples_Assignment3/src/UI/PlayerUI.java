@@ -1,6 +1,7 @@
 package UI;
 import Backend.*;
 
+import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.Scanner;
 import java.io.*;
@@ -20,11 +21,29 @@ public class PlayerUI {
         Scanner scanner = new Scanner(System.in);
         System.out.println("CHOOSE YOUR FIGHTER:");
         printFighters();
-        gm.initialisePlayer(Integer.parseInt(scanner.nextLine()));
+        String availableInts = getAvailableInts();
+        int input = 0;
+        while (input == 0)
+        {
+            try {
+                String line = scanner.nextLine();
+                if (availableInts.contains(line) && line.length() == 1)
+                    input = Integer.parseInt(line);
+                else
+                    System.out.println("The character you have entered isn't a number from the list, try again.");
+            }
+            catch (NumberFormatException e) {
+                System.out.println("The character you have entered isn't a number between 1 and 7, try again.");
+            }
+        }
+        gm.initialisePlayer(input);
         System.out.println("YOUR CHOSEN FIGHTER IS :");
-        System.out.println(gm.getPlayerDescription()); //TODO: Decide later about whether or not we should change to just the name
+        gm.printPlayerDescription();
     }
 
+    public String getAvailableInts() {
+        return gm.getAvailableInts();
+    }
     /**
      * This method prints the available fighters from text
      */
@@ -42,27 +61,27 @@ public class PlayerUI {
         }
         int counter = 1;
         while (!lines.isEmpty()) {
-            String line = lines.removeFirst(); //TODO: check it's not removeLast()
-            String[] playerDescription = line.split(","); //TODO: check if regex works
+            String line = lines.removeFirst();
+            String[] playerDescription = line.split(",");
             String playerClass = playerDescription[1];
             System.out.println();
-            System.out.println("======= Press " + counter++ + " for ===");
-            System.out.println("Name : " + playerDescription[2]);
-            System.out.println("Class : " + playerClass);
-            System.out.println("Max. Health : " + playerDescription[3]);
-            System.out.println("Attack Damage : " + playerDescription[4]);
-            System.out.println("Defense Points : " + playerDescription[5]);
+            System.out.println("========= Press " + counter++ + " for =========");
+            System.out.println("\tName : " + playerDescription[2]);
+            System.out.println("\tClass : " + playerClass);
+            System.out.println("\tMax. Health : " + playerDescription[3]);
+            System.out.println("\tAttack Damage : " + playerDescription[4]);
+            System.out.println("\tDefense Points : " + playerDescription[5]);
             switch (playerClass) {
-                case "Rogue" -> System.out.println("Ability Cost : " + playerDescription[6]);
-                case "Warrior" -> System.out.println("Ability Cooldown : " + playerDescription[6]);
-                case "Hunter" -> System.out.println("Ability Range : " + playerDescription[6]);
+                case "Rogue" -> System.out.println("\tAbility Cost : " + playerDescription[6]);
+                case "Warrior" -> System.out.println("\tAbility Cooldown : " + playerDescription[6]);
+                case "Hunter" -> System.out.println("\tAbility Range : " + playerDescription[6]);
                 case "Mage" -> {
-                    System.out.println("Starting Mana : " + (Integer.parseInt(playerDescription[6]))/4);
-                    System.out.println("Max. Mana : " + playerDescription[6]);
-                    System.out.println("Ability Cost : " + playerDescription[7]);
-                    System.out.println("Spell Power : " + playerDescription[8]);
-                    System.out.println("Spell Hits : " + playerDescription[9] + " times");
-                    System.out.println("Ability Range : " +playerDescription[10]);
+                    System.out.println("\tStarting Mana : " + (Integer.parseInt(playerDescription[6]))/4);
+                    System.out.println("\tMax. Mana : " + playerDescription[6]);
+                    System.out.println("\tAbility Cost : " + playerDescription[7]);
+                    System.out.println("\tSpell Power : " + playerDescription[8]);
+                    System.out.println("\tSpell Hits : " + playerDescription[9] + " times");
+                    System.out.println("\tAbility Range : " +playerDescription[10]);
                 }
             }
             System.out.println("===============================");
@@ -75,15 +94,14 @@ public class PlayerUI {
      * This method prints the chosen player description
      */
     protected void printCurrPlayerDesc() {
-        System.out.println(gm.getPlayerDescription());
+        gm.printPlayerDescription();
     }
 
     /**
      * This method retrieves the player's name
-     * @return
+     * @return the player's name
      */
     protected String getPlayerName() {
         return gm.getPlayerName();
     }
-
 }

@@ -26,8 +26,8 @@ public class GameMaster implements DeathObserver,Observable{
     }
 
     //Getters
-    public String getPlayerDescription() { return player.description();}
-    public String getCurrentBoard() { return board.description();}
+    public void printPlayerDescription() { messageCallback.send(player.description());}
+    public void printCurrentBoard() { messageCallback.send(board.description());}
     public String getPlayerName() { return player.getName();}
     public String getDefaultPlayerPath() {
         return defaultPlayerPath;
@@ -42,7 +42,7 @@ public class GameMaster implements DeathObserver,Observable{
         defaultLevelPath = path;
         levels = ((new File(defaultLevelPath)).listFiles());
         if (levels != null)
-            Arrays.sort(levels); //TODO: check what happens with more than 10 level files (i.e more than a single digit level) //MAYBE NOT NEEDED
+            Arrays.sort(levels);
         else
             throw new IllegalArgumentException("Something went wrong while loading level files.");
         board = new Board(readNextLevel());
@@ -60,7 +60,6 @@ public class GameMaster implements DeathObserver,Observable{
             levels[0] = new File(defaultWinLevelPath);
             currLevel = 0;
         } else if (currLevel < 0) {
-            //notifyDeathObservers(player, ); TODO: check if this commented line is needed, I think not.
             levels = new File[1];
             levels[0] = new File(defaultLoseLevelPath);
             currLevel = 0;
@@ -82,7 +81,7 @@ public class GameMaster implements DeathObserver,Observable{
         Tile[][] boardTiles = new Tile[lines.size()][];
         int row = 0;
         while (!lines.isEmpty()) {
-            String currLine = lines.removeFirst(); //TODO: make sure this is the proper one, could be removeLast
+            String currLine = lines.removeFirst();
             char[] currLineInChar = currLine.toCharArray();
             Tile[] currLineInTiles = new Tile[currLine.length()];
             for (int column = 0; column < currLineInChar.length; column++) {
@@ -100,7 +99,6 @@ public class GameMaster implements DeathObserver,Observable{
         for (Enemy e : enemies)
             e.addDeathObserver(this);
         initialiseTileSurroundings();
-        //initialiseEnemySurroundings(); TODO: check if needed, I think not.
     }
     /**
      * This method initialises all surroundings of every Tile in the 2D Tile array
@@ -110,11 +108,6 @@ public class GameMaster implements DeathObserver,Observable{
             for (Tile t : tArray)
                 t.setSurroundings(board.getSurroundings(t.getPos()));
     }
-//    private void initialiseEnemySurroundings() {
-//        for (Enemy curr : enemies) {
-//            curr.setSurroundings(board.getSurroundings(curr.getPos()));
-//        }
-//    }
 
     /**
      * This method initialises the player properly using another method
@@ -125,6 +118,73 @@ public class GameMaster implements DeathObserver,Observable{
         player.setSurroundings(board.getSurroundings(player.getPos()));
         player.setMessageCallback(messageCallback);
         player.addDeathObserver(this);
+    }
+
+    public String getAvailableInts() {
+        StringBuilder output = new StringBuilder();
+        try {
+            String line;
+            BufferedReader reader = new BufferedReader(new FileReader(defaultPlayerPath));
+            while ((line = reader.readLine()) != null) {
+                output.append(line.charAt(0));
+            }
+        } catch (FileNotFoundException fileNotFoundException) {
+            messageCallback.send(fileNotFoundException.getMessage());
+        } catch (IOException ioException) {
+            messageCallback.send(ioException.getMessage());
+        }
+        return output.toString();
+    }
+    /**
+     * This method constructs the proper player the user picked in its proper position on the board
+     * @param playerInt the index of the player the user has picked
+     * @param x the x (column) position of the player
+     * @param y the y (row) position of the player
+     * @return the Player created
+     */
+    private Player txtToPlayer(int playerInt, int x, int y) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(defaultPlayerPath));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (Integer.parseInt(""+line.charAt(0)) == playerInt) { //if we want to use more than 10 players, just swap this while with a for loop
+                    String[] playerDescription = line.split(",");
+                    String playerClass = playerDescription[1];
+                    String name = playerDescription[2];
+                    int health = Integer.parseInt(playerDescription[3]);
+                    int attack = Integer.parseInt(playerDescription[4]);
+                    int defense = Integer.parseInt(playerDescription[5]);
+                    switch (playerClass) {
+                        case "Rogue" -> {
+                            int cost = Integer.parseInt(playerDescription[6]);
+                            return new Rogue(name,health,attack,defense,cost,x,y);
+                        }
+                        case "Warrior" -> {
+                            int cd = Integer.parseInt(playerDescription[6]);
+                            return new Warrior(name,health,attack,defense,cd,x,y);
+                        }
+                        case "Mage" -> {
+                            int mp = Integer.parseInt(playerDescription[6]);
+                            int mCost = Integer.parseInt(playerDescription[7]);
+                            int spellPower = Integer.parseInt(playerDescription[8]);
+                            int hitCount = Integer.parseInt(playerDescription[9]);
+                            int abilityRange = Integer.parseInt(playerDescription[10]);
+                            return new Mage(name,health,attack,defense,mp,mCost,spellPower,hitCount,abilityRange,x,y);
+                        }
+                        case "Hunter" -> {
+                            int range = Integer.parseInt(playerDescription[6]);
+                            return new Hunter(name,health,attack,defense,range,x,y);
+                        }
+                        default -> throw new IllegalArgumentException("There are only 4 types you could implement.");
+                    }
+                }
+            }
+        } catch (FileNotFoundException fileNotFoundException) {
+            messageCallback.send(fileNotFoundException.getMessage());
+        } catch (IOException ioException) {
+            messageCallback.send(ioException.getMessage());
+        }
+        throw new IllegalArgumentException("Something went wrong while importing player from text");
     }
 
     /**
@@ -206,57 +266,7 @@ public class GameMaster implements DeathObserver,Observable{
         initialiseLevel();
     }
 
-    /**
-     * This method constructs the proper player the user picked in its proper position on the board
-     * @param playerInt the index of the player the user has picked
-     * @param x the x (column) position of the player
-     * @param y the y (row) position of the player
-     * @return the Player created
-     */
-    private Player txtToPlayer(int playerInt, int x, int y) {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(defaultPlayerPath));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (Integer.parseInt(""+line.charAt(0)) == playerInt) { //if we want to use more than 10 players, just swap this while with a for loop
-                    String[] playerDescription = line.split(","); //TODO: check if regex works
-                    String playerClass = playerDescription[1];
-                    String name = playerDescription[2];
-                    int health = Integer.parseInt(playerDescription[3]);
-                    int attack = Integer.parseInt(playerDescription[4]);
-                    int defense = Integer.parseInt(playerDescription[5]);
-                    switch (playerClass) {
-                        case "Rogue" -> {
-                            int cost = Integer.parseInt(playerDescription[6]);
-                            return new Rogue(name,health,attack,defense,cost,x,y);
-                        }
-                        case "Warrior" -> {
-                            int cd = Integer.parseInt(playerDescription[6]);
-                            return new Warrior(name,health,attack,defense,cd,x,y);
-                        }
-                        case "Mage" -> {
-                            int mp = Integer.parseInt(playerDescription[6]);
-                            int mCost = Integer.parseInt(playerDescription[7]);
-                            int spellPower = Integer.parseInt(playerDescription[8]);
-                            int hitCount = Integer.parseInt(playerDescription[9]);
-                            int abilityRange = Integer.parseInt(playerDescription[10]);
-                            return new Mage(name,health,attack,defense,mp,mCost,spellPower,hitCount,abilityRange,x,y);
-                        }
-                        case "Hunter" -> {
-                            int range = Integer.parseInt(playerDescription[6]);
-                            return new Hunter(name,health,attack,defense,range,x,y);
-                        }
-                        default -> throw new IllegalArgumentException("There are only 4 types you could implement.");
-                    }
-                }
-            }
-        } catch (FileNotFoundException fileNotFoundException) {
-            System.out.println(fileNotFoundException.getMessage());
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-        throw new IllegalArgumentException("Something went wrong while importing player from text");
-    }
+
 
     /**
      * This method constructs the proper enemy the map is describing
@@ -271,7 +281,7 @@ public class GameMaster implements DeathObserver,Observable{
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.charAt(0) == c) {
-                    String[] enemyDescription = line.split(","); //TODO: check if regex works
+                    String[] enemyDescription = line.split(",");
                     String enemyType = enemyDescription[1];
                     String name = enemyDescription[2];
                     int health = Integer.parseInt(enemyDescription[3]);

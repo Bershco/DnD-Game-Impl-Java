@@ -39,7 +39,10 @@ public abstract class Unit extends Tile implements Visitor{
     public void setHealthAmount(int healthAmount) {
         this.healthAmount = healthAmount;
     }
-    public void alterHealthPoolBy(int i) {
+    public void alterHealthAmountBy(int i) {
+        healthAmount += i;
+    }
+    public void raiseHealthPoolBy(int i) {
         healthPool += i;
     }
     public void raiseAttackPoints(int i) {
@@ -48,11 +51,13 @@ public abstract class Unit extends Tile implements Visitor{
     public void raiseDefensePoints(int i) {
         defensePoints += i;
     }
-
+    protected void setAttackPoints(int attackPoints) {
+        this.attackPoints = attackPoints;
+    }
 
     //Abstract Methods
     protected abstract void death(Unit killer);
-
+    protected abstract int getExperienceValue();
 
     /**
      * This method is part of the combat system of the game, it is used to attack another unit
@@ -78,14 +83,19 @@ public abstract class Unit extends Tile implements Visitor{
      */
     private String generateBattleSequence(Unit attacker, Unit defender, int damage) {
         StringBuilder output = new StringBuilder("=======================================\n" +
-                attacker.getName() + "\t\t VS \t" + defender.getName() + "\n" +
-                "Attack: \t" + attacker.getAttackPoints() + "\t\t\t" + "Defense: \t" + defender.getDefensePoints() + "\n" +
-                "Roll results: \t" + damage + "\t\t" + "Health: " +((damage>0) ? defender.getHealthAmount()+damage : defender.getHealthAmount()) + "\n" +
+                attacker.description() + "\n\t\t\tATTACKS\n" + defender.description()+
+                "\nRoll results: \t" + damage + "\t\t" + "Health: " +((damage>0) ? defender.getHealthAmount()+damage : defender.getHealthAmount()) + "\n" +
                 "=======================================\n");
-        if (damage > 0)
-            return output +
-                    attacker.getName() + " has inflicted " + damage + " damage to " + defender.getName() + "\n" +
-                    defender.getName() + "'s health points are now: " + defender.getHealthAmount();
+        if (damage > 0) {
+            if (defender.getHealthAmount() > 0)
+                return output +
+                        attacker.getName() + " has inflicted " + damage + " damage to " + defender.getName() + "\n" +
+                        defender.getName() + "'s health points are now: " + defender.getHealthAmount();
+            else
+                return output +
+                        attacker.getName() + " has inflicted " + damage + " damage to " + defender.getName() + "\n" +
+                        defender.getName() + " is now dead";
+        }
         else
             return output +
                     attacker.getName() + " has tried to damage " + defender.getName() + " with no success.";
