@@ -1,5 +1,7 @@
 package Backend;
 
+import Backend.Tiles.Unit;
+
 import java.util.List;
 
 public interface HeroicUnit {

@@ -1,5 +1,8 @@
 package UI;
 import Backend.*;
+import Backend.Tiles.EnemyTiles.Enemy;
+import Backend.Tiles.Unit;
+
 import java.util.Scanner;
 
 public class GameUI implements DeathObserver,WinObserver {
@@ -45,7 +48,7 @@ public class GameUI implements DeathObserver,WinObserver {
             pui.printCurrPlayerDesc();
         }
         if (win) gm.loadWin();
-        else if (dead) gm.loadLose();
+        else gm.loadLose();
         bui.printCurrBoard();
     }
 
