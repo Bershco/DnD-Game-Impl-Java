@@ -59,24 +59,35 @@ public class Mage extends  Player{
     public void castAbility(List<? extends Unit> enemiesOverall) {
         List<Unit> enemies = new LinkedList<>();
         for (Unit enemy : enemiesOverall)
-            if (range(enemy)<abilityRange)
+            if (range(enemy) < abilityRange)
                 enemies.add(enemy);
         if(enoughResources()) {
             currentMana -= manaCost;
             int hits = 0;
+            messageCallback.send("=================================================\n\t\t You have cast the special ability\n=================================================");
+            replaceSPWithAP();
             while (hits < hitCount && enemies.size() > 0) {
                 Random rnd = new Random();
                 int index = rnd.nextInt(enemies.size());
                 Unit enemy = enemies.get(index);
-                messageCallback.send(getName() + " used the special ability against " + enemy.getName());
-                if(getAttackPoints() > enemy.getDefensePoints())
-                    enemy.alterHealthPoolBy(spellPower); //TODO: might be wrong (probably)
+                if (dealDamage(enemy))
+                    enemy.death(this);
                 hits++;
             }
+            replaceSPWithAP();
         }
         else {
             throw new IllegalStateException("You can't use your special ability right now as you dont have enough resources or it is still in cooldown");
         }
+    }
+
+    /**
+     * This method is a helper method that replaces Spell Power with Ability Points in order to be used by castAbility method
+     */
+    private void replaceSPWithAP() {
+        int temp = getAttackPoints();
+        setAttackPoints(spellPower);
+        spellPower = temp;
     }
 
     /**

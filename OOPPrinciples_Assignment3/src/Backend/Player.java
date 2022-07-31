@@ -24,7 +24,7 @@ public class Player extends Unit implements HeroicUnit,Observable{
     protected void onLevelUp() {
         experience -= playerLevel * experiencePerLevel;
         playerLevel++;
-        alterHealthPoolBy(playerLevel * 4);
+        raiseHealthPoolBy(playerLevel * 4);
         fullHealth();
         raiseAttackPoints(playerLevel * 4);
         raiseDefensePoints(playerLevel);

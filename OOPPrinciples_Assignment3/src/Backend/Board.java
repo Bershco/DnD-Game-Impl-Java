@@ -45,7 +45,7 @@ public class Board {
      * This method describes the entirety of the board, and outputs it into String form
      * @return a String form board using the Tiles' chars
      */
-    public String description() { //TODO check if this could be toString or if this was a requirement
+    public String description() {
         StringBuilder outputBoard = new StringBuilder();
         for (Tile[] tArray : currentPosition) {
             for (Tile t : tArray) {

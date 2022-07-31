@@ -38,7 +38,7 @@ public class GameUI implements DeathObserver,WinObserver {
                 case "a" -> gm.onGameTick(Action.LEFT);
                 case "s" -> gm.onGameTick(Action.DOWN);
                 case "d" -> gm.onGameTick(Action.RIGHT);
-                case "e" -> gm.onGameTick(Action.ABILITYCAST); //TODO: add ability description in onGameTick messageCallbacks
+                case "e" -> gm.onGameTick(Action.ABILITYCAST);
                 case "q" -> gm.onGameTick(Action.STAND);
             }
             bui.printCurrBoard();
@@ -76,12 +76,11 @@ public class GameUI implements DeathObserver,WinObserver {
     @Override
     public void onWinEvent(boolean endGame) {
         win = endGame;
-        pseudoClearScreen();
         System.out.println((!endGame) ? "Level completed, congratulations, here's the next one:" : "Game over.....................?");
     }
 
     /**
-     * This method prints out the message it is received, used by messagecallbacks
+     * This method prints out the message it is received, used by messageCallbacks
      * @param message the message to be print
      */
     public void print(String message){

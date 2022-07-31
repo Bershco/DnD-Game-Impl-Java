@@ -39,7 +39,10 @@ public abstract class Unit extends Tile implements Visitor{
     public void setHealthAmount(int healthAmount) {
         this.healthAmount = healthAmount;
     }
-    public void alterHealthPoolBy(int i) {
+    public void alterHealthAmountBy(int i) {
+        healthAmount += i;
+    }
+    public void raiseHealthPoolBy(int i) {
         healthPool += i;
     }
     public void raiseAttackPoints(int i) {
@@ -48,7 +51,9 @@ public abstract class Unit extends Tile implements Visitor{
     public void raiseDefensePoints(int i) {
         defensePoints += i;
     }
-
+    protected void setAttackPoints(int attackPoints) {
+        this.attackPoints = attackPoints;
+    }
 
     //Abstract Methods
     protected abstract void death(Unit killer);

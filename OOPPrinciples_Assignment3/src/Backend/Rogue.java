@@ -54,10 +54,10 @@ public class Rogue extends Player {
                 enemies.add(enemy);
         if (enoughResources()) {
             currentEnergy -= cost;
+            messageCallback.send("=================================================\n\t\t You have cast the special ability\n=================================================");
             enemies.forEach(enemy -> {
-                messageCallback.send(getName() + " used the special ability against " + enemy.getName());
-                if(getAttackPoints() > enemy.getDefensePoints())
-                    enemy.alterHealthPoolBy(getAttackPoints()); //TODO: this isn't true
+                if (dealDamage(enemy))
+                    enemy.death(this);
             });
         }
         else {
