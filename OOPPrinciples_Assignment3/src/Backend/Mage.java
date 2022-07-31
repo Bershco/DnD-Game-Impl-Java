@@ -68,13 +68,14 @@ public class Mage extends  Player{
                 Random rnd = new Random();
                 int index = rnd.nextInt(enemies.size());
                 Unit enemy = enemies.get(index);
+                messageCallback.send(getName() + " used the special ability against " + enemy.getName());
                 if(getAttackPoints() > enemy.getDefensePoints())
                     enemy.alterHealthPoolBy(spellPower); //TODO: might be wrong (probably)
                 hits++;
             }
         }
         else {
-            throw new IllegalStateException("You can't use that right now!");
+            throw new IllegalStateException("You can't use your special ability right now as you dont have enough resources or it is still in cooldown");
         }
     }
 

@@ -8,10 +8,8 @@ public class Program {
         GameUI gui = new GameUI(args[0]);
         printTutorial();
         gui.startGame();
-        //TODO: UML
-        //TODO: javadocs
-        //TODO: run over the game again and maybe run it
-        //TODO: Unit tests
+        //TODO: UML - Tom
+        //TODO: Unit tests - if there's time
     }
 
     public static void printTutorial() {

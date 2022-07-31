@@ -60,7 +60,6 @@ public class GameMaster implements DeathObserver,Observable{
             levels[0] = new File(defaultWinLevelPath);
             currLevel = 0;
         } else if (currLevel < 0) {
-            //notifyDeathObservers(player, ); TODO: check if this commented line is needed, I think not.
             levels = new File[1];
             levels[0] = new File(defaultLoseLevelPath);
             currLevel = 0;
@@ -82,7 +81,7 @@ public class GameMaster implements DeathObserver,Observable{
         Tile[][] boardTiles = new Tile[lines.size()][];
         int row = 0;
         while (!lines.isEmpty()) {
-            String currLine = lines.removeFirst(); //TODO: make sure this is the proper one, could be removeLast
+            String currLine = lines.removeFirst();
             char[] currLineInChar = currLine.toCharArray();
             Tile[] currLineInTiles = new Tile[currLine.length()];
             for (int column = 0; column < currLineInChar.length; column++) {
@@ -100,7 +99,6 @@ public class GameMaster implements DeathObserver,Observable{
         for (Enemy e : enemies)
             e.addDeathObserver(this);
         initialiseTileSurroundings();
-        //initialiseEnemySurroundings(); TODO: check if needed, I think not.
     }
     /**
      * This method initialises all surroundings of every Tile in the 2D Tile array
@@ -110,11 +108,6 @@ public class GameMaster implements DeathObserver,Observable{
             for (Tile t : tArray)
                 t.setSurroundings(board.getSurroundings(t.getPos()));
     }
-//    private void initialiseEnemySurroundings() {
-//        for (Enemy curr : enemies) {
-//            curr.setSurroundings(board.getSurroundings(curr.getPos()));
-//        }
-//    }
 
     /**
      * This method initialises the player properly using another method
@@ -219,7 +212,7 @@ public class GameMaster implements DeathObserver,Observable{
             String line;
             while ((line = reader.readLine()) != null) {
                 if (Integer.parseInt(""+line.charAt(0)) == playerInt) { //if we want to use more than 10 players, just swap this while with a for loop
-                    String[] playerDescription = line.split(","); //TODO: check if regex works
+                    String[] playerDescription = line.split(",");
                     String playerClass = playerDescription[1];
                     String name = playerDescription[2];
                     int health = Integer.parseInt(playerDescription[3]);
@@ -271,7 +264,7 @@ public class GameMaster implements DeathObserver,Observable{
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.charAt(0) == c) {
-                    String[] enemyDescription = line.split(","); //TODO: check if regex works
+                    String[] enemyDescription = line.split(",");
                     String enemyType = enemyDescription[1];
                     String name = enemyDescription[2];
                     int health = Integer.parseInt(enemyDescription[3]);

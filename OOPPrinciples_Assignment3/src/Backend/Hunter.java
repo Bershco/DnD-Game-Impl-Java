@@ -65,11 +65,11 @@ public class Hunter extends Player {
                 if(range(enemy) < range(closestEnemy))
                     closestEnemy = enemy;
             }
-            messageCallback.send(getName() + " used his ability."); //TODO: check if more is needed.
+            messageCallback.send(getName() + " used the special ability against " + closestEnemy.getName());
             dealDamage(closestEnemy);
         }
         else {
-            throw new IllegalStateException("You can't use that right now!");
+            throw new IllegalStateException("You can't use your special ability right now as you dont have enough resources or it is still in cooldown");
         }
     }
 

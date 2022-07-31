@@ -57,13 +57,18 @@ public class Warrior extends Player {
         if (enoughResources()) {
             remainingCooldown = abilityCooldown;
             setHealthAmount(Math.min(getHealthPool(), getHealthAmount() + getDefensePoints() * 10));
-            Random rnd = new Random();
-            int index = rnd.nextInt(enemies.size());
-            Unit enemy = enemies.get(index);
-            enemy.alterHealthPoolBy(-getHealthPool() * 10);
+            messageCallback.send("=================================================\n\t\t You have cast the special ability\n=================================================");
+            messageCallback.send(getName() + "'s health is now " + getHealthAmount());
+            if (!enemies.isEmpty()) {
+                Random rnd = new Random();
+                int index = rnd.nextInt(enemies.size());
+                Unit enemy = enemies.get(index);
+                messageCallback.send(getName() + " used the special ability against " + enemy.getName());
+                enemy.alterHealthPoolBy(-getHealthPool() * 10);
+            }
         }
         else {
-            throw new IllegalStateException("You can't use that right now!");
+            throw new IllegalStateException("You can't use your special ability right now as you dont have enough resources or it is still in cooldown");
         }
     }
 
@@ -75,6 +80,6 @@ public class Warrior extends Player {
     public String description() {
         return super.description() +
             "Ability Range: "+range+"\n" +
-            "Cooldown: " + remainingCooldown + " out of " + abilityCooldown + "\n";
+            "Cooldown: " + remainingCooldown + " turns.\n";
     }
 }

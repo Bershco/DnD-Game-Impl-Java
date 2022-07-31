@@ -30,15 +30,15 @@ public class GameUI implements DeathObserver,WinObserver {
         String availableChars = "wasdeq";
         while (!win && !dead) {
             String input = scanner.nextLine().toLowerCase();
-            pseudoClearScreen();
             while (!availableChars.contains(input) || input.length() != 1)
                 input = scanner.nextLine().toLowerCase();
+            pseudoClearScreen();
             switch (input) {
                 case "w" -> gm.onGameTick(Action.UP);
                 case "a" -> gm.onGameTick(Action.LEFT);
                 case "s" -> gm.onGameTick(Action.DOWN);
                 case "d" -> gm.onGameTick(Action.RIGHT);
-                case "e" -> gm.onGameTick(Action.ABILITYCAST); //TODO: add ability description in onGameTick returns
+                case "e" -> gm.onGameTick(Action.ABILITYCAST); //TODO: add ability description in onGameTick messageCallbacks
                 case "q" -> gm.onGameTick(Action.STAND);
             }
             bui.printCurrBoard();
@@ -56,7 +56,7 @@ public class GameUI implements DeathObserver,WinObserver {
     @Override
     public void onPlayerEvent(Unit killer) {
         dead = true;
-        System.out.println("\n\nGame over.....................?\n"); //TODO: maybe have a lose board as well as the win board
+        System.out.println("\n\nGame over.....................?\n");
     }
 
     /**
@@ -89,7 +89,7 @@ public class GameUI implements DeathObserver,WinObserver {
     }
 
     /**
-     * This method simply prints a LOT of newline characters in order to clear the screen after each action TODO: need to make sure characters that aren't WASDEQ don't reset the screen
+     * This method simply prints a LOT of newline characters in order to clear the screen after each action
      */
     public void pseudoClearScreen() {
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");

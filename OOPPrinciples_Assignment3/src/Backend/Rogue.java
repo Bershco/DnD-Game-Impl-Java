@@ -55,12 +55,13 @@ public class Rogue extends Player {
         if (enoughResources()) {
             currentEnergy -= cost;
             enemies.forEach(enemy -> {
+                messageCallback.send(getName() + " used the special ability against " + enemy.getName());
                 if(getAttackPoints() > enemy.getDefensePoints())
                     enemy.alterHealthPoolBy(getAttackPoints()); //TODO: this isn't true
             });
         }
         else {
-            throw new IllegalStateException("You can't use that right now!");
+            throw new IllegalStateException("You can't use your special ability right now as you dont have enough resources or it is still in cooldown");
         }
     }
 

@@ -27,7 +27,8 @@ public class Trap extends Enemy{
         else
             ticksCount++;
         if (range(player.getPos()) < 2)
-            dealDamage(player);
+            if(dealDamage(player))
+                player.death(this);
         return Action.STAND;
     }
 
