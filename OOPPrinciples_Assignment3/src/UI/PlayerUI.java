@@ -39,7 +39,7 @@ public class PlayerUI {
         gm.printPlayerDescription();
     }
 
-    public String getAvailableInts() {
+    protected String getAvailableInts() {
         return gm.getAvailableInts();
     }
     /**

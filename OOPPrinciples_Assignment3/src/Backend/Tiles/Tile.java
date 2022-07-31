@@ -63,6 +63,15 @@ public abstract class Tile implements Visited {
     }
 
     /**
+     * This method uses the method above to update all the surroundings that 'this' Tile is now it and not another
+     */
+    public void updateTheSurroundings() {
+        above.acknowledge(this,Action.DOWN);
+        onTheLeft.acknowledge(this, Action.RIGHT);
+        below.acknowledge(this,Action.UP);
+        onTheRight.acknowledge(this,Action.LEFT);
+    }
+    /**
      * This method describes a euclidean distance calculation for the purpose of finding a range between
      * 'this' tile and another tile
      * @param other the tile we are looking the range towards
@@ -147,15 +156,6 @@ public abstract class Tile implements Visited {
             case DOWN -> below = t;
             case RIGHT -> onTheRight = t;
         }
-    }
-    /**
-     * This method uses the method above to update all the surroundings that 'this' Tile is now it and not another
-     */
-    public void updateTheSurroundings() {
-        above.acknowledge(this,Action.DOWN);
-        onTheLeft.acknowledge(this, Action.RIGHT);
-        below.acknowledge(this,Action.UP);
-        onTheRight.acknowledge(this,Action.LEFT);
     }
     public String toString() {
         return "" + tile;
