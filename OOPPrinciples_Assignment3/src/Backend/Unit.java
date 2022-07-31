@@ -2,19 +2,13 @@ package Backend;
 
 public abstract class Unit extends Tile implements Visitor{
     private final String name;
-    protected int healthPool;
-    protected int healthAmount;
-    protected int attackPoints;
-    protected int defensePoints;
+    private int healthPool;
+    private int healthAmount;
+    private int attackPoints;
+    private int defensePoints;
     protected MessageCallback messageCallback;
 
-    public String getName() {
-        return name;
-    }
-
-    public int getAttackPoints() { return attackPoints; }
-    public int getDefensePoints() { return defensePoints; }
-
+    //Constructor
     public Unit(String _name, char _tile, int _healthPool, int _attackPoints, int _defensePoints, int x, int y) {
         super(_tile, new Position(x,y));
         name = _name;
@@ -24,64 +18,41 @@ public abstract class Unit extends Tile implements Visitor{
         defensePoints = _defensePoints;
     }
 
-    /**
-     * This method returns full information of the current unit.
-     * Mainly used to print the information of each unit during combat / on player's turn
-     * @return description of the unit
-     */
-    public String description() {
-        return name + ":\t\t" +
-                "Health: " + healthAmount + "/" + healthPool + "\t\t" +
-                "Attack: " + attackPoints + "\t\t" +
-                "Defense: " + defensePoints + "\t\t";
+    //Getters
+    public String getName() {
+        return name;
     }
-
-    public boolean goTo(Tile t) {
-        if (t.accept(this)) {
-            swapSurroundingsWith(t);
-            swapPositionsWith(t);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean visit(Empty e) {
-        return true;
-    }
-
-    @Override
-    public boolean visit(Wall w) {
-        return false;
-    }
-
-    @Override
-    public boolean visit(Grave g) {
-        return false;
-    }
-
-    public String toString() {
-        return super.toString();
-    }
-
-    /**
-     * This method moves a unit
-     * @param d the direction to attempt movement towards
-     */
-
-    /**
-     * This method describes a death of a unit
-     * @param killer
-     */
-    protected void death(Unit killer) {}
-
+    public int getAttackPoints() { return attackPoints; }
+    public int getDefensePoints() { return defensePoints; }
     public int getHealthAmount() {
         return healthAmount;
     }
+    public int getHealthPool() {
+        return healthPool;
+    }
 
+    //Setters
     public void setMessageCallback(MessageCallback _messageCallback){
         messageCallback = _messageCallback;
     }
+    public void fullHealth() {healthAmount = healthPool;}
+    public void setHealthAmount(int healthAmount) {
+        this.healthAmount = healthAmount;
+    }
+    public void alterHealthPoolBy(int i) {
+        healthPool += i;
+    }
+    public void raiseAttackPoints(int i) {
+        attackPoints += i;
+    }
+    public void raiseDefensePoints(int i) {
+        defensePoints += i;
+    }
+
+
+    //Abstract Methods
+    protected abstract void death(Unit killer);
+
 
     /**
      * This method is part of the combat system of the game, it is used to attack another unit
@@ -98,7 +69,14 @@ public abstract class Unit extends Tile implements Visitor{
         return target.healthAmount <= 0;
     }
 
-    public String generateBattleSequence(Unit attacker, Unit defender, int damage) {
+    /**
+     * This method generates battle sequences between the attacker and the defender (not the actual calculations, rather - the output string)
+     * @param attacker the attacking unit
+     * @param defender the defending unit
+     * @param damage the damage taken
+     * @return the generated String to output
+     */
+    private String generateBattleSequence(Unit attacker, Unit defender, int damage) {
         StringBuilder output = new StringBuilder("=======================================\n" +
                 attacker.getName() + "\t\t VS \t" + defender.getName() + "\n" +
                 "Attack: \t" + attacker.getAttackPoints() + "\t\t\t" + "Defense: \t" + defender.getDefensePoints() + "\n" +
@@ -113,5 +91,49 @@ public abstract class Unit extends Tile implements Visitor{
                     attacker.getName() + " has tried to damage " + defender.getName() + " with no success.";
     }
 
+    /**
+     * This method returns full information of the current unit.
+     * @return description of the unit
+     */
+    public String description() {
+        return name + ":\t\t" +
+                "Health: " + healthAmount + "/" + healthPool + "\t\t" +
+                "Attack: " + attackPoints + "\t\t" +
+                "Defense: " + defensePoints + "\t\t";
+    }
 
+    /**
+     * This method moves a unit to a certain tile using the visitor pattern and updates their fields properly
+     * @param t the tile the unit attempts to move towards
+     * @return whether the movement was successful or not
+     */
+    public boolean goTo(Tile t) {
+        if (t.accept(this)) {
+            swapSurroundingsWith(t);
+            swapPositionsWith(t);
+            return true;
+        }
+        return false;
+    }
+
+    //Visitor Pattern
+    @Override
+    public boolean visit(Empty e) {
+        return true;
+    }
+
+    @Override
+    public boolean visit(Wall w) {
+        return false;
+    }
+
+    @Override
+    public boolean visit(Grave g) {
+        return false;
+    }
+
+
+    public String toString() {
+        return super.toString();
+    }
 }

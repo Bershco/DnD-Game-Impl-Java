@@ -11,25 +11,36 @@ public class Player extends Unit implements HeroicUnit,Observable{
     List<DeathObserver> deathObservers = new LinkedList<>();
     List<WinObserver> winObservers = new LinkedList<>();
 
+    //Constructor
     public Player(String _name, int _healthPool, int _attackPoints, int _defensePoints, int x, int y) {
         super(_name,'@',_healthPool,_attackPoints,_defensePoints,x,y);
         experience = 0;
         playerLevel = 1;
     }
 
+    /**
+     * This method describes the process of a level up of a base player
+     */
     protected void onLevelUp() {
         experience -= playerLevel * experiencePerLevel;
         playerLevel++;
-        healthPool += playerLevel * 4;
-        healthAmount = healthPool;
-        attackPoints += playerLevel * 4;
-        defensePoints += playerLevel;
-        messageCallback.send(getName() + " has reached level " + playerLevel); // TODO: Complete
+        alterHealthPoolBy(playerLevel * 4);
+        fullHealth();
+        raiseAttackPoints(playerLevel * 4);
+        raiseDefensePoints(playerLevel);
     }
 
+    /**
+     * This method describes the process of a game tick with regard to the base player
+     * @param a the action taken by the player
+     * @return the action taken by the player
+     */
     protected Action onGameTick(Action a) {
-        if(experience >= playerLevel * experiencePerLevel)
+        int tempLevel = playerLevel;
+        while(experience >= playerLevel * experiencePerLevel)
             onLevelUp();
+        if (tempLevel < playerLevel)
+            messageCallback.send(getName() + " has reached level " + playerLevel + ".");
         return a;
     }
 
@@ -41,12 +52,12 @@ public class Player extends Unit implements HeroicUnit,Observable{
     public void castAbility(List<? extends Unit> enemies) {}
 
     /**
-     * This method describes the death of the player - simply calling the method gameOverLose() in our singleton board - in order to finish the game
-     * @param killer
+     * This method describes the death of the player
+     * @param killer the enemy that killed the player
      */
     @Override
     protected void death(Unit killer) {
-        notifyDeathObservers(killer,pos);
+        notifyDeathObservers(killer,getPos());
     }
     /**
      * This method describes how experience is added to the player
@@ -64,51 +75,53 @@ public class Player extends Unit implements HeroicUnit,Observable{
         return true;
     }
 
+    //Visitor Pattern
     @Override
     public boolean visit(Player p) {
         return false;
     }
-
     @Override
     public boolean visit(Enemy e) {
         if (dealDamage(e)) {
             e.death(this);
-            return true;
+            addExp(e.getExperienceValue());
         }
         return false;
     }
-
     @Override
     public boolean accept(Visitor visitor) {
         return visitor.visit(this);
     }
 
-    @Override
-    public String description() {
-        return super.description() +
-            "Experience: " + experience + "/" + experiencePerLevel*playerLevel + "\t" +
-            "Level: " + playerLevel + "\t";
-    }
-
+    //Observer Pattern
     @Override
     public void addDeathObserver(DeathObserver o) {
         deathObservers.add(o);
     }
-
     @Override
     public void addWinObserver(WinObserver o) {
         winObservers.add(o);
     }
-
     @Override
     public void notifyDeathObservers(Unit killer, Position DeathPos) {
         for (DeathObserver o : deathObservers)
             o.onPlayerEvent(killer);
     }
-
     @Override
     public void notifyWinObservers(boolean endGame) {
         for (WinObserver o : winObservers)
             o.onWinEvent(endGame);
     }
+
+    /**
+     * This method describes the player
+     * @return String form description
+     */
+    @Override
+    public String description() {
+        return super.description() +
+                "Experience: " + experience + "/" + experiencePerLevel*playerLevel + "\t" +
+                "Level: " + playerLevel + "\t";
+    }
+
 }

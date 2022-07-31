@@ -8,11 +8,15 @@ import java.io.*;
 public class PlayerUI {
     private final GameMaster gm;
 
+    //Constructor
     public PlayerUI(GameMaster gm){
         this.gm = gm;
     }
 
-    public void initialisePlayer() {
+    /**
+     * This method initialises the player
+     */
+    protected void initialisePlayer() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("CHOOSE YOUR FIGHTER:");
         printFighters();
@@ -21,6 +25,9 @@ public class PlayerUI {
         System.out.println(gm.getPlayerDescription()); //TODO: Decide later about whether or not we should change to just the name
     }
 
+    /**
+     * This method prints the available fighters from text
+     */
     private void printFighters() {
         String fighterPath = gm.getDefaultPlayerPath();
         LinkedList<String> lines = new LinkedList<>();
@@ -64,11 +71,18 @@ public class PlayerUI {
         }
     }
 
-    public void printCurrPlayerDesc() {
+    /**
+     * This method prints the chosen player description
+     */
+    protected void printCurrPlayerDesc() {
         System.out.println(gm.getPlayerDescription());
     }
 
-    public String getPlayerName() {
+    /**
+     * This method retrieves the player's name
+     * @return
+     */
+    protected String getPlayerName() {
         return gm.getPlayerName();
     }
 

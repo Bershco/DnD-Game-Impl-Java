@@ -13,53 +13,19 @@ public class GameMaster implements DeathObserver,Observable{
     private final static String defaultPlayerPath = (new File("players.txt")).getPath();
     private final static String defaultWinLevelPath = (new File("dontREADME.txt")).getPath();
     private final static String defaultLoseLevelPath = (new File("dontREADME2.txt")).getPath();
-    private MessageCallback messageCallback;
-
-    public String defaultLevelPath;
+    private final MessageCallback messageCallback;
+    private String defaultLevelPath;
     private File[] levels;
     private final List<DeathObserver> deathObservers = new LinkedList<>();
     private final List<WinObserver> winObservers = new LinkedList<>();
     private int currLevel = 0;
 
+    //Constructor
     public GameMaster(MessageCallback messageCallback){
         this.messageCallback = messageCallback;
     }
 
-    public void initialiseGame(String path) {
-        player = new Player("default_player",1,1,1,-1,-1);
-        defaultLevelPath = path;
-        levels = ((new File(defaultLevelPath)).listFiles());
-        if (levels != null)
-            Arrays.sort(levels); //TODO: check what happens with more than 10 level files (i.e more than a single digit level)
-        else
-            throw new IllegalArgumentException("Something went wrong while loading level files.");
-        board = new Board(readNextLevel());
-        initialiseLevel();
-    }
-
-    public void initialiseLevel() {
-        for (Enemy e : enemies)
-            e.addDeathObserver(this);
-        initialiseTileSurroundings();
-        initialiseEnemySurroundings();
-    }
-    public void initialiseEnemySurroundings() {
-        for (Enemy curr : enemies) {
-            curr.setSurroundings(board.getSurroundings(curr.pos));
-        }
-    }
-    public void initialiseTileSurroundings() {
-        for (Tile[] tArray : board.currentPosition)
-            for (Tile t : tArray)
-                t.setSurroundings(board.getSurroundings(t.pos));
-    }
-    public void initialisePlayer(int playerInt) {
-        player = txtToPlayer(playerInt,player.pos.x,player.pos.y);
-        player.setSurroundings(board.getSurroundings(player.pos));
-        player.setMessageCallback(messageCallback);
-        player.addDeathObserver(this);
-    }
-
+    //Getters
     public String getPlayerDescription() { return player.description();}
     public String getCurrentBoard() { return board.description();}
     public String getPlayerName() { return player.getName();}
@@ -67,17 +33,115 @@ public class GameMaster implements DeathObserver,Observable{
         return defaultPlayerPath;
     }
 
-    public String onGameTick(Action a) { //TODO maybe check if String return type is needed or can be void
+    /**
+     * This method initialises the game using the proper level directory path
+     * @param path the proper path to the level directory
+     */
+    public void initialiseGame(String path) {
+        player = new Player("default_player",1,1,1,-1,-1);
+        defaultLevelPath = path;
+        levels = ((new File(defaultLevelPath)).listFiles());
+        if (levels != null)
+            Arrays.sort(levels); //TODO: check what happens with more than 10 level files (i.e more than a single digit level) //MAYBE NOT NEEDED
+        else
+            throw new IllegalArgumentException("Something went wrong while loading level files.");
+        board = new Board(readNextLevel());
+        initialiseLevel();
+    }
+
+    /**
+     * This method loads the next level from the text files in defaultLevelDirectory
+     * @return a 2D Tile array to be used as a Board
+     */
+    private Tile[][] readNextLevel() {
+        if (currLevel >= levels.length) {
+            notifyWinObservers(true);
+            levels = new File[1];
+            levels[0] = new File(defaultWinLevelPath);
+            currLevel = 0;
+        } else if (currLevel < 0) {
+            //notifyDeathObservers(player, ); TODO: check if this commented line is needed, I think not.
+            levels = new File[1];
+            levels[0] = new File(defaultLoseLevelPath);
+            currLevel = 0;
+        } else notifyWinObservers(false);
+
+        LinkedList<String> lines = new LinkedList<>();
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(levels[currLevel++]));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+        } catch (FileNotFoundException fileNotFoundException) {
+            System.out.println("File not found as expected. (level"+currLevel+".txt)");
+        } catch (IOException e) {
+            messageCallback.send(e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
+        }
+        enemies.clear();
+        Tile[][] boardTiles = new Tile[lines.size()][];
+        int row = 0;
+        while (!lines.isEmpty()) {
+            String currLine = lines.removeFirst(); //TODO: make sure this is the proper one, could be removeLast
+            char[] currLineInChar = currLine.toCharArray();
+            Tile[] currLineInTiles = new Tile[currLine.length()];
+            for (int column = 0; column < currLineInChar.length; column++) {
+                currLineInTiles[column] = processTile(currLineInChar[column], column, row);
+            }
+            boardTiles[row++] = currLineInTiles;
+        }
+        return boardTiles;
+    }
+
+    /**
+     * This is a helper method that helps initialise all
+     */
+    private void initialiseLevel() {
+        for (Enemy e : enemies)
+            e.addDeathObserver(this);
+        initialiseTileSurroundings();
+        //initialiseEnemySurroundings(); TODO: check if needed, I think not.
+    }
+    /**
+     * This method initialises all surroundings of every Tile in the 2D Tile array
+     */
+    private void initialiseTileSurroundings() {
+        for (Tile[] tArray : board.currentPosition)
+            for (Tile t : tArray)
+                t.setSurroundings(board.getSurroundings(t.getPos()));
+    }
+//    private void initialiseEnemySurroundings() {
+//        for (Enemy curr : enemies) {
+//            curr.setSurroundings(board.getSurroundings(curr.getPos()));
+//        }
+//    }
+
+    /**
+     * This method initialises the player properly using another method
+     * @param playerInt the index of the player chosen by the actual player
+     */
+    public void initialisePlayer(int playerInt) {
+        player = txtToPlayer(playerInt,player.getX(), player.getY());
+        player.setSurroundings(board.getSurroundings(player.getPos()));
+        player.setMessageCallback(messageCallback);
+        player.addDeathObserver(this);
+    }
+
+    /**
+     * This method enacts what is supposed to happen after every choice for a turn the player makes
+     * @param a the action to be performed
+     */
+    public void onGameTick(Action a) {
         if (a == Action.ABILITYCAST) {
             try {
                 player.castAbility(enemies);
             }
             catch (Exception e) {
-                return e.getMessage();
+                messageCallback.send(e.getMessage());
             }
         }
         else {
-            if (player.onGameTick(a) != Action.STAND)
+            if (a != Action.STAND)
                 goTo(player,a);
         }
         List<Unit> onlyThePlayer = new LinkedList<>();
@@ -87,12 +151,17 @@ public class GameMaster implements DeathObserver,Observable{
             if (enemyMovement != Action.STAND)
                 goTo(e,enemyMovement);
         }
+        player.onGameTick(a);
         if (enemies.isEmpty())
             onLevelWon();
-        return "";
     }
 
-    public void goTo(Enemy curr, Action direction) {
+    /**
+     * This method
+     * @param curr the unit that is enacting to go somewhere
+     * @param direction the direction the unit wants to go towards
+     */
+    private void goTo(Unit curr, Action direction) {
         //This method is for readability purposes.
         Tile temp = curr;
         switch (direction) {
@@ -105,57 +174,45 @@ public class GameMaster implements DeathObserver,Observable{
             board.swapTiles(curr,temp);
     }
 
-    public void goTo(Player curr, Action direction) { //TODO might not need overloading
-        //This method is for readability purposes.
-        Tile temp = curr;
-        switch (direction) {
-            case UP -> temp = curr.getAbove();
-            case LEFT -> temp = curr.getOnTheLeft();
-            case DOWN -> temp = curr.getBelow();
-            case RIGHT -> temp = curr.getOnTheRight();
-        }
-        if (curr.goTo(temp))
-            board.swapTiles(curr,temp);
-    }
-
+    /**
+     * This method describes what happens in a loss scenario
+     */
     public void gameOverLose() {
-        Grave grave = board.replacePlayerWithGrave(player.pos);
+        Grave grave = board.replacePlayerWithGrave(player.getPos());
         grave.setSurroundings(player.getSurroundings());
         grave.updateTheSurroundings();
     }
 
     /**
-     * Loads the win board
+     * Loads the "YOU WIN..." board
      */
     public void loadWin() {
         board = new Board(readNextLevel());
     }
 
     /**
-     * Loads the lose board
+     * Loads the "YOU LOSE..." board
      */
     public void loadLose() {
         currLevel = -1;
         board = new Board(readNextLevel());
     }
 
+    /**
+     * Loads the next level and initialises it, happens when the player finished a level but not yet the game.
+     */
     public void onLevelWon() {
         board.currentPosition = readNextLevel();
         initialiseLevel();
     }
-    @Override
-    public void onPlayerEvent(Unit killer) {
-        gameOverLose();
-        notifyDeathObservers(killer,player.getPos());
-    }
-    @Override
-    public void onEnemyEvent(Enemy e) {
-        Empty empty = board.replaceEnemyWithEmpty(e.pos); //TODO update the surroundings
-        empty.setSurroundings(e.getSurroundings());
-        empty.updateTheSurroundings();
-        player.addExp(e.getExperienceValue());
-        enemies.remove(e);
-    }
+
+    /**
+     * This method constructs the proper player the user picked in its proper position on the board
+     * @param playerInt the index of the player the user has picked
+     * @param x the x (column) position of the player
+     * @param y the y (row) position of the player
+     * @return the Player created
+     */
     private Player txtToPlayer(int playerInt, int x, int y) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(defaultPlayerPath));
@@ -200,6 +257,14 @@ public class GameMaster implements DeathObserver,Observable{
         }
         throw new IllegalArgumentException("Something went wrong while importing player from text");
     }
+
+    /**
+     * This method constructs the proper enemy the map is describing
+     * @param c the enemy to be created
+     * @param x the x (column) position of the enemy
+     * @param y the y (row) position of the enemy
+     * @return the Enemy created
+     */
     private Enemy txtToEnemy(char c, int x, int y) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(defaultEnemyPath));
@@ -239,6 +304,14 @@ public class GameMaster implements DeathObserver,Observable{
         }
         throw new IllegalArgumentException("Something went wrong while importing mobs from text");
     }
+
+    /**
+     * This method constructs each tile properly with regard to its char
+     * @param c its char
+     * @param x its x (column) position
+     * @param y its y (row) position
+     * @return the Tile created
+     */
     private Tile processTile(char c, int x, int y) {
         if (c == '.') return new Empty(new Position(x,y));
         else if (c == '#') return new Wall(new Position(x,y));
@@ -256,45 +329,31 @@ public class GameMaster implements DeathObserver,Observable{
             throw new IllegalArgumentException("Something went wrong while processing tiles");
         }
     }
-    private Tile[][] readNextLevel() {
-        if (currLevel >= levels.length) {
-            notifyWinObservers(true);
-            levels = new File[1];
-            levels[0] = new File(defaultWinLevelPath);
-            currLevel = 0;
-        }
-        else if (currLevel < 0) {
-            //notifyDeathObservers(player, );
-            levels = new File[1];
-            levels[0] = new File(defaultLoseLevelPath);
-            currLevel = 0;
-        } else notifyWinObservers(false);
-        LinkedList<String> lines = new LinkedList<>();
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(levels[currLevel++]));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                lines.add(line);
-            }
-        } catch (FileNotFoundException fileNotFoundException) {
-                System.out.println("File not found as expected. (level"+currLevel+".txt)");
-        } catch (IOException e) {
-            System.out.println(e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
-        }
-        enemies.clear();
-        Tile[][] boardTiles = new Tile[lines.size()][]; //TODO: switch all xs with ys
-        int y = 0;
-        while (!lines.isEmpty()) {
-            String currLine = lines.removeFirst(); //TODO: make sure this is the proper one, could be removeLast
-            char[] currLineInChar = currLine.toCharArray();
-            Tile[] currLineInTiles = new Tile[currLine.length()];
-            for (int x = 0; x < currLineInChar.length; x++) {
-                currLineInTiles[x] = processTile(currLineInChar[x], x, y);
-            }
-            boardTiles[y++] = currLineInTiles;
-        }
-        return boardTiles;
+
+
+    //Observer Pattern
+
+    /**
+     * This method describes what happens when a player dies with regard to the Game Master
+     * @param killer the enemy that killed the player
+     */
+    @Override
+    public void onPlayerEvent(Unit killer) {
+        gameOverLose();
+        notifyDeathObservers(killer,player.getPos());
     }
+    /**
+     * This method describes what happens when an enemy dies with regard to the Game Master
+     * @param e the enemy that died
+     */
+    @Override
+    public void onEnemyEvent(Enemy e) {
+        Tile empty = board.replaceEnemyWithEmpty(e.getPos());
+        empty.setSurroundings(e.getSurroundings());
+        empty.updateTheSurroundings();
+        enemies.remove(e);
+    }
+
     @Override
     public void addDeathObserver(DeathObserver o) {
         deathObservers.add(o);

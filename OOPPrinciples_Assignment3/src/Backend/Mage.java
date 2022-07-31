@@ -1,6 +1,5 @@
 package Backend;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -13,6 +12,7 @@ public class Mage extends  Player{
     private final int hitCount;
     private final int abilityRange;
 
+    //Constructor
     public Mage(String _name, int _healthPool, int _attackPoints, int _defensePoints, int _manaPool, int _manaCost, int _spellPower, int _hitCount, int _abilityRange, int x, int y) {
         super(_name,_healthPool,_attackPoints,_defensePoints,x,y);
         manaPool = _manaPool;
@@ -29,7 +29,6 @@ public class Mage extends  Player{
     @Override
     protected void onLevelUp() {
         super.onLevelUp();
-
         manaPool += playerLevel * 25;
         currentMana = Math.min(manaPool, currentMana + manaPool / 4);
         spellPower += playerLevel * 10;
@@ -69,8 +68,8 @@ public class Mage extends  Player{
                 Random rnd = new Random();
                 int index = rnd.nextInt(enemies.size());
                 Unit enemy = enemies.get(index);
-                if(attackPoints > enemy.defensePoints)
-                    enemy.healthAmount -= spellPower; //TODO: might be wrong (probably)
+                if(getAttackPoints() > enemy.getDefensePoints())
+                    enemy.alterHealthPoolBy(spellPower); //TODO: might be wrong (probably)
                 hits++;
             }
         }
@@ -79,6 +78,10 @@ public class Mage extends  Player{
         }
     }
 
+    /**
+     * This method describes the mage player
+     * @return String form description
+     */
     @Override
     public String description() {
         return super.description() +
